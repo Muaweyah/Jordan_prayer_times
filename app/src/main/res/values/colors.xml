@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1B4332</color>
+    <color name="primary_dark">#123328</color>
+    <color name="accent">#D4AF37</color>
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_alt">#D8F3DC</color>
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#52616B</color>
+    <color name="next_prayer_bg">#1B4332</color>
+    <color name="teal_accent">#2FD1BE</color>
+
+    <color name="purple_dark_bg">#1A0B2E</color>
+    <color name="purple_dark_text">#FFFFFF</color>
+
+    <color name="purple_light_bg">#F3E8FF</color>
+    <color name="purple_light_text">#1A0B2E</color>
+
+    <color name="mode_white_bg">#FFFFFF</color>
+    <color name="mode_white_text">#000000</color>
+
+    <color name="mode_black_bg">#000000</color>
+    <color name="mode_black_text">#FFFFFF</color>
+
+    <color name="accent_gold">#D4AF37</color>
+
+    <color name="purple_gradient_start">#3B0764</color>
+    <color name="purple_gradient_end">#9333EA</color>
+    <color name="purple_primary">#6B21A8</color>
+    <color name="purple_popup_bg">#4C1D95</color>
+    <color name="purple_text">#FFFFFF</color>
+</resources>

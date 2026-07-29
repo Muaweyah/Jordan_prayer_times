@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="occasions_list">
+        <item>رأس الهجرة النبوية: 1 محرم</item>
+        <item>يوم عاشوراء: 10 محرم</item>
+        <item>المولد النبوي الشريف: 12 ربيع الأول</item>
+        <item>الإسراء والمعراج: 27 رجب</item>
+        <item>بداية شهر رمضان المبارك: 1 رمضان</item>
+        <item>ليلة القدر: 27 رمضان (تقديرية)</item>
+        <item>عيد الفطر السعيد: 1 شوال</item>
+        <item>وقفة عرفة وخصوصية الحج: 9 ذو الحجة</item>
+        <item>عيد الأضحى المبارك: 10 ذو الحجة</item>
+    </string-array>
+</resources>

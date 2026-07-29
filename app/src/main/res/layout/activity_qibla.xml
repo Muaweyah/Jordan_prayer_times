@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#111827"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_title_qibla"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_width="wrap_content"
+        android:text="@string/qibla_title"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/compass_container"
+        android:layout_centerInParent="true"
+        android:layout_height="300dp"
+        android:layout_width="300dp">
+
+        <ImageView
+            android:id="@+id/iv_compass_dial"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:src="@drawable/bg_compass_dial" />
+
+        <FrameLayout
+            android:id="@+id/needle_container"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_qibla_needle"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_qibla_needle" />
+
+            <ImageView
+                android:id="@+id/iv_kaaba_marker"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="6dp"
+                android:contentDescription="@string/qibla_title"
+                android:src="@drawable/ic_kaaba" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_qibla_angle"
+        android:layout_below="@id/compass_container"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:textColor="#F59E0B"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/btnHome"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/bg_fab_circle"
+        android:src="@drawable/ic_home"
+        android:padding="12dp"
+        android:elevation="6dp"
+        android:contentDescription="@string/home_title" />
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="occasions_list">
+        <item>Islamic New Year: 1 Muharram</item>
+        <item>Day of Ashura: 10 Muharram</item>
+        <item>Prophet\'s Birthday (Mawlid): 12 Rabi al-Awwal</item>
+        <item>Isra and Mi\'raj: 27 Rajab</item>
+        <item>Start of Ramadan: 1 Ramadan</item>
+        <item>Laylat al-Qadr: 27 Ramadan (estimated)</item>
+        <item>Eid al-Fitr: 1 Shawwal</item>
+        <item>Day of Arafah: 9 Dhu al-Hijjah</item>
+        <item>Eid al-Adha: 10 Dhu al-Hijjah</item>
+    </string-array>
+</resources>
