@@ -1,0 +1,73 @@
+--- a/app/src/main/java/com/jo/prayertimes/MainActivity.kt	2026-07-29 14:05:16.351779296 +0000
++++ b/app/src/main/java/com/jo/prayertimes/MainActivity.kt	2026-07-29 14:05:16.353660325 +0000
+@@ -1,13 +1,16 @@
+ package com.jo.prayertimes
+ 
+ import android.Manifest
++import android.app.AlarmManager
+ import android.content.Context
+ import android.content.Intent
+ import android.content.pm.PackageManager
++import android.net.Uri
+ import android.os.Build
+ import android.os.Bundle
+ import android.os.Handler
+ import android.os.Looper
++import android.provider.Settings
+ import android.view.KeyEvent
+ import android.view.View
+ import android.widget.AdapterView
+@@ -86,6 +89,7 @@
+         setupRegionSpinner()
+         setupMenuButton()
+         requestNotificationPermissionIfNeeded()
++        requestExactAlarmPermissionIfNeeded()
+ 
+         flipDetector = FlipDetector(this) { stopAdhanService() }
+ 
+@@ -190,6 +194,27 @@
+         }
+     }
+ 
++    /**
++     * على أندرويد 12 (API 31) فما فوق، يجب أن يمنح المستخدم إذن "جدولة المنبهات الدقيقة" يدويًا
++     * من الإعدادات. بدونه يتحول النظام لجدولة غير دقيقة قد يؤجلها لدقائق طويلة أو لا تعمل إطلاقًا
++     * عند تفعيل توفير البطارية، وهذا هو سبب عدم عمل تنبيهات الأذان رغم أنها مفعّلة داخل التطبيق.
++     */
++    private fun requestExactAlarmPermissionIfNeeded() {
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++            val alarmManager = getSystemService(AlarmManager::class.java)
++            if (alarmManager?.canScheduleExactAlarms() == false) {
++                try {
++                    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
++                        data = Uri.parse("package:$packageName")
++                    }
++                    startActivity(intent)
++                } catch (e: Exception) {
++                    e.printStackTrace()
++                }
++            }
++        }
++    }
++
+     override fun onResume() {
+         super.onResume()
+         flipDetector.start()
+@@ -203,7 +228,7 @@
+     }
+ 
+     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+-        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
++        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) && AdhanService.isPlaying) {
+             stopAdhanService()
+             return true
+         }
+@@ -212,7 +237,7 @@
+ 
+     private fun stopAdhanService() {
+         val intent = Intent(this, AdhanService::class.java).apply {
+-            action = "ACTION_STOP_ADHAN"
++            action = AdhanService.ACTION_STOP_ADHAN
+         }
+         startService(intent)
+     }
