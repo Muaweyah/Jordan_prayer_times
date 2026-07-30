@@ -44,6 +44,8 @@
 <string name="about_title">About</string>
 <string name="home_title">Prayer Times</string>
     <string name="countdown_to_next_format">Time remaining until %1$s: %2$s</string>
+    <string name="next_prayer_title">Next Prayer</string>
+    <string name="time_remaining_label">Time Remaining</string>
 <string name="prayer_sunrise">Sunrise</string>
 <string name="menu_button_desc">Menu</string>
 <string name="save_settings">Save Settings</string>

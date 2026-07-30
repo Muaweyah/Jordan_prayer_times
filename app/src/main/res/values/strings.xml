@@ -44,6 +44,8 @@
 <string name="about_title">حول التطبيق</string>
 <string name="home_title">مواقيت الصلاة</string>
     <string name="countdown_to_next_format">الوقت المتبقي لـ %1$s: %2$s</string>
+    <string name="next_prayer_title">الصلاة القادمة</string>
+    <string name="time_remaining_label">الوقت المتبقي</string>
 <string name="prayer_sunrise">الشروق</string>
 <string name="menu_button_desc">القائمة</string>
 <string name="save_settings">حفظ الإعدادات</string>

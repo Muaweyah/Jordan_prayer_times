@@ -10,6 +10,9 @@
     <color name="text_secondary">#52616B</color>
     <color name="next_prayer_bg">#1B4332</color>
     <color name="teal_accent">#2FD1BE</color>
+    <color name="countdown_card_bg">#1E2A47</color>
+    <color name="countdown_track">#33415C</color>
+    <color name="countdown_text_secondary">#B7C3D9</color>
 
     <color name="purple_dark_bg">#1A0B2E</color>
     <color name="purple_dark_text">#FFFFFF</color>

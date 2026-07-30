@@ -17,6 +17,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
@@ -42,12 +43,18 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spRegion: Spinner
     private lateinit var tvCurrentTime: TextView
-    private lateinit var tvCountdown: TextView
     private lateinit var tvGregorianDate: TextView
     private lateinit var tvHijriDate: TextView
+    private lateinit var circularCountdown: CircularCountdownView
+    private lateinit var ivNextPrayerIcon: ImageView
+    private lateinit var tvCountdownBig: TextView
+    private lateinit var tvNextPrayerClock: TextView
+    private lateinit var tvNextPrayerName: TextView
 
     /** لحظة حلول الصلاة القادمة (بالمللي ثانية) واسمها، تُستخدم لحساب العد التنازلي كل ثانية دون إعادة بناء القائمة */
     private var nextEventTargetMillis: Long = 0L
+    /** لحظة الصلاة/الحدث السابق، تُستخدم كنقطة بداية لحساب نسبة تقدم الحلقة الدائرية */
+    private var nextEventStartMillis: Long = 0L
     private var nextEventLabel: String = ""
     private var lastRefreshedMinute: Int = -1
 
@@ -72,9 +79,13 @@ class MainActivity : AppCompatActivity() {
 
         spRegion = findViewById(R.id.spRegion)
         tvCurrentTime = findViewById(R.id.tvCurrentTime)
-        tvCountdown = findViewById(R.id.tvCountdown)
         tvGregorianDate = findViewById(R.id.tvGregorianDate)
         tvHijriDate = findViewById(R.id.tvHijriDate)
+        circularCountdown = findViewById(R.id.circularCountdown)
+        ivNextPrayerIcon = findViewById(R.id.ivNextPrayerIcon)
+        tvCountdownBig = findViewById(R.id.tvCountdownBig)
+        tvNextPrayerClock = findViewById(R.id.tvNextPrayerClock)
+        tvNextPrayerName = findViewById(R.id.tvNextPrayerName)
 
         val rvPrayerTimes = findViewById<RecyclerView>(R.id.rvPrayerTimes)
         rvPrayerTimes.layoutManager = LinearLayoutManager(this)
@@ -233,16 +244,30 @@ class MainActivity : AppCompatActivity() {
         var nextIndex = rawList.indexOfFirst { toMinutes(it.time) > nowMinutes }
 
         if (nextIndex == -1) {
-            // كل مواقيت اليوم انتهت، فالحدث القادم هو فجر الغد
+            // كل مواقيت اليوم انتهت، فالحدث القادم هو فجر الغد، ونقطة البداية هي عشاء اليوم
             nextIndex = 0
             val tomorrow = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, 1) }
             val tomorrowTimes = repository.timesFor(region, tomorrow)
             nextEventTargetMillis = timeStringToCalendar(tomorrowTimes.fajr, tomorrow).timeInMillis
             nextEventLabel = Prayer.FAJR.arabicLabel
+            nextEventStartMillis = timeStringToCalendar(rawList.last().time, now).timeInMillis
+        } else if (nextIndex == 0) {
+            // الوقت الحالي قبل فجر اليوم، فنقطة البداية هي عشاء الأمس
+            nextEventTargetMillis = timeStringToCalendar(rawList[nextIndex].time, now).timeInMillis
+            nextEventLabel = rawList[nextIndex].name
+            val yesterday = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -1) }
+            val yesterdayTimes = repository.timesFor(region, yesterday)
+            nextEventStartMillis = timeStringToCalendar(yesterdayTimes.isha, yesterday).timeInMillis
         } else {
             nextEventTargetMillis = timeStringToCalendar(rawList[nextIndex].time, now).timeInMillis
             nextEventLabel = rawList[nextIndex].name
+            nextEventStartMillis = timeStringToCalendar(rawList[nextIndex - 1].time, now).timeInMillis
         }
+
+        tvNextPrayerClock.text = formatClock12h(nextEventTargetMillis)
+        tvNextPrayerName.text = nextEventLabel
+        val isNightEvent = nextEventLabel == Prayer.FAJR.arabicLabel || nextEventLabel == Prayer.ISHA.arabicLabel
+        ivNextPrayerIcon.setImageResource(if (isNightEvent) R.drawable.ic_moon else R.drawable.ic_sun)
 
         val finalList = rawList.mapIndexed { index, item -> item.copy(isNext = index == nextIndex) }
         adapter.updateData(finalList)
@@ -286,15 +311,27 @@ class MainActivity : AppCompatActivity() {
         val hours = totalSeconds / 3600
         val minutes = (totalSeconds % 3600) / 60
         val seconds = totalSeconds % 60
-        tvCountdown.text = getString(
-            R.string.countdown_to_next_format,
-            nextEventLabel,
-            String.format(Locale("ar"), "%02d:%02d:%02d", hours, minutes, seconds)
-        )
+        tvCountdownBig.text = String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+
+        val totalIntervalMs = (nextEventTargetMillis - nextEventStartMillis).coerceAtLeast(1L)
+        val elapsedMs = (totalIntervalMs - remainingMs).coerceIn(0L, totalIntervalMs)
+        circularCountdown.setProgress(elapsedMs.toFloat() / totalIntervalMs.toFloat())
+
         if (remainingMs == 0L) {
             // انتهى العد، أعد حساب الصلاة/الحدث القادم فوراً
             refreshPrayerTimes()
         }
+    }
+
+    /** ينسق الوقت بنظام 12 ساعة بأرقام لاتينية مع مؤشر صباحاً/مساءً بالعربية، مثل: 9:08 م */
+    private fun formatClock12h(millis: Long): String {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = millis
+        var hour = cal.get(Calendar.HOUR)
+        if (hour == 0) hour = 12
+        val minute = cal.get(Calendar.MINUTE)
+        val period = if (cal.get(Calendar.AM_PM) == Calendar.PM) "م" else "ص"
+        return String.format(Locale.US, "%d:%02d %s", hour, minute, period)
     }
 
     private fun requestNotificationPermissionIfNeeded() {
