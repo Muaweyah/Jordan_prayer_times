@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Jordan Prayer Times</string>
+<string name="qibla_title">Qibla Direction</string>
+<string name="settings_title">Settings</string>
+<string name="language_title">App Language</string>
+<string name="lang_arabic">العربية</string>
+<string name="lang_english">English</string>
+<string name="lang_system">System Default</string>
+<string name="governorate_title">Governorate</string>
+<string name="adhan_sound">Adhan Audio</string>
+<string name="occasions_title">Religious &amp; National Occasions</string>
+
+<!-- Occasion titles (religious and national) -->
+<string name="occ_new_year">New Year\'s Day</string>
+<string name="occ_isra_miraj">Isra and Mi\'raj</string>
+<string name="occ_ramadan_start">Start of Ramadan</string>
+<string name="occ_laylat_qadr">Laylat al-Qadr (estimated)</string>
+<string name="occ_eid_fitr">Eid al-Fitr</string>
+<string name="occ_labour_day">Labour Day</string>
+<string name="occ_independence_day">Jordan Independence Day</string>
+<string name="occ_arafah">Day of Arafah</string>
+<string name="occ_eid_adha">Eid al-Adha</string>
+<string name="occ_islamic_new_year">Islamic New Year</string>
+<string name="occ_ashura">Day of Ashura</string>
+<string name="occ_mawlid">Prophet\'s Birthday (Mawlid)</string>
+<string name="occ_christmas">Christmas Day</string>
+
+<!-- Fixed Hijri anniversary for each religious occasion (shown next to the auto-computed Gregorian date) -->
+<string name="occ_isra_miraj_hijri">27 Rajab</string>
+<string name="occ_ramadan_start_hijri">1 Ramadan</string>
+<string name="occ_laylat_qadr_hijri">27 Ramadan</string>
+<string name="occ_eid_fitr_hijri">1 Shawwal</string>
+<string name="occ_arafah_hijri">9 Dhu al-Hijjah</string>
+<string name="occ_eid_adha_hijri">10 Dhu al-Hijjah</string>
+<string name="occ_islamic_new_year_hijri">1 Muharram</string>
+<string name="occ_ashura_hijri">10 Muharram</string>
+<string name="occ_mawlid_hijri">12 Rabi al-Awwal</string>
+
+<string name="occ_gregorian_prefix">corresponds to</string>
+<string name="azkar_title">Azkar</string>
+<string name="quran_title">Holy Quran</string>
+<string name="tasbih_title">Electronic Tasbih</string>
+<string name="about_title">About</string>
+<string name="home_title">Prayer Times</string>
+    <string name="countdown_to_next_format">Time remaining until %1$s: %2$s</string>
+<string name="prayer_sunrise">Sunrise</string>
+<string name="menu_button_desc">Menu</string>
+<string name="save_settings">Save Settings</string>
+<string name="settings_saved">Settings saved successfully</string>
+<string name="restart_needed">Reopen the app to fully apply the new language</string>
+<string name="settings_header">App Settings &amp; Appearance</string>
+<string name="theme_section_title">App Theme</string>
+<string name="language_section_title">App Language</string>
+<string name="notif_section_title">Adhan Alert per Prayer</string>
+<string name="hijri_section_title">Hijri Date Correction</string>
+<string name="hijri_section_desc">Use the buttons below to shift the displayed Hijri date by a day or two if it differs from the actual moon sighting</string>
+<string name="no_change_label">No change</string>
+<string name="flip_mute_title">Stop Adhan on Phone Flip</string>
+<string name="flip_mute_desc">Mute the alert as soon as the phone is turned face down</string>
+<string name="volume_mute_title">Stop Adhan with Volume Buttons</string>
+<string name="volume_mute_desc">Mute the alert as soon as either volume button is pressed</string>
+<string name="theme_system">System Default</string>
+<string name="theme_light">Light Mode</string>
+<string name="theme_dark">Dark Mode</string>
+<string name="theme_purple">Purple Gradient</string>
+<string name="prayer_fajr">Fajr</string>
+<string name="prayer_dhuhr">Dhuhr</string>
+<string name="prayer_asr">Asr</string>
+<string name="prayer_maghrib">Maghrib</string>
+<string name="prayer_isha">Isha</string>
+</resources>

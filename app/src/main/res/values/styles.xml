@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- تنسيق قائمة الخيارات المنسدلة (زر ☰) بحيث تتبع ألوان الثيم الحالي بدل الشكل الافتراضي للجهاز -->
+    <style name="AppPopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@color/surface</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+    </style>
+
+    <!-- نص أبيض عريض واضح لقائمة الخيارات في الثيم البنفسجي -->
+    <style name="PurplePopupMenuText" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/purple_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppPopupMenuPurple" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@color/purple_popup_bg</item>
+        <item name="android:textColorPrimary">@color/purple_text</item>
+    </style>
+</resources>

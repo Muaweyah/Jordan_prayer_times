@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1E9E8A</color>
+    <color name="primary_dark">#000000</color>
+    <color name="accent">#E8C158</color>
+    <color name="background">#000000</color>
+    <color name="surface">#000000</color>
+    <color name="surface_alt">#1A2A50</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#8B96BC</color>
+    <color name="next_prayer_bg">#123232</color>
+    <color name="teal_accent">#2FD1BE</color>
+</resources>
