@@ -122,7 +122,7 @@ class AzkarActivity : AppCompatActivity() {
 
     private fun prepareAudio() {
         stopAudio()
-        val resId = if (isMorning) R.raw.azkar_sabah else R.raw.azkar_misaa
+        val resId = if (isMorning) R.raw.tasbeeh else R.raw.istighfar
         mediaPlayer = MediaPlayer.create(this, resId)
         mediaPlayer?.let { player ->
             seekBar.max = player.duration
@@ -134,9 +134,9 @@ class AzkarActivity : AppCompatActivity() {
             }
         }
         tvNowPlaying.text = if (isMorning)
-            "استماع لأذكار الصباح بصوت الشيخ مشاري العفاسي"
+            "استماع للتسبيح"
         else
-            "استماع لأذكار المساء بصوت الشيخ مشاري العفاسي"
+            "استماع للاستغفار"
     }
 
     private fun playAudio() {

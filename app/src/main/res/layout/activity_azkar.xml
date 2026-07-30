@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="أذكار الصباح والمساء"
+        android:text="تسبيح واستغفار"
         android:textColor="@color/text_primary"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -34,7 +34,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
-            android:text="أذكار الصباح"
+            android:text="تسبيح"
             android:backgroundTint="@color/primary"
             android:textColor="#FFFFFF" />
 
@@ -44,7 +44,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:text="أذكار المساء"
+            android:text="استغفار"
             android:backgroundTint="@color/surface_alt"
             android:textColor="@color/text_primary" />
     </LinearLayout>
@@ -63,7 +63,7 @@
             android:id="@+id/tvAzkarNowPlaying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="استماع لأذكار الصباح بصوت الشيخ مشاري العفاسي"
+            android:text="استماع للتسبيح"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
             android:gravity="center"
