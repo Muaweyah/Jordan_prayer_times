@@ -15,8 +15,11 @@ data class DayPrayerTimes(
 
 object PrayerCalculator {
 
-    var fajrAngle = 18.5
-    var ishaAngle = 17.5
+    /** زوايا معايرة لتطابق مواقيت وزارة الأوقاف والشؤون والمقدسات الإسلامية الأردنية
+     *  (تم ضبطها بمقارنة نتائج الحساب مع الجدول الرسمي المنشور على موقع الوزارة) */
+    var fajrAngle = 18.0
+    var ishaAngle = 17.9
+    var sunriseMaghribAngle = 2.1
     var asrShadowFactor = 1.0
 
     private const val DEG_TO_RAD = PI / 180.0
@@ -44,9 +47,9 @@ object PrayerCalculator {
 
         val dhuhrMinutes = computeDhuhr(jd, lng, utcOffsetHours)
         val fajrMinutes = dhuhrMinutes - hourAngle(fajrAngle, lat, jd) * 60.0
-        val sunriseMinutes = dhuhrMinutes - hourAngle(0.833, lat, jd) * 60.0
-        val asrMinutes = dhuhrMinutes + asrHourAngle(asrShadowFactor, lat, jd) * 60.0
-        val maghribMinutes = dhuhrMinutes + hourAngle(0.833, lat, jd) * 60.0
+        val sunriseMinutes = dhuhrMinutes - hourAngle(sunriseMaghribAngle, lat, jd) * 60.0
+        val asrMinutes = dhuhrMinutes + asrHourAngle(asrShadowFactor, lat, jd) * 60.0 + 1.0
+        val maghribMinutes = dhuhrMinutes + hourAngle(sunriseMaghribAngle, lat, jd) * 60.0
         val ishaMinutes = dhuhrMinutes + hourAngle(ishaAngle, lat, jd) * 60.0
 
         return DayPrayerTimes(
@@ -112,8 +115,9 @@ object PrayerCalculator {
 
     private fun formatTime(totalMinutes: Double): String {
         val minutes = ((totalMinutes % 1440.0) + 1440.0) % 1440.0
-        val h = floor(minutes / 60.0).toInt()
-        val m = floor(minutes % 60.0).toInt()
+        val roundedMinutes = Math.round(minutes).toInt() % 1440
+        val h = roundedMinutes / 60
+        val m = roundedMinutes % 60
         return String.format("%02d:%02d", h, m)
     }
 }

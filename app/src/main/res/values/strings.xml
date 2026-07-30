@@ -10,11 +10,40 @@
 <string name="governorate_title">المحافظة</string>
 <string name="adhan_sound">صوت الأذان</string>
 <string name="occasions_title">المناسبات الدينية والوطنية</string>
+
+<!-- عناوين المناسبات (الدينية منها والوطنية) -->
+<string name="occ_new_year">رأس السنة الميلادية</string>
+<string name="occ_isra_miraj">ليلة الإسراء والمعراج</string>
+<string name="occ_ramadan_start">بداية شهر رمضان المبارك</string>
+<string name="occ_laylat_qadr">ليلة القدر (تقديرية)</string>
+<string name="occ_eid_fitr">عيد الفطر السعيد</string>
+<string name="occ_labour_day">عيد العمال</string>
+<string name="occ_independence_day">عيد استقلال المملكة</string>
+<string name="occ_arafah">وقفة عرفة</string>
+<string name="occ_eid_adha">عيد الأضحى المبارك</string>
+<string name="occ_islamic_new_year">رأس السنة الهجرية</string>
+<string name="occ_ashura">يوم عاشوراء</string>
+<string name="occ_mawlid">المولد النبوي الشريف</string>
+<string name="occ_christmas">عيد الميلاد المجيد</string>
+
+<!-- التاريخ الهجري الثابت لكل مناسبة دينية (يُعرض إلى جانب التاريخ الميلادي المحسوب تلقائياً) -->
+<string name="occ_isra_miraj_hijri">27 رجب</string>
+<string name="occ_ramadan_start_hijri">1 رمضان</string>
+<string name="occ_laylat_qadr_hijri">27 رمضان</string>
+<string name="occ_eid_fitr_hijri">1 شوال</string>
+<string name="occ_arafah_hijri">9 ذو الحجة</string>
+<string name="occ_eid_adha_hijri">10 ذو الحجة</string>
+<string name="occ_islamic_new_year_hijri">1 محرم</string>
+<string name="occ_ashura_hijri">10 محرم</string>
+<string name="occ_mawlid_hijri">12 ربيع الأول</string>
+
+<string name="occ_gregorian_prefix">الموافق</string>
 <string name="azkar_title">الأذكار</string>
 <string name="quran_title">القرآن الكريم</string>
 <string name="tasbih_title">المسبحة الإلكترونية</string>
 <string name="about_title">حول التطبيق</string>
 <string name="home_title">مواقيت الصلاة</string>
+    <string name="countdown_to_next_format">الوقت المتبقي لـ %1$s: %2$s</string>
 <string name="prayer_sunrise">الشروق</string>
 <string name="menu_button_desc">القائمة</string>
 <string name="save_settings">حفظ الإعدادات</string>

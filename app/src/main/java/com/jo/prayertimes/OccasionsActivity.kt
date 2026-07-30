@@ -22,7 +22,7 @@ class OccasionsActivity : AppCompatActivity() {
 
         HomeNavigator.wire(this)
         val listView = findViewById<ListView>(R.id.lvOccasions)
-        val occasions = resources.getStringArray(R.array.occasions_list).toList()
+        val occasions = OccasionsCalculator.getUpcomingOccasions(this)
 
         listView.adapter = OccasionCardAdapter(this, occasions)
         listView.divider = null
@@ -31,27 +31,16 @@ class OccasionsActivity : AppCompatActivity() {
 
     private class OccasionCardAdapter(
         context: Context,
-        items: List<String>
-    ) : ArrayAdapter<String>(context, R.layout.item_occasion_card, items) {
+        items: List<ComputedOccasion>
+    ) : ArrayAdapter<ComputedOccasion>(context, R.layout.item_occasion_card, items) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context)
                 .inflate(R.layout.item_occasion_card, parent, false)
 
-            val entry = getItem(position) ?: ""
-            val separatorIndex = entry.indexOf(':')
-            val title: String
-            val date: String
-            if (separatorIndex != -1) {
-                title = entry.substring(0, separatorIndex).trim()
-                date = entry.substring(separatorIndex + 1).trim()
-            } else {
-                title = entry
-                date = ""
-            }
-
-            view.findViewById<TextView>(R.id.occasionTitle).text = title
-            view.findViewById<TextView>(R.id.occasionDate).text = date
+            val entry = getItem(position)
+            view.findViewById<TextView>(R.id.occasionTitle).text = entry?.title ?: ""
+            view.findViewById<TextView>(R.id.occasionDate).text = entry?.dateText ?: ""
             return view
         }
     }

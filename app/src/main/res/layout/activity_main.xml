@@ -56,6 +56,15 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvCountdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF3B0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp" />
+
+        <TextView
             android:id="@+id/tvGregorianDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

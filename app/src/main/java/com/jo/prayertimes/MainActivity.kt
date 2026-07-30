@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
@@ -41,14 +42,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spRegion: Spinner
     private lateinit var tvCurrentTime: TextView
+    private lateinit var tvCountdown: TextView
     private lateinit var tvGregorianDate: TextView
     private lateinit var tvHijriDate: TextView
+
+    /** لحظة حلول الصلاة القادمة (بالمللي ثانية) واسمها، تُستخدم لحساب العد التنازلي كل ثانية دون إعادة بناء القائمة */
+    private var nextEventTargetMillis: Long = 0L
+    private var nextEventLabel: String = ""
+    private var lastRefreshedMinute: Int = -1
 
     private val refreshHandler = Handler(Looper.getMainLooper())
     private val refreshRunnable = object : Runnable {
         override fun run() {
             updateClock()
-            refreshHandler.postDelayed(this, 30_000)
+            refreshHandler.postDelayed(this, 1_000)
         }
     }
 
@@ -65,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         spRegion = findViewById(R.id.spRegion)
         tvCurrentTime = findViewById(R.id.tvCurrentTime)
+        tvCountdown = findViewById(R.id.tvCountdown)
         tvGregorianDate = findViewById(R.id.tvGregorianDate)
         tvHijriDate = findViewById(R.id.tvHijriDate)
 
@@ -90,10 +98,69 @@ class MainActivity : AppCompatActivity() {
         setupMenuButton()
         requestNotificationPermissionIfNeeded()
         requestExactAlarmPermissionIfNeeded()
+        requestBatteryOptimizationExemptionIfNeeded()
+        promptXiaomiAutostartIfNeeded()
 
         flipDetector = FlipDetector(this) { stopAdhanService() }
 
         AlarmScheduler(this).rescheduleAll()
+    }
+
+    /**
+     * على أجهزة شاومي/ريدمي/بوكو (MIUI)، يمنع النظام التطبيق من العمل في الخلفية افتراضياً
+     * ما لم يُفعَّل "بدء التشغيل التلقائي" يدوياً من إعدادات الأمان الخاصة بشاومي.
+     * هذا هو السبب الأكثر شيوعاً لعدم ظهور تنبيهات الأذان على هذه الأجهزة.
+     */
+    private fun promptXiaomiAutostartIfNeeded() {
+        val manufacturer = Build.MANUFACTURER.lowercase(Locale.ROOT)
+        val isXiaomiFamily = manufacturer.contains("xiaomi") || manufacturer.contains("redmi") || manufacturer.contains("poco")
+        if (!isXiaomiFamily) return
+
+        val prefs = getSharedPreferences("PrayerAppSettings", Context.MODE_PRIVATE)
+        if (prefs.getBoolean("xiaomi_autostart_prompt_shown", false)) return
+
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("إعداد ضروري لأجهزة شاومي")
+            .setMessage(
+                "لضمان عمل تنبيهات الأذان حتى مع إغلاق الشاشة، افتح صفحة \"بدء التشغيل التلقائي\" ثم فعّل التطبيق، " +
+                "وتأكد أيضاً من ضبط توفير البطارية للتطبيق على \"بلا قيود\"."
+            )
+            .setPositiveButton("فتح الإعدادات") { _, _ ->
+                openXiaomiAutostartSettings()
+            }
+            .setNegativeButton("لاحقاً", null)
+            .setOnDismissListener {
+                prefs.edit().putBoolean("xiaomi_autostart_prompt_shown", true).apply()
+            }
+            .show()
+    }
+
+    private fun openXiaomiAutostartSettings() {
+        val candidateIntents = listOf(
+            Intent().setClassName(
+                "com.miui.securitycenter",
+                "com.miui.permcenter.autostart.AutoStartManagementActivity"
+            ),
+            Intent("miui.intent.action.OP_AUTO_START").addCategory(Intent.CATEGORY_DEFAULT),
+            Intent().setClassName("com.miui.securitycenter", "com.miui.securitycenter.Main")
+        )
+        for (intent in candidateIntents) {
+            try {
+                startActivity(intent)
+                return
+            } catch (e: Exception) {
+                // نجرّب النية التالية في حال لم تكن هذه الشاشة متوفرة على هذا الإصدار من MIUI
+            }
+        }
+        // كحل أخير، افتح صفحة تفاصيل التطبيق في إعدادات النظام العادية
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:$packageName")
+            }
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setupRegionSpinner() {
@@ -164,7 +231,18 @@ class MainActivity : AppCompatActivity() {
 
         val nowMinutes = now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE)
         var nextIndex = rawList.indexOfFirst { toMinutes(it.time) > nowMinutes }
-        if (nextIndex == -1) nextIndex = 0
+
+        if (nextIndex == -1) {
+            // كل مواقيت اليوم انتهت، فالحدث القادم هو فجر الغد
+            nextIndex = 0
+            val tomorrow = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, 1) }
+            val tomorrowTimes = repository.timesFor(region, tomorrow)
+            nextEventTargetMillis = timeStringToCalendar(tomorrowTimes.fajr, tomorrow).timeInMillis
+            nextEventLabel = Prayer.FAJR.arabicLabel
+        } else {
+            nextEventTargetMillis = timeStringToCalendar(rawList[nextIndex].time, now).timeInMillis
+            nextEventLabel = rawList[nextIndex].name
+        }
 
         val finalList = rawList.mapIndexed { index, item -> item.copy(isNext = index == nextIndex) }
         adapter.updateData(finalList)
@@ -177,11 +255,46 @@ class MainActivity : AppCompatActivity() {
         return parts[0].trim().toInt() * 60 + parts[1].trim().toInt()
     }
 
+    private fun timeStringToCalendar(time: String, dayReference: Calendar): Calendar {
+        val parts = time.split(":")
+        val cal = dayReference.clone() as Calendar
+        cal.set(Calendar.HOUR_OF_DAY, parts[0].trim().toInt())
+        cal.set(Calendar.MINUTE, parts[1].trim().toInt())
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal
+    }
+
     private fun updateClock() {
         val now = Calendar.getInstance()
-        tvCurrentTime.text = SimpleDateFormat("EEEE، HH:mm", Locale.getDefault()).format(now.time)
+        tvCurrentTime.text = SimpleDateFormat("EEEE، HH:mm:ss", Locale.getDefault()).format(now.time)
         tvGregorianDate.text = SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(now.time)
-        refreshPrayerTimes()
+
+        // نعيد بناء قائمة المواقيت فقط عند تغيّر الدقيقة، أما العد التنازلي فيُحدَّث كل ثانية بشكل مستقل وخفيف
+        val currentMinute = now.get(Calendar.MINUTE)
+        if (currentMinute != lastRefreshedMinute) {
+            lastRefreshedMinute = currentMinute
+            refreshPrayerTimes()
+        }
+        updateCountdown(now)
+    }
+
+    private fun updateCountdown(now: Calendar) {
+        if (nextEventTargetMillis == 0L) return
+        val remainingMs = (nextEventTargetMillis - now.timeInMillis).coerceAtLeast(0)
+        val totalSeconds = remainingMs / 1000
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+        tvCountdown.text = getString(
+            R.string.countdown_to_next_format,
+            nextEventLabel,
+            String.format(Locale("ar"), "%02d:%02d:%02d", hours, minutes, seconds)
+        )
+        if (remainingMs == 0L) {
+            // انتهى العد، أعد حساب الصلاة/الحدث القادم فوراً
+            refreshPrayerTimes()
+        }
     }
 
     private fun requestNotificationPermissionIfNeeded() {
@@ -194,23 +307,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * على أندرويد 12 (API 31) فما فوق، يجب أن يمنح المستخدم إذن "جدولة المنبهات الدقيقة" يدويًا
-     * من الإعدادات. بدونه يتحول النظام لجدولة غير دقيقة قد يؤجلها لدقائق طويلة أو لا تعمل إطلاقًا
-     * عند تفعيل توفير البطارية، وهذا هو سبب عدم عمل تنبيهات الأذان رغم أنها مفعّلة داخل التطبيق.
-     */
+    /** بدون هذه الصلاحية على أندرويد 12+ قد لا يعمل تنبيه الأذان في وقته بدقة */
     private fun requestExactAlarmPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = getSystemService(AlarmManager::class.java)
-            if (alarmManager?.canScheduleExactAlarms() == false) {
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
                 try {
-                    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                        data = Uri.parse("package:$packageName")
-                    }
-                    startActivity(intent)
+                    startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+            }
+        }
+    }
+
+    /** استثناء التطبيق من تحسين البطارية، وإلا فقد يوقف النظام الجدولة أو الخدمة قبل أن يُطلق الأذان */
+    private fun requestBatteryOptimizationExemptionIfNeeded() {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            try {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

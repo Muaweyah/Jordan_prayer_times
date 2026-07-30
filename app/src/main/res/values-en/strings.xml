@@ -10,11 +10,40 @@
 <string name="governorate_title">Governorate</string>
 <string name="adhan_sound">Adhan Audio</string>
 <string name="occasions_title">Religious &amp; National Occasions</string>
+
+<!-- Occasion titles (religious and national) -->
+<string name="occ_new_year">New Year\'s Day</string>
+<string name="occ_isra_miraj">Isra and Mi\'raj</string>
+<string name="occ_ramadan_start">Start of Ramadan</string>
+<string name="occ_laylat_qadr">Laylat al-Qadr (estimated)</string>
+<string name="occ_eid_fitr">Eid al-Fitr</string>
+<string name="occ_labour_day">Labour Day</string>
+<string name="occ_independence_day">Jordan Independence Day</string>
+<string name="occ_arafah">Day of Arafah</string>
+<string name="occ_eid_adha">Eid al-Adha</string>
+<string name="occ_islamic_new_year">Islamic New Year</string>
+<string name="occ_ashura">Day of Ashura</string>
+<string name="occ_mawlid">Prophet\'s Birthday (Mawlid)</string>
+<string name="occ_christmas">Christmas Day</string>
+
+<!-- Fixed Hijri anniversary for each religious occasion (shown next to the auto-computed Gregorian date) -->
+<string name="occ_isra_miraj_hijri">27 Rajab</string>
+<string name="occ_ramadan_start_hijri">1 Ramadan</string>
+<string name="occ_laylat_qadr_hijri">27 Ramadan</string>
+<string name="occ_eid_fitr_hijri">1 Shawwal</string>
+<string name="occ_arafah_hijri">9 Dhu al-Hijjah</string>
+<string name="occ_eid_adha_hijri">10 Dhu al-Hijjah</string>
+<string name="occ_islamic_new_year_hijri">1 Muharram</string>
+<string name="occ_ashura_hijri">10 Muharram</string>
+<string name="occ_mawlid_hijri">12 Rabi al-Awwal</string>
+
+<string name="occ_gregorian_prefix">corresponds to</string>
 <string name="azkar_title">Azkar</string>
 <string name="quran_title">Holy Quran</string>
 <string name="tasbih_title">Electronic Tasbih</string>
 <string name="about_title">About</string>
 <string name="home_title">Prayer Times</string>
+    <string name="countdown_to_next_format">Time remaining until %1$s: %2$s</string>
 <string name="prayer_sunrise">Sunrise</string>
 <string name="menu_button_desc">Menu</string>
 <string name="save_settings">Save Settings</string>
