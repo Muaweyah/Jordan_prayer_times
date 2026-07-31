@@ -29,7 +29,6 @@ class PrayerAdapter(
         val cardView: CardView = view.findViewById(R.id.card_prayer)
         val iconView: ImageView = view.findViewById(R.id.iv_prayer_icon)
         val nameView: TextView = view.findViewById(R.id.tv_prayer_name)
-        val nameEnView: TextView = view.findViewById(R.id.tv_prayer_name_en)
         val timeView: TextView = view.findViewById(R.id.tv_prayer_time)
         val bellButton: ImageButton = view.findViewById(R.id.btn_bell_toggle)
     }
@@ -54,7 +53,6 @@ class PrayerAdapter(
 
         val prayer = item.prayer
         if (prayer != null) {
-            holder.nameEnView.text = prayer.englishLabel
             holder.iconView.setImageResource(iconFor(prayer))
             holder.iconView.setBackgroundResource(bgFor(prayer))
 
@@ -69,7 +67,6 @@ class PrayerAdapter(
             }
         } else {
             // الشروق ليس وقت صلاة: لا أذان له ولا زر جرس
-            holder.nameEnView.text = "Sunrise"
             holder.iconView.setImageResource(R.drawable.ic_sun)
             holder.iconView.setBackgroundResource(R.drawable.bg_icon_sunrise)
             holder.bellButton.visibility = View.INVISIBLE
