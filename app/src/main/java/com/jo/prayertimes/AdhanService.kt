@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
@@ -31,9 +32,55 @@ class AdhanService : Service() {
         }
 
         val prayerKey = intent?.getStringExtra(AlarmScheduler.EXTRA_PRAYER_KEY)
+        if (shouldSuppressAdhanSound()) {
+            // جهاز مستخدَم حالياً (وسائط تعمل أو مكالمة جارية): نكتفي بإشعار عادي في مركز
+            // الإشعارات دون تشغيل صوت الأذان إطلاقاً، حتى لا يقاطع الوسائط أو المكالمة الجارية.
+            isPlaying = false
+            postSilentNotification(prayerKey)
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         startForeground(NOTIFICATION_ID, buildNotification(prayerKey))
         playAdhan()
         return START_STICKY
+    }
+
+    /** إشعار عادي (غير مستمر) بلا صوت ولا زر إيقاف، لأنه لا يوجد صوت يعمل أصلاً ليتم إيقافه */
+    private fun postSilentNotification(prayerKey: String?) {
+        val prayer = Prayer.values().find { it.key == prayerKey }
+        val title = if (prayer != null) "حان الآن موعد أذان ${prayer.arabicLabel}" else "حان الآن موعد الأذان"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID, "تنبيهات الأذان", NotificationManager.IMPORTANCE_HIGH
+            )
+            val manager = getSystemService(NotificationManager::class.java)
+            manager?.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText("تم كتم صوت الأذان تلقائياً (وسائط تعمل أو مكالمة جارية)")
+            .setSmallIcon(android.R.drawable.ic_lock_silent_mode_off)
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        val manager = getSystemService(NotificationManager::class.java)
+        manager?.notify(NOTIFICATION_ID, notification)
+    }
+
+    /** يتحقق مما إذا كان يجب كتم صوت الأذان لأن تطبيق وسائط آخر يعمل حالياً أو لوجود مكالمة هاتفية جارية.
+     *  نعتمد على حالة مدير الصوت (AudioManager) بدلاً من صلاحية قراءة حالة الهاتف الحساسة. */
+    private fun shouldSuppressAdhanSound(): Boolean {
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return false
+        val isMediaPlaying = audioManager.isMusicActive
+        val isPhoneCallActive = audioManager.mode == AudioManager.MODE_IN_CALL ||
+            audioManager.mode == AudioManager.MODE_IN_COMMUNICATION ||
+            audioManager.mode == AudioManager.MODE_RINGTONE
+        return isMediaPlaying || isPhoneCallActive
     }
 
     private fun buildNotification(prayerKey: String?): android.app.Notification {

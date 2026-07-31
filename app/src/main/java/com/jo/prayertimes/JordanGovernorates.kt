@@ -1,6 +1,18 @@
 package com.jo.prayertimes
 
-enum class JordanGovernorates(val arabicName: String, val lat: Double, val lng: Double) {
+/**
+ * [officialZoneKey] يربط المنطقة بالاسم الحرفي للمنطقة كما ورد في التقويم السنوي الرسمي
+ * الصادر عن وزارة الأوقاف والشؤون والمقدسات الإسلامية لعام 2026 (انظر
+ * assets/prayer_times_2026.json وcalendar2026.pdf)، بحيث تُقرأ مواقيتها مباشرة من
+ * جدول الوزارة الرسمي بدل حسابها فلكياً. المحافظات الأصلية الاثنتا عشرة تبقى تعتمد
+ * الحساب الفلكي المعايَر (officialZoneKey = null) حفاظاً على سلوكها الحالي دون تغيير.
+ */
+enum class JordanGovernorates(
+    val arabicName: String,
+    val lat: Double,
+    val lng: Double,
+    val officialZoneKey: String? = null
+) {
     AMMAN("عَمّان", 31.9539, 35.9106),
     IRBID("إربد", 32.5556, 35.8500),
     ZARQA("الزرقاء", 32.0728, 36.0880),
@@ -12,7 +24,20 @@ enum class JordanGovernorates(val arabicName: String, val lat: Double, val lng: 
     MADABA("مأدبا", 31.7157, 35.7939),
     JERASH("جرش", 32.2811, 35.8992),
     AJLOUN("عجلون", 32.3326, 35.7517),
-    MAFRAQ("المفرق", 32.3433, 36.2081);
+    MAFRAQ("المفرق", 32.3433, 36.2081),
+
+    // مناطق إضافية بناءً على طلب المستخدم، تُقرأ مواقيتها من جدول وزارة الأوقاف الرسمي (عام 2026)
+    // عبر officialZoneKey، مع الإحداثيات كخيار احتياطي لأي سنة أخرى غير مغطاة بالجدول
+    AZRAQ("الأزرق", 31.8349, 36.8143, "الأزرق"),
+    UMARI("العمري", 31.0870, 37.4890, "الأزرق"),
+    RUWAISHED("الرويشد", 32.5042, 38.2011, "حدود الكرامة - الرويشد"),
+    JAFR("الجفر", 30.2933, 36.2139, "معان - الحسينية/المدورة"),
+    MUWAQQAR("الموقر", 31.8156, 36.0942, "عمان/الزرقاء - البلقاء/مأدبا"),
+    SHUNA_JANUBIYA("الشونة الجنوبية", 31.9148, 35.6133, "الأغوار الوسطى"),
+    SHUNA_WUSTA("الشونة الوسطى", 31.9028, 35.6167, "الأغوار الوسطى"),
+    SHUNA_SHAMALIYA("الشونة الشمالية", 32.6100, 35.6081, "الأغوار الشمالية"),
+    QAFQAFA("قفقفا", 32.3485, 35.9386, "جرش وعجلون"),
+    TLAA_AL_ALI_BARAKA("تلاع العلي - حي البركة", 32.0089, 35.8637, "عمان/الزرقاء - البلقاء/مأدبا");
 
     companion object {
         fun getNamesList(): List<String> = values().map { it.arabicName }
