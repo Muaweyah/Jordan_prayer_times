@@ -19,14 +19,19 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var spSurahList: Spinner
     private lateinit var btnPlayQuran: Button
     private lateinit var btnPauseQuran: Button
+    private lateinit var btnRewind10: Button
+    private lateinit var btnForward10: Button
     private lateinit var seekBarQuran: SeekBar
     private lateinit var tvCurrentSurahName: TextView
     private lateinit var tvTimeRemaining: TextView
+    private lateinit var tvAyahText: TextView
 
     private var mediaPlayer: MediaPlayer? = null
     private var pausedPosition = 0
     private var currentSurahIndex = -1
     private var isUserSeeking = false
+
+    private var surahAyatMap: Map<String, List<String>> = emptyMap()
 
     private val progressHandler = Handler(Looper.getMainLooper())
     private val progressRunnable = object : Runnable {
@@ -49,19 +54,27 @@ class QuranActivity : AppCompatActivity() {
         spSurahList = findViewById(R.id.spSurahList)
         btnPlayQuran = findViewById(R.id.btnPlayQuran)
         btnPauseQuran = findViewById(R.id.btnPauseQuran)
+        btnRewind10 = findViewById(R.id.btnRewind10)
+        btnForward10 = findViewById(R.id.btnForward10)
         seekBarQuran = findViewById(R.id.seekBarQuran)
         tvCurrentSurahName = findViewById(R.id.tvCurrentSurahName)
         tvTimeRemaining = findViewById(R.id.tvTimeRemaining)
+        tvAyahText = findViewById(R.id.tvAyahText)
+
+        surahAyatMap = loadQuranData()
 
         val surahNames = loadSurahNames()
         val adapter = ArrayAdapter(this, R.layout.spinner_item, surahNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spSurahList.adapter = adapter
         tvCurrentSurahName.text = surahNames.firstOrNull() ?: ""
+        updateAyahText(surahNames.firstOrNull())
 
         spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                tvCurrentSurahName.text = surahNames.getOrNull(position) ?: ""
+                val name = surahNames.getOrNull(position) ?: ""
+                tvCurrentSurahName.text = name
+                updateAyahText(name)
                 if (position != currentSurahIndex) {
                     // السورة المختارة تغيّرت، لا نستأنف من موضع سورة أخرى
                     pausedPosition = 0
@@ -104,6 +117,24 @@ class QuranActivity : AppCompatActivity() {
                 }
             }
         }
+
+        btnRewind10.setOnClickListener {
+            mediaPlayer?.let {
+                val newPos = (it.currentPosition - 10000).coerceAtLeast(0)
+                it.seekTo(newPos)
+                seekBarQuran.progress = newPos
+                updateRemainingTime(it.duration - newPos)
+            }
+        }
+
+        btnForward10.setOnClickListener {
+            mediaPlayer?.let {
+                val newPos = (it.currentPosition + 10000).coerceAtMost(it.duration)
+                it.seekTo(newPos)
+                seekBarQuran.progress = newPos
+                updateRemainingTime(it.duration - newPos)
+            }
+        }
     }
 
     private fun loadSurahNames(): List<String> {
@@ -113,6 +144,33 @@ class QuranActivity : AppCompatActivity() {
             (0 until array.length()).map { array.getString(it) }
         } catch (e: Exception) {
             Array(114) { i -> "سورة رقم ${i + 1}" }.toList()
+        }
+    }
+
+    private fun loadQuranData(): Map<String, List<String>> {
+        return try {
+            val json = assets.open("quran.json").bufferedReader().use { it.readText() }
+            val array = JSONArray(json)
+            val map = mutableMapOf<String, List<String>>()
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                val surahName = obj.getString("surah")
+                val ayatArray = obj.getJSONArray("ayat")
+                val ayatList = (0 until ayatArray.length()).map { ayatArray.getString(it) }
+                map[surahName] = ayatList
+            }
+            map
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
+
+    private fun updateAyahText(surahName: String?) {
+        val ayat = surahAyatMap[surahName]
+        tvAyahText.text = if (ayat != null) {
+            ayat.mapIndexed { index, ayah -> "${ayah} ﴿${index + 1}﴾" }.joinToString("\n\n")
+        } else {
+            "نص السورة غير متوفر حالياً"
         }
     }
 

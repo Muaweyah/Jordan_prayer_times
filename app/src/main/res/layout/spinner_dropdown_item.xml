@@ -10,7 +10,7 @@
     android:minHeight="58dp"
     android:includeFontPadding="true"
     android:lineSpacingExtra="4dp"
-    android:textColor="@color/text_primary"
+    android:textColor="#1A0B2E"
     android:textSize="18sp"
     android:textStyle="bold"
     android:fontFamily="@font/cairo" />

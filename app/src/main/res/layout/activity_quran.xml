@@ -63,7 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="12dp">
 
         <Button
             android:id="@+id/btnPlayQuran"
@@ -84,6 +85,62 @@
             android:backgroundTint="#C0392B"
             android:textColor="#FFFFFF" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnRewind10"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            android:text="⏪ 10 ثوانٍ"
+            android:backgroundTint="@color/purple_light_bg"
+            android:textColor="@color/purple_light_text"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnForward10"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            android:text="10 ثوانٍ ⏩"
+            android:backgroundTint="@color/purple_light_bg"
+            android:textColor="@color/purple_light_text" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="نص السورة"
+        android:textColor="@color/purple_dark_text"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/purple_light_bg"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/tvAyahText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purple_light_text"
+            android:textSize="18sp"
+            android:lineSpacingExtra="10dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="" />
+
+    </ScrollView>
 </LinearLayout>
 
     <ImageButton
