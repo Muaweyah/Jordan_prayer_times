@@ -5,6 +5,8 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +23,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -42,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: PrayerAdapter
 
     private lateinit var spRegion: Spinner
+    private lateinit var btnLocateMe: ImageButton
     private lateinit var tvCurrentTime: TextView
     private lateinit var tvGregorianDate: TextView
     private lateinit var tvHijriDate: TextView
@@ -78,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         repository = PrayerRepository(this)
 
         spRegion = findViewById(R.id.spRegion)
+        btnLocateMe = findViewById(R.id.btnLocateMe)
         tvCurrentTime = findViewById(R.id.tvCurrentTime)
         tvGregorianDate = findViewById(R.id.tvGregorianDate)
         tvHijriDate = findViewById(R.id.tvHijriDate)
@@ -106,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupRegionSpinner()
+        setupLocationButton()
         setupMenuButton()
         requestNotificationPermissionIfNeeded()
         requestExactAlarmPermissionIfNeeded()
@@ -194,6 +200,69 @@ class MainActivity : AppCompatActivity() {
                 refreshPrayerTimes()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun setupLocationButton() {
+        btnLocateMe.setOnClickListener { detectNearestGovernorate() }
+    }
+
+    /** يحدد المحافظة الأقرب لموقع الجهاز الفعلي عبر GPS/الشبكة، ثم يختارها تلقائياً في القائمة المنسدلة. */
+    private fun detectNearestGovernorate() {
+        val hasFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+        val hasCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+
+        if (!hasFine && !hasCoarse) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                300
+            )
+            return
+        }
+
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        val location: Location? = try {
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                ?: locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
+        } catch (e: SecurityException) {
+            null
+        }
+
+        if (location == null) {
+            Toast.makeText(
+                this,
+                "تعذّر تحديد الموقع، تأكد من تفعيل خدمة الموقع (GPS) في إعدادات الهاتف وحاول مجدداً",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val nearest = JordanGovernorates.values().minByOrNull { gov ->
+            val dLat = gov.lat - location.latitude
+            val dLng = gov.lng - location.longitude
+            dLat * dLat + dLng * dLng
+        } ?: return
+
+        val names = JordanGovernorates.getNamesList()
+        val index = names.indexOf(nearest.arabicName)
+        if (index >= 0) {
+            spRegion.setSelection(index)
+            Toast.makeText(this, "تم تحديد المحافظة: ${nearest.arabicName}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 300 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            detectNearestGovernorate()
         }
     }
 
