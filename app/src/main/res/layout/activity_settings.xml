@@ -47,7 +47,8 @@
             android:id="@+id/spinnerLanguage"
             android:popupBackground="@color/surface"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:minHeight="52dp"
             android:background="@color/surface" />
     </LinearLayout>
 
@@ -74,7 +75,8 @@
             android:id="@+id/spinnerTheme"
         android:popupBackground="@color/surface"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+        android:minHeight="52dp"
             android:background="@color/surface" />
     </LinearLayout>
 
