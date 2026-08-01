@@ -44,4 +44,9 @@ class SettingsManager(context: Context) {
     var appLanguage: String
         get() = prefs.getString("key_app_language", "system") ?: "system"
         set(value) { prefs.edit().putString("key_app_language", value).apply() }
+
+    /** نظام عرض الوقت: "24" (افتراضي) أو "12" (مع مؤشر صباحاً/مساءً) */
+    var timeFormat: String
+        get() = prefs.getString("key_time_format", "24") ?: "24"
+        set(value) { prefs.edit().putString("key_time_format", value).apply() }
 }

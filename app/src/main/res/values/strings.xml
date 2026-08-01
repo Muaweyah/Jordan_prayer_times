@@ -60,6 +60,8 @@
 <string name="no_change_label">بدون تعديل</string>
 <string name="flip_mute_title">إيقاف الأذان عند قلب الهاتف</string>
 <string name="flip_mute_desc">كتم صوت التنبيه بمجرد تدوير الهاتف للشاشة للأسفل</string>
+<string name="time_format_title">نظام الساعة 12</string>
+<string name="time_format_desc">عرض الوقت بصيغة 12 ساعة مع مؤشر صباحاً/مساءً بدل نظام 24 ساعة</string>
 <string name="volume_mute_title">إيقاف الأذان بأزرار الصوت</string>
 <string name="volume_mute_desc">كتم صوت التنبيه فور الضغط على أي من زري رفع أو خفض الصوت</string>
 <string name="theme_system">حسب النظام</string>

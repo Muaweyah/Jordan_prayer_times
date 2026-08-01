@@ -60,6 +60,8 @@
 <string name="no_change_label">No change</string>
 <string name="flip_mute_title">Stop Adhan on Phone Flip</string>
 <string name="flip_mute_desc">Mute the alert as soon as the phone is turned face down</string>
+<string name="time_format_title">12-Hour Format</string>
+<string name="time_format_desc">Show times in 12-hour format with AM/PM instead of 24-hour</string>
 <string name="volume_mute_title">Stop Adhan with Volume Buttons</string>
 <string name="volume_mute_desc">Mute the alert as soon as either volume button is pressed</string>
 <string name="theme_system">System Default</string>

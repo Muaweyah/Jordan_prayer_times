@@ -49,7 +49,7 @@ class PrayerAdapter(
 
         val item = prayerList[position]
         holder.nameView.text = item.name
-        holder.timeView.text = item.time
+        holder.timeView.text = formatTimeForDisplay(item.time)
 
         val prayer = item.prayer
         if (prayer != null) {
@@ -80,6 +80,18 @@ class PrayerAdapter(
             holder.cardView.setCardBackgroundColor(0xFF1F2937.toInt())
             holder.timeView.setTextColor(0xFFF59E0B.toInt())
         }
+    }
+
+    /** ينسق وقت العرض حسب إعداد نظام الساعة، دون التأثير على القيمة الأصلية المستخدمة في الحسابات الداخلية */
+    private fun formatTimeForDisplay(time: String): String {
+        if (settingsManager.timeFormat != "12") return time
+        val parts = time.split(":")
+        val hour = parts.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
+        val minute = parts.getOrNull(1)?.trim()?.toIntOrNull() ?: 0
+        val period = if (hour >= 12) "م" else "ص"
+        var hour12 = hour % 12
+        if (hour12 == 0) hour12 = 12
+        return String.format("%d:%02d %s", hour12, minute, period)
     }
 
     private fun iconFor(prayer: Prayer): Int = when (prayer) {

@@ -13,6 +13,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var swFlipToMute: Switch
     private lateinit var swVolumeButtonMute: Switch
+    private lateinit var swTimeFormat12h: Switch
     private lateinit var spinnerTheme: Spinner
     private lateinit var spinnerLanguage: Spinner
     private lateinit var btnSaveSettings: Button
@@ -42,6 +43,7 @@ class SettingsActivity : AppCompatActivity() {
 
         swFlipToMute = findViewById(R.id.swFlipToMute)
         swVolumeButtonMute = findViewById(R.id.swVolumeButtonMute)
+        swTimeFormat12h = findViewById(R.id.swTimeFormat12h)
         spinnerTheme = findViewById(R.id.spinnerTheme)
         spinnerLanguage = findViewById(R.id.spinnerLanguage)
         btnSaveSettings = findViewById(R.id.btnSaveSettings)
@@ -59,6 +61,7 @@ class SettingsActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("PrayerAppSettings", Context.MODE_PRIVATE)
         swFlipToMute.isChecked = prefs.getBoolean("flip_to_mute", true)
         swVolumeButtonMute.isChecked = prefs.getBoolean("volume_button_mute", true)
+        swTimeFormat12h.isChecked = settings.timeFormat == "12"
 
         swFajr.isChecked = settings.isNotificationEnabled(Prayer.FAJR)
         swDhuhr.isChecked = settings.isNotificationEnabled(Prayer.DHUHR)
@@ -114,6 +117,7 @@ class SettingsActivity : AppCompatActivity() {
             settings.setNotificationEnabled(Prayer.ISHA, swIsha.isChecked)
             settings.hijriOffsetDays = hijriOffset
             settings.appLanguage = selectedLanguage
+            settings.timeFormat = if (swTimeFormat12h.isChecked) "12" else "24"
 
             // نُطبّق فوراً أي تغيير في تفعيل/تعطيل التنبيهات على التنبيهات المجدولة
             AlarmScheduler(this).rescheduleAll()
