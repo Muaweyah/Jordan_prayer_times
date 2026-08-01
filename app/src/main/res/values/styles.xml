@@ -16,4 +16,14 @@
         <item name="android:popupBackground">@color/purple_popup_bg</item>
         <item name="android:textColorPrimary">@color/purple_text</item>
     </style>
+
+    <!-- تصميم موحّد وواضح التباين لكل مربعات الحوار (AlertDialog) في التطبيق،
+         يضمن خلفية فاتحة ونص داكن دائماً بغض النظر عن ثيم الجهاز أو التطبيق -->
+    <style name="AppAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/surface</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="colorAccent">@color/primary</item>
+    </style>
+
 </resources>

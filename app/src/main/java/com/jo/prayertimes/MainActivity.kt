@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("PrayerAppSettings", Context.MODE_PRIVATE)
         if (prefs.getBoolean("xiaomi_autostart_prompt_shown", false)) return
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.AppAlertDialogTheme)
             .setTitle("إعداد ضروري لأجهزة شاومي")
             .setMessage(
                 "لضمان عمل تنبيهات الأذان حتى مع إغلاق الشاشة، افتح صفحة \"بدء التشغيل التلقائي\" ثم فعّل التطبيق، " +
