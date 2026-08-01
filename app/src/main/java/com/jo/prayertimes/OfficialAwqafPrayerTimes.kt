@@ -31,11 +31,20 @@ object OfficialAwqafPrayerTimes {
         return table[dayOfYearIndex]?.get(officialZoneKey)
     }
 
-    /** يحوّل "6:9" أو "6:09" إلى الصيغة الموحدة "06:09" المستخدمة في باقي التطبيق */
-    private fun normalizeTime(raw: String): String {
+    /** يحوّل وقتاً صباحياً (فجر/شروق) دون أي تعديل على الساعة */
+    private fun normalizeMorningTime(raw: String): String {
         val parts = raw.split(":")
         val hour = parts[0].trim().toIntOrNull() ?: 0
         val minute = parts.getOrNull(1)?.trim()?.toIntOrNull() ?: 0
+        return String.format("%02d:%02d", hour, minute)
+    }
+
+    /** يحوّل وقتاً بعد الظهر (ظهر/عصر/مغرب/عشاء) من صيغة 12 ساعة الغامضة إلى 24 ساعة صحيحة */
+    private fun normalizeAfternoonTime(raw: String): String {
+        val parts = raw.split(":")
+        var hour = parts[0].trim().toIntOrNull() ?: 0
+        val minute = parts.getOrNull(1)?.trim()?.toIntOrNull() ?: 0
+        if (hour in 1..11) hour += 12
         return String.format("%02d:%02d", hour, minute)
     }
 
@@ -51,12 +60,12 @@ object OfficialAwqafPrayerTimes {
                 dayObject.keys().forEach { zoneKey ->
                     val zoneTimes = dayObject.getJSONObject(zoneKey)
                     zones[zoneKey] = DayPrayerTimes(
-                        fajr = normalizeTime(zoneTimes.getString("fajr")),
-                        sunrise = normalizeTime(zoneTimes.getString("shorouq")),
-                        dhuhr = normalizeTime(zoneTimes.getString("dhuhr")),
-                        asr = normalizeTime(zoneTimes.getString("asr")),
-                        maghrib = normalizeTime(zoneTimes.getString("maghrib")),
-                        isha = normalizeTime(zoneTimes.getString("isha"))
+                        fajr = normalizeMorningTime(zoneTimes.getString("fajr")),
+                        sunrise = normalizeMorningTime(zoneTimes.getString("shorouq")),
+                        dhuhr = normalizeAfternoonTime(zoneTimes.getString("dhuhr")),
+                        asr = normalizeAfternoonTime(zoneTimes.getString("asr")),
+                        maghrib = normalizeAfternoonTime(zoneTimes.getString("maghrib")),
+                        isha = normalizeAfternoonTime(zoneTimes.getString("isha"))
                     )
                 }
                 parsed[dayKey.toInt()] = zones
