@@ -17,13 +17,10 @@ class QuranActivity : AppCompatActivity() {
     }
 
     private lateinit var spSurahList: Spinner
-    private lateinit var btnPlayQuran: Button
-    private lateinit var btnPauseQuran: Button
+    private lateinit var btnPlayPause: Button
     private lateinit var btnRewind10: Button
     private lateinit var btnForward10: Button
     private lateinit var seekBarQuran: SeekBar
-    private lateinit var tvCurrentSurahName: TextView
-    private lateinit var tvTimeRemaining: TextView
     private lateinit var tvAyahText: TextView
 
     private var mediaPlayer: MediaPlayer? = null
@@ -39,7 +36,6 @@ class QuranActivity : AppCompatActivity() {
             mediaPlayer?.let {
                 if (it.isPlaying && !isUserSeeking) {
                     seekBarQuran.progress = it.currentPosition
-                    updateRemainingTime(it.duration - it.currentPosition)
                 }
             }
             progressHandler.postDelayed(this, 500)
@@ -52,13 +48,10 @@ class QuranActivity : AppCompatActivity() {
 
         HomeNavigator.wire(this)
         spSurahList = findViewById(R.id.spSurahList)
-        btnPlayQuran = findViewById(R.id.btnPlayQuran)
-        btnPauseQuran = findViewById(R.id.btnPauseQuran)
+        btnPlayPause = findViewById(R.id.btnPlayPause)
         btnRewind10 = findViewById(R.id.btnRewind10)
         btnForward10 = findViewById(R.id.btnForward10)
         seekBarQuran = findViewById(R.id.seekBarQuran)
-        tvCurrentSurahName = findViewById(R.id.tvCurrentSurahName)
-        tvTimeRemaining = findViewById(R.id.tvTimeRemaining)
         tvAyahText = findViewById(R.id.tvAyahText)
 
         surahAyatMap = loadQuranData()
@@ -67,19 +60,17 @@ class QuranActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, R.layout.spinner_item, surahNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spSurahList.adapter = adapter
-        tvCurrentSurahName.text = surahNames.firstOrNull() ?: ""
         updateAyahText(surahNames.firstOrNull())
 
         spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val name = surahNames.getOrNull(position) ?: ""
-                tvCurrentSurahName.text = name
                 updateAyahText(name)
                 if (position != currentSurahIndex) {
                     // السورة المختارة تغيّرت، لا نستأنف من موضع سورة أخرى
                     pausedPosition = 0
                     seekBarQuran.progress = 0
-                    updateRemainingTime(0)
+                    btnPlayPause.text = "▶"
                 }
             }
 
@@ -87,11 +78,7 @@ class QuranActivity : AppCompatActivity() {
         }
 
         seekBarQuran.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    mediaPlayer?.let { updateRemainingTime(it.duration - progress) }
-                }
-            }
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 isUserSeeking = true
@@ -103,18 +90,16 @@ class QuranActivity : AppCompatActivity() {
             }
         })
 
-        btnPlayQuran.setOnClickListener {
-            val selectedPosition = spSurahList.selectedItemPosition
-            playAudio(selectedPosition + 1, selectedPosition)
-        }
-
-        btnPauseQuran.setOnClickListener {
-            mediaPlayer?.let {
-                if (it.isPlaying) {
-                    it.pause()
-                    pausedPosition = it.currentPosition
-                    Toast.makeText(this, "تم الإيقاف المؤقت", Toast.LENGTH_SHORT).show()
-                }
+        btnPlayPause.setOnClickListener {
+            val mp = mediaPlayer
+            if (mp != null && mp.isPlaying) {
+                mp.pause()
+                pausedPosition = mp.currentPosition
+                btnPlayPause.text = "▶"
+            } else {
+                val selectedPosition = spSurahList.selectedItemPosition
+                playAudio(selectedPosition + 1, selectedPosition)
+                btnPlayPause.text = "⏸"
             }
         }
 
@@ -123,7 +108,6 @@ class QuranActivity : AppCompatActivity() {
                 val newPos = (it.currentPosition - 10000).coerceAtLeast(0)
                 it.seekTo(newPos)
                 seekBarQuran.progress = newPos
-                updateRemainingTime(it.duration - newPos)
             }
         }
 
@@ -132,7 +116,6 @@ class QuranActivity : AppCompatActivity() {
                 val newPos = (it.currentPosition + 10000).coerceAtMost(it.duration)
                 it.seekTo(newPos)
                 seekBarQuran.progress = newPos
-                updateRemainingTime(it.duration - newPos)
             }
         }
     }
@@ -174,20 +157,11 @@ class QuranActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateRemainingTime(remainingMs: Int) {
-        val safeMs = remainingMs.coerceAtLeast(0)
-        val totalSeconds = safeMs / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        tvTimeRemaining.text = String.format("الوقت المتبقي: %02d:%02d", minutes, seconds)
-    }
-
     private fun playAudio(surahNumber: Int, surahIndex: Int) {
         if (mediaPlayer != null && !mediaPlayer!!.isPlaying && pausedPosition > 0 && surahIndex == currentSurahIndex) {
             mediaPlayer?.start()
             progressHandler.removeCallbacks(progressRunnable)
             progressHandler.post(progressRunnable)
-            Toast.makeText(this, "استئناف التلاوة...", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -209,17 +183,17 @@ class QuranActivity : AppCompatActivity() {
                     mp.start()
                     progressHandler.removeCallbacks(progressRunnable)
                     progressHandler.post(progressRunnable)
-                    Toast.makeText(this@QuranActivity, "جاري تلاوة السورة", Toast.LENGTH_SHORT).show()
                 }
                 setOnCompletionListener {
                     pausedPosition = 0
                     seekBarQuran.progress = 0
-                    updateRemainingTime(0)
+                    btnPlayPause.text = "▶"
                     progressHandler.removeCallbacks(progressRunnable)
                 }
             }
         } catch (e: Exception) {
             Toast.makeText(this, "تعذر تشغيل الصوت", Toast.LENGTH_SHORT).show()
+            btnPlayPause.text = "▶"
         }
     }
 
