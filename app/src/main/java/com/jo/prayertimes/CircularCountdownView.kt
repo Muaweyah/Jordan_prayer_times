@@ -23,7 +23,7 @@ class CircularCountdownView @JvmOverloads constructor(
     private val sweepTotal = 180f
     private var progress = 0f // من 0 إلى 1
 
-    private val strokeWidthPx = 16f * resources.displayMetrics.density
+    private val strokeWidthPx = 7f * resources.displayMetrics.density
     private val arcRect = RectF()
 
     private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
