@@ -145,7 +145,35 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 progressQuranPage.visibility = View.GONE
+                openTilawaPanel(view)
             }
+        }
+    }
+
+    /** يحاول فتح قائمة القرّاء (زر "تلاوة") داخل صفحة Quranflash تلقائياً بعد تحميلها.
+     * الصفحة تطبيق ويب حديث يُبنى محتواه بجافاسكربت بعد التحميل الأولي، لذلك نكرر المحاولة
+     * على فترات قصيرة لضمان أن الزر أصبح موجوداً فعلياً قبل محاولة الضغط عليه. */
+    private fun openTilawaPanel(view: WebView?) {
+        val js = """
+            (function() {
+                function findAndClick() {
+                    var all = document.querySelectorAll('*');
+                    for (var i = 0; i < all.length; i++) {
+                        var el = all[i];
+                        if (el.children.length === 0 && el.textContent && el.textContent.trim() === 'تلاوة') {
+                            el.click();
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return findAndClick();
+            })();
+        """.trimIndent()
+
+        val delays = listOf(800L, 1800L, 3000L)
+        for (delayMs in delays) {
+            progressHandler.postDelayed({ view?.evaluateJavascript(js, null) }, delayMs)
         }
     }
 
