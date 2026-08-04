@@ -84,31 +84,30 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="نص السورة"
+        android:text="صفحة المصحف"
         android:textColor="@color/purple_dark_text"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/purple_light_bg"
-        android:padding="4dp">
+        android:background="@color/purple_light_bg">
 
-        <TextView
-            android:id="@+id/tvAyahText"
+        <WebView
+            android:id="@+id/webViewQuran"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/purple_light_text"
-            android:textSize="18sp"
-            android:lineSpacingExtra="10dp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:text="" />
+            android:layout_height="match_parent" />
 
-    </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressQuranPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 </LinearLayout>
 
     <ImageButton
