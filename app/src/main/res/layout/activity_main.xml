@@ -89,8 +89,8 @@
             android:gravity="center" />
 
         <FrameLayout
-            android:layout_width="150dp"
-            android:layout_height="55dp">
+            android:layout_width="140dp"
+            android:layout_height="50dp">
 
             <com.jo.prayertimes.CircularCountdownView
                 android:id="@+id/circularCountdown"
