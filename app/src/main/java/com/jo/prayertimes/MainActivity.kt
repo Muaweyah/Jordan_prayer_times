@@ -46,11 +46,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spRegion: Spinner
     private lateinit var btnLocateMe: ImageButton
-    private lateinit var tvCurrentTime: TextView
+    private lateinit var tvRemainingLabel: TextView
+    private lateinit var ivRegionArrow: ImageView
     private lateinit var tvGregorianDate: TextView
     private lateinit var tvHijriDate: TextView
     private lateinit var circularCountdown: CircularCountdownView
-    private lateinit var ivNextPrayerIcon: ImageView
     private lateinit var tvCountdownBig: TextView
     private lateinit var tvNextPrayerClock: TextView
     private lateinit var tvNextPrayerName: TextView
@@ -83,14 +83,15 @@ class MainActivity : AppCompatActivity() {
 
         spRegion = findViewById(R.id.spRegion)
         btnLocateMe = findViewById(R.id.btnLocateMe)
-        tvCurrentTime = findViewById(R.id.tvCurrentTime)
         tvGregorianDate = findViewById(R.id.tvGregorianDate)
         tvHijriDate = findViewById(R.id.tvHijriDate)
         circularCountdown = findViewById(R.id.circularCountdown)
-        ivNextPrayerIcon = findViewById(R.id.ivNextPrayerIcon)
+        tvRemainingLabel = findViewById(R.id.tvRemainingLabel)
         tvCountdownBig = findViewById(R.id.tvCountdownBig)
         tvNextPrayerClock = findViewById(R.id.tvNextPrayerClock)
         tvNextPrayerName = findViewById(R.id.tvNextPrayerName)
+        ivRegionArrow = findViewById(R.id.ivRegionArrow)
+        ivRegionArrow.setOnClickListener { spRegion.performClick() }
 
         val rvPrayerTimes = findViewById<RecyclerView>(R.id.rvPrayerTimes)
         rvPrayerTimes.layoutManager = LinearLayoutManager(this)
@@ -335,8 +336,7 @@ class MainActivity : AppCompatActivity() {
 
         tvNextPrayerClock.text = formatClockDisplay(nextEventTargetMillis)
         tvNextPrayerName.text = nextEventLabel
-        val isNightEvent = nextEventLabel == Prayer.FAJR.arabicLabel || nextEventLabel == Prayer.ISHA.arabicLabel
-        ivNextPrayerIcon.setImageResource(if (isNightEvent) R.drawable.ic_moon else R.drawable.ic_sun)
+        tvRemainingLabel.text = "متبقٍ حتى $nextEventLabel"
 
         val finalList = rawList.mapIndexed { index, item -> item.copy(isNext = index == nextIndex) }
         adapter.updateData(finalList)
@@ -361,8 +361,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateClock() {
         val now = Calendar.getInstance()
-        tvCurrentTime.text = SimpleDateFormat("EEEE، HH:mm:ss", Locale.getDefault()).format(now.time)
-        tvGregorianDate.text = SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(now.time)
+        tvGregorianDate.text = SimpleDateFormat("EEEE، d MMMM yyyy", Locale.getDefault()).format(now.time)
 
         // نعيد بناء قائمة المواقيت فقط عند تغيّر الدقيقة، أما العد التنازلي فيُحدَّث كل ثانية بشكل مستقل وخفيف
         val currentMinute = now.get(Calendar.MINUTE)
