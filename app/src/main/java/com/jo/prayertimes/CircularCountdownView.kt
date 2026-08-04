@@ -19,8 +19,8 @@ class CircularCountdownView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val startAngle = 135f
-    private val sweepTotal = 270f
+    private val startAngle = 180f
+    private val sweepTotal = 180f
     private var progress = 0f // من 0 إلى 1
 
     private val strokeWidthPx = 16f * resources.displayMetrics.density
