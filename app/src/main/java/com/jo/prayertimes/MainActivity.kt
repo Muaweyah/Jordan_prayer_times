@@ -51,8 +51,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvHijriDate: TextView
     private lateinit var circularCountdown: CircularCountdownView
     private lateinit var tvCountdownBig: TextView
-    private lateinit var tvNextPrayerClock: TextView
-    private lateinit var tvNextPrayerName: TextView
+
 
     /** لحظة حلول الصلاة القادمة (بالمللي ثانية) واسمها، تُستخدم لحساب العد التنازلي كل ثانية دون إعادة بناء القائمة */
     private var nextEventTargetMillis: Long = 0L
@@ -87,8 +86,7 @@ class MainActivity : AppCompatActivity() {
         circularCountdown = findViewById(R.id.circularCountdown)
         tvRemainingLabel = findViewById(R.id.tvRemainingLabel)
         tvCountdownBig = findViewById(R.id.tvCountdownBig)
-        tvNextPrayerClock = findViewById(R.id.tvNextPrayerClock)
-        tvNextPrayerName = findViewById(R.id.tvNextPrayerName)
+
 
         val rvPrayerTimes = findViewById<RecyclerView>(R.id.rvPrayerTimes)
         rvPrayerTimes.layoutManager = LinearLayoutManager(this)
@@ -331,8 +329,6 @@ class MainActivity : AppCompatActivity() {
             nextEventStartMillis = timeStringToCalendar(rawList[nextIndex - 1].time, now).timeInMillis
         }
 
-        tvNextPrayerClock.text = formatClockDisplay(nextEventTargetMillis)
-        tvNextPrayerName.text = nextEventLabel
         tvRemainingLabel.text = "متبقٍ حتى $nextEventLabel"
 
         val finalList = rawList.mapIndexed { index, item -> item.copy(isNext = index == nextIndex) }

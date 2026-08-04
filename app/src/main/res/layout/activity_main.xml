@@ -65,9 +65,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_countdown_card"
-        android:padding="4dp"
+        android:padding="3dp"
         android:gravity="center"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="3dp">
 
         <TextView
             android:id="@+id/tvGregorianDate"
@@ -125,24 +125,6 @@
             </LinearLayout>
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/tvNextPrayerName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:gravity="center" />
-
-        <TextView
-            android:id="@+id/tvNextPrayerClock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:textColor="@color/countdown_text_secondary"
-            android:textSize="11sp"
-            android:gravity="center" />
     </LinearLayout>
 
     <FrameLayout
