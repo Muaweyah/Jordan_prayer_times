@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/llQuranRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,6 +13,7 @@
     android:layoutDirection="rtl">
 
     <TextView
+        android:id="@+id/tvQuranTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="القرآن الكريم"
@@ -32,6 +34,7 @@
 
     <!-- صف تحكم موحّد: تأخير 10 ثوانٍ / تشغيل-إيقاف / شريط التقدّم / تقديم 10 ثوانٍ -->
     <LinearLayout
+        android:id="@+id/llQuranControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -82,6 +85,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvPageLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="صفحة المصحف"
@@ -106,6 +110,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+
+        <ImageButton
+            android:id="@+id/btnToggleFullscreen"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_fab_circle"
+            android:src="@android:drawable/ic_menu_view"
+            android:padding="8dp"
+            android:contentDescription="شاشة كاملة" />
 
     </FrameLayout>
 </LinearLayout>

@@ -25,6 +25,13 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var seekBarQuran: SeekBar
     private lateinit var webViewQuran: WebView
     private lateinit var progressQuranPage: ProgressBar
+    private lateinit var btnToggleFullscreen: ImageButton
+    private lateinit var tvQuranTitle: TextView
+    private lateinit var tvPageLabel: TextView
+    private lateinit var llQuranControls: LinearLayout
+    private lateinit var llQuranRoot: LinearLayout
+    private lateinit var btnHome: ImageButton
+    private var isFullscreen = false
 
     private var mediaPlayer: MediaPlayer? = null
     private var pausedPosition = 0
@@ -55,6 +62,14 @@ class QuranActivity : AppCompatActivity() {
         seekBarQuran = findViewById(R.id.seekBarQuran)
         webViewQuran = findViewById(R.id.webViewQuran)
         progressQuranPage = findViewById(R.id.progressQuranPage)
+        btnToggleFullscreen = findViewById(R.id.btnToggleFullscreen)
+        tvQuranTitle = findViewById(R.id.tvQuranTitle)
+        tvPageLabel = findViewById(R.id.tvPageLabel)
+        llQuranControls = findViewById(R.id.llQuranControls)
+        llQuranRoot = findViewById(R.id.llQuranRoot)
+        btnHome = findViewById(R.id.btnHome)
+
+        btnToggleFullscreen.setOnClickListener { toggleFullscreen() }
 
         setupWebView()
 
@@ -132,6 +147,25 @@ class QuranActivity : AppCompatActivity() {
                 progressQuranPage.visibility = View.GONE
             }
         }
+    }
+
+    private fun toggleFullscreen() {
+        isFullscreen = !isFullscreen
+        val visibility = if (isFullscreen) View.GONE else View.VISIBLE
+        tvQuranTitle.visibility = visibility
+        spSurahList.visibility = visibility
+        llQuranControls.visibility = visibility
+        tvPageLabel.visibility = visibility
+        btnHome.visibility = visibility
+        llQuranRoot.setPadding(
+            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
+            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
+            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
+            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt()
+        )
+        btnToggleFullscreen.setImageResource(
+            if (isFullscreen) android.R.drawable.ic_menu_close_clear_cancel else android.R.drawable.ic_menu_view
+        )
     }
 
     private fun loadQuranPage(surahNumber: Int) {
