@@ -49,8 +49,13 @@ class CircularCountdownView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        // نبني قوساً نصف دائري حقيقي (نصف قطره متساوٍ أفقياً وعمودياً)، قاعدته المسطحة
+        // ترتكز تماماً عند الحافة السفلية للعنصر، لتلامس مباشرة العنصر الذي يليه أسفله
         val inset = strokeWidthPx / 2f + 2f
-        arcRect.set(inset, inset, w - inset, h - inset)
+        val radius = (w / 2f) - inset
+        val centerX = w / 2f
+        val bottomY = h.toFloat() - inset
+        arcRect.set(centerX - radius, bottomY - 2f * radius, centerX + radius, bottomY)
 
         val colors = intArrayOf(
             Color.parseColor("#2FD1BE"),

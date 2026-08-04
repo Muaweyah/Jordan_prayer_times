@@ -26,7 +26,7 @@ class PrayerAdapter(
     }
 
     class PrayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cardView: CardView = view.findViewById(R.id.card_prayer)
+        val rowRoot: View = view.findViewById(R.id.row_prayer_item)
         val iconView: ImageView = view.findViewById(R.id.iv_prayer_icon)
         val nameView: TextView = view.findViewById(R.id.tv_prayer_name)
         val timeView: TextView = view.findViewById(R.id.tv_prayer_time)
@@ -74,10 +74,10 @@ class PrayerAdapter(
         }
 
         if (item.isNext) {
-            holder.cardView.setCardBackgroundColor(0xFF2D3748.toInt())
+            holder.rowRoot.setBackgroundColor(0x332D3748.toInt())
             holder.timeView.setTextColor(0xFF10B981.toInt())
         } else {
-            holder.cardView.setCardBackgroundColor(0xFF1F2937.toInt())
+            holder.rowRoot.setBackgroundColor(android.graphics.Color.TRANSPARENT)
             holder.timeView.setTextColor(0xFFF59E0B.toInt())
         }
     }
@@ -99,7 +99,7 @@ class PrayerAdapter(
         Prayer.DHUHR -> R.drawable.ic_sun
         Prayer.ASR -> R.drawable.ic_sun
         Prayer.MAGHRIB -> R.drawable.ic_sunset
-        Prayer.ISHA -> R.drawable.ic_moon
+        Prayer.ISHA -> R.drawable.ic_isha_night
     }
 
     private fun bgFor(prayer: Prayer): Int = when (prayer) {

@@ -99,8 +99,8 @@ class MainActivity : AppCompatActivity() {
 
         rvPrayerTimes.post {
             val rowCount = 6 // الفجر، الشروق، الظهر، العصر، المغرب، العشاء
-            val marginPerRowPx = (8 * resources.displayMetrics.density).toInt() // 4dp أعلى + 4dp أسفل لكل بطاقة
-            val minItemHeightPx = (34 * resources.displayMetrics.density).toInt() // أقل ارتفاع يضمن عدم قص النص
+            val marginPerRowPx = (1 * resources.displayMetrics.density).toInt() // خط فاصل رفيع بين كل صلاة والتي تليها
+            val minItemHeightPx = (32 * resources.displayMetrics.density).toInt() // أقل ارتفاع يضمن عدم قص النص
             val availableHeight = rvPrayerTimes.height
             if (availableHeight > 0) {
                 val computedHeight = (availableHeight - marginPerRowPx * rowCount) / rowCount

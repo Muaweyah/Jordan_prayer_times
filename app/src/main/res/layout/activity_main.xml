@@ -90,7 +90,7 @@
 
         <FrameLayout
             android:layout_width="140dp"
-            android:layout_height="50dp">
+            android:layout_height="66dp">
 
             <com.jo.prayertimes.CircularCountdownView
                 android:id="@+id/circularCountdown"
@@ -145,9 +145,16 @@
             android:gravity="center" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPrayerTimes"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@drawable/bg_prayer_list_gradient"
+        android:padding="4dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPrayerTimes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </LinearLayout>
