@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#E8C158</color>
+    <color name="background">#000000</color>
+    <color name="next_prayer_bg">#123232</color>
+    <color name="primary">#1E9E8A</color>
+    <color name="primary_dark">#000000</color>
+    <color name="surface">#000000</color>
+    <color name="surface_alt">#1A2A50</color>
+    <color name="teal_accent">#2FD1BE</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#8B96BC</color>
+    <style name="Theme.PrayerTimes" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="fontFamily">@font/cairo</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:popupMenuStyle">@style/AppPopupMenu</item>
+        <item name="popupMenuStyle">@style/AppPopupMenu</item>
+    </style>
+</resources>

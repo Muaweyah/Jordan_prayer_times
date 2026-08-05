@@ -39,6 +39,8 @@
         <activity android:name=".OccasionsActivity" android:exported="false" />
         <activity android:name=".AboutActivity" android:exported="false" />
         <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".PetFeedingActivity" android:exported="false" />
+        <activity android:name=".PetDetailActivity" android:exported="false" />
 
         <service
             android:name=".AdhanService"
@@ -46,6 +48,7 @@
             android:foregroundServiceType="mediaPlayback" />
 
         <receiver android:name=".AlarmReceiver" android:exported="false" />
+        <receiver android:name=".PetFeedingReceiver" android:exported="false" />
 
         <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>

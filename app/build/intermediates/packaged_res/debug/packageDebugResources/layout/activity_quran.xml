@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <!-- الهامش العلوي: اختيار السورة والصفحة -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:background="#1E1E1E"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/tvPageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="صفحة 1 من 604"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- قائمة منسدلة قابلة للكتابة والبحث -->
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteSurah"
+            android:layout_width="160dp"
+            android:layout_height="42dp"
+            android:background="#2A2A2A"
+            android:completionThreshold="1"
+            android:hint="ابحث عن سورة..."
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAA"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- عرض صفحات القرآن -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerQuran"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomControlBar"
+        android:layout_below="@id/topBar"
+        android:background="#FFFFFF" />
+
+    <!-- شريط التحكم بالصوت -->
+    <LinearLayout
+        android:id="@+id/bottomControlBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="#1E1E1E"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageButton
+            android:id="@+id/btnPlayAudio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Play Audio"
+            android:src="@android:drawable/ic_media_play" />
+    </LinearLayout>
+</RelativeLayout>

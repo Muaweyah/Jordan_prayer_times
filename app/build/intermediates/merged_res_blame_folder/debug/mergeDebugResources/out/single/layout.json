@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_qibla.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_qibla.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_settings.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_labeled_switch.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_labeled_switch.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_occasions.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_occasions.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_dropdown_surah.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_dropdown_surah.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_main.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_tasbih.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_tasbih.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/spinner_dropdown_item.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_quran_page.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_quran_page.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_pet_card.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_pet_card.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_pet_feeder.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_pet_feeder.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_quran.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_quran.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_prayer.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_prayer.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_about.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_about.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_spinner.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_spinner.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_zikr_card.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_zikr_card.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_occasion_card.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_occasion_card.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_pet_edit.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_pet_edit.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/spinner_item.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/spinner_item.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_pet_meal_row.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_pet_meal_row.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/item_prayer_row.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/item_prayer_row.xml"
+    },
+    {
+        "merged": "com.jo.prayertimes.app-mergeDebugResources-44:/layout/activity_azkar.xml",
+        "source": "com.jo.prayertimes.app-main-47:/layout/activity_azkar.xml"
+    }
+]

@@ -1,0 +1,277 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.jo.prayertimes"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:5:5-67
+11-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.VIBRATE" />
+12-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:6:5-66
+12-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:6:22-63
+13    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+13-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:7:5-81
+13-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:7:22-78
+14    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+14-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:8:5-77
+14-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:8:22-74
+15    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+15-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:9:5-79
+15-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:9:22-76
+16    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+16-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:10:5-77
+16-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:10:22-74
+17    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+17-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:11:5-92
+17-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:11:22-89
+18    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+18-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:12:5-79
+18-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:12:22-76
+19    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+19-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:13:5-81
+19-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:13:22-78
+20    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+20-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:14:5-95
+20-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:14:22-92
+21
+22    <uses-feature
+22-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:15:5-93
+23        android:name="android.hardware.sensor.compass"
+23-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:15:19-65
+24        android:required="false" />
+24-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:15:66-90
+25    <uses-feature
+25-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:16:5-91
+26        android:name="android.hardware.location.gps"
+26-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:16:19-63
+27        android:required="false" />
+27-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:16:64-88
+28
+29    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+29-->[androidx.media3:media3-exoplayer:1.2.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/befd3e24f7541b20e3d6d8df88894336/transformed/media3-exoplayer-1.2.1/AndroidManifest.xml:22:5-79
+29-->[androidx.media3:media3-exoplayer:1.2.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/befd3e24f7541b20e3d6d8df88894336/transformed/media3-exoplayer-1.2.1/AndroidManifest.xml:22:22-76
+30
+31    <permission
+31-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+32        android:name="com.jo.prayertimes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+32-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+33        android:protectionLevel="signature" />
+33-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+34
+35    <uses-permission android:name="com.jo.prayertimes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+35-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+35-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+36
+37    <application
+37-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:18:5-59:19
+38        android:allowBackup="true"
+38-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:19:9-35
+39        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+39-->[androidx.core:core:1.13.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/8e0a0bff2d388b6446750efdf4a5758f/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+40        android:debuggable="true"
+41        android:extractNativeLibs="false"
+42        android:icon="@mipmap/ic_launcher"
+42-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:20:9-43
+43        android:label="مواقيت الصلاة"
+43-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:21:9-38
+44        android:roundIcon="@mipmap/ic_launcher_round"
+44-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:22:9-54
+45        android:supportsRtl="true"
+45-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:23:9-35
+46        android:theme="@style/Theme.PrayerTimes"
+46-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:24:9-49
+47        android:usesCleartextTraffic="true" >
+47-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:18:18-53
+48        <activity
+48-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:26:9-33:20
+49            android:name="com.jo.prayertimes.MainActivity"
+49-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:27:13-41
+50            android:exported="true" >
+50-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:28:13-36
+51            <intent-filter>
+51-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:29:13-32:29
+52                <action android:name="android.intent.action.MAIN" />
+52-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:30:17-69
+52-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:30:25-66
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+54-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:31:17-77
+54-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:31:27-74
+55            </intent-filter>
+56        </activity>
+57        <activity
+57-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:35:9-76
+58            android:name="com.jo.prayertimes.QuranActivity"
+58-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:35:19-48
+59            android:exported="false" />
+59-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:35:49-73
+60        <activity
+60-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:36:9-76
+61            android:name="com.jo.prayertimes.AzkarActivity"
+61-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:36:19-48
+62            android:exported="false" />
+62-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:36:49-73
+63        <activity
+63-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:37:9-76
+64            android:name="com.jo.prayertimes.QiblaActivity"
+64-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:37:19-48
+65            android:exported="false" />
+65-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:37:49-73
+66        <activity
+66-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:38:9-77
+67            android:name="com.jo.prayertimes.TasbihActivity"
+67-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:38:19-49
+68            android:exported="false" />
+68-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:38:50-74
+69        <activity
+69-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:39:9-80
+70            android:name="com.jo.prayertimes.OccasionsActivity"
+70-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:39:19-52
+71            android:exported="false" />
+71-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:39:53-77
+72        <activity
+72-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:40:9-76
+73            android:name="com.jo.prayertimes.AboutActivity"
+73-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:40:19-48
+74            android:exported="false" />
+74-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:40:49-73
+75        <activity
+75-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:41:9-79
+76            android:name="com.jo.prayertimes.SettingsActivity"
+76-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:41:19-51
+77            android:exported="false" />
+77-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:41:52-76
+78        <activity
+78-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:42:9-80
+79            android:name="com.jo.prayertimes.PetFeederActivity"
+79-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:42:19-52
+80            android:exported="false" />
+80-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:42:53-77
+81        <activity
+81-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:43:9-78
+82            android:name="com.jo.prayertimes.PetEditActivity"
+82-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:43:19-50
+83            android:exported="false" />
+83-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:43:51-75
+84
+85        <service
+85-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:45:9-48:61
+86            android:name="com.jo.prayertimes.AdhanService"
+86-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:46:13-41
+87            android:exported="false"
+87-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:47:13-37
+88            android:foregroundServiceType="mediaPlayback" />
+88-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:48:13-58
+89
+90        <receiver
+90-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:50:9-76
+91            android:name="com.jo.prayertimes.AlarmReceiver"
+91-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:50:19-48
+92            android:exported="false" />
+92-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:50:49-73
+93        <receiver
+93-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:51:9-79
+94            android:name="com.jo.prayertimes.PetAlarmReceiver"
+94-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:51:19-51
+95            android:exported="false" />
+95-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:51:52-76
+96        <receiver
+96-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:53:9-57:20
+97            android:name="com.jo.prayertimes.BootReceiver"
+97-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:53:19-47
+98            android:exported="true" >
+98-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:53:48-71
+99            <intent-filter>
+99-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:54:13-56:29
+100                <action android:name="android.intent.action.BOOT_COMPLETED" />
+100-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:55:17-79
+100-->/data/data/com.termux/files/home/Jordan_prayer_times/app/src/main/AndroidManifest.xml:55:25-76
+101            </intent-filter>
+102        </receiver>
+103
+104        <provider
+104-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+105            android:name="androidx.startup.InitializationProvider"
+105-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+106            android:authorities="com.jo.prayertimes.androidx-startup"
+106-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+107            android:exported="false" >
+107-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+108            <meta-data
+108-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+109                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+109-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+110                android:value="androidx.startup" />
+110-->[androidx.emoji2:emoji2:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/192474c036ec43764acdf6f3e34ae042/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+111            <meta-data
+111-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-4/44d9374c2fc79a1ce870385ec114cea5/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+112                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+112-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-4/44d9374c2fc79a1ce870385ec114cea5/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+113                android:value="androidx.startup" />
+113-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-4/44d9374c2fc79a1ce870385ec114cea5/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+114            <meta-data
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+115                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+116                android:value="androidx.startup" />
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+117        </provider>
+118
+119        <uses-library
+119-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:25:9-27:40
+120            android:name="androidx.window.extensions"
+120-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:26:13-54
+121            android:required="false" />
+121-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:27:13-37
+122        <uses-library
+122-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:28:9-30:40
+123            android:name="androidx.window.sidecar"
+123-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:29:13-51
+124            android:required="false" />
+124-->[androidx.window:window:1.0.0] /data/data/com.termux/files/home/.gradle/caches/transforms-4/53d6f4f37c5743a28bc1f83cb31e6436/transformed/window-1.0.0/AndroidManifest.xml:30:13-37
+125
+126        <receiver
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+127            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+128            android:directBootAware="false"
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+129            android:enabled="true"
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+130            android:exported="true"
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+131            android:permission="android.permission.DUMP" >
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+132            <intent-filter>
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+133                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+134            </intent-filter>
+135            <intent-filter>
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+136                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+137            </intent-filter>
+138            <intent-filter>
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+139                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+140            </intent-filter>
+141            <intent-filter>
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+142                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] /data/data/com.termux/files/home/.gradle/caches/transforms-4/4e16cc280eaa0a1f5277c41379c36ea2/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+143            </intent-filter>
+144        </receiver>
+145    </application>
+146
+147</manifest>

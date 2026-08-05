@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="occasions_list">
+        <item>Islamic New Year: 1 Muharram</item>
+        <item>Day of Ashura: 10 Muharram</item>
+        <item>Prophet\'s Birthday (Mawlid): 12 Rabi al-Awwal</item>
+        <item>Isra and Mi\'raj: 27 Rajab</item>
+        <item>Start of Ramadan: 1 Ramadan</item>
+        <item>Laylat al-Qadr: 27 Ramadan (estimated)</item>
+        <item>Eid al-Fitr: 1 Shawwal</item>
+        <item>Day of Arafah: 9 Dhu al-Hijjah</item>
+        <item>Eid al-Adha: 10 Dhu al-Hijjah</item>
+    </string-array>
+    <string name="about_title">About</string>
+    <string name="add_meal">Add meal</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="adhan_sound">Adhan Audio</string>
+    <string name="app_name">Jordan Prayer Times</string>
+    <string name="azkar_title">Azkar</string>
+    <string name="cancel_label">Cancel</string>
+    <string name="choose_sound">Choose alert tone</string>
+    <string name="confirm_delete_pet_message">Delete %1$s and all its feeding times?</string>
+    <string name="confirm_delete_pet_title">Delete Pet</string>
+    <string name="countdown_to_next_format">Time remaining until %1$s: %2$s</string>
+    <string name="delete_confirm_label">Delete</string>
+    <string name="delete_pet">Delete Pet</string>
+    <string name="edit_pet">Edit</string>
+    <string name="flip_mute_desc">Mute the alert as soon as the phone is turned face down</string>
+    <string name="flip_mute_title">Stop Adhan on Phone Flip</string>
+    <string name="governorate_title">Governorate</string>
+    <string name="hijri_section_desc">Use the buttons below to shift the displayed Hijri date by a day or two if it differs from the actual moon sighting</string>
+    <string name="hijri_section_title">Hijri Date Correction</string>
+    <string name="home_title">Prayer Times</string>
+    <string name="lang_arabic">العربية</string>
+    <string name="lang_english">English</string>
+    <string name="lang_system">System Default</string>
+    <string name="language_section_title">App Language</string>
+    <string name="language_title">App Language</string>
+    <string name="meal_label_hint">Meal name (optional)</string>
+    <string name="meal_required">Please add at least one meal</string>
+    <string name="meal_summary_disabled_suffix"> (off)</string>
+    <string name="meals_section_title">Feeding times</string>
+    <string name="menu_button_desc">Menu</string>
+    <string name="next_prayer_title">Next Prayer</string>
+    <string name="no_change_label">No change</string>
+    <string name="notif_section_title">Adhan Alert per Prayer</string>
+    <string name="occ_arafah">Day of Arafah</string>
+    <string name="occ_arafah_hijri">9 Dhu al-Hijjah</string>
+    <string name="occ_ashura">Day of Ashura</string>
+    <string name="occ_ashura_hijri">10 Muharram</string>
+    <string name="occ_christmas">Christmas Day</string>
+    <string name="occ_eid_adha">Eid al-Adha</string>
+    <string name="occ_eid_adha_hijri">10 Dhu al-Hijjah</string>
+    <string name="occ_eid_fitr">Eid al-Fitr</string>
+    <string name="occ_eid_fitr_hijri">1 Shawwal</string>
+    <string name="occ_gregorian_prefix">corresponds to</string>
+    <string name="occ_independence_day">Jordan Independence Day</string>
+    <string name="occ_islamic_new_year">Islamic New Year</string>
+    <string name="occ_islamic_new_year_hijri">1 Muharram</string>
+    <string name="occ_isra_miraj">Isra and Mi\'raj</string>
+    <string name="occ_isra_miraj_hijri">27 Rajab</string>
+    <string name="occ_labour_day">Labour Day</string>
+    <string name="occ_laylat_qadr">Laylat al-Qadr (estimated)</string>
+    <string name="occ_laylat_qadr_hijri">27 Ramadan</string>
+    <string name="occ_mawlid">Prophet\'s Birthday (Mawlid)</string>
+    <string name="occ_mawlid_hijri">12 Rabi al-Awwal</string>
+    <string name="occ_new_year">New Year\'s Day</string>
+    <string name="occ_ramadan_start">Start of Ramadan</string>
+    <string name="occ_ramadan_start_hijri">1 Ramadan</string>
+    <string name="occasions_title">Religious &amp; National Occasions</string>
+    <string name="pet_deleted_format">%1$s deleted</string>
+    <string name="pet_feeder_empty">You haven\'t added any pets yet.\nTap the button below to set up its feeding times.</string>
+    <string name="pet_feeder_menu">Feed Your Pet</string>
+    <string name="pet_feeder_title">Feed Your Pet</string>
+    <string name="pet_name_hint">Pet\'s name</string>
+    <string name="pet_name_required">Please enter the pet\'s name</string>
+    <string name="pet_saved_format">%1$s saved successfully</string>
+    <string name="pet_type_bird">Bird</string>
+    <string name="pet_type_cat">Cat</string>
+    <string name="pet_type_dog">Dog</string>
+    <string name="pet_type_fish">Fish</string>
+    <string name="pet_type_label">Pet type</string>
+    <string name="pet_type_other">Other</string>
+    <string name="pet_type_rabbit">Rabbit</string>
+    <string name="prayer_asr">Asr</string>
+    <string name="prayer_dhuhr">Dhuhr</string>
+    <string name="prayer_fajr">Fajr</string>
+    <string name="prayer_isha">Isha</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_sunrise">Sunrise</string>
+    <string name="qibla_title">Qibla Direction</string>
+    <string name="quran_title">Holy Quran</string>
+    <string name="remove_meal">Remove meal</string>
+    <string name="restart_needed">Reopen the app to fully apply the new language</string>
+    <string name="save_pet">Save</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="settings_header">App Settings &amp; Appearance</string>
+    <string name="settings_saved">Settings saved successfully</string>
+    <string name="settings_title">Settings</string>
+    <string name="sound_chosen_format">Selected tone: %1$s</string>
+    <string name="sound_default_label">Default tone</string>
+    <string name="tasbih_title">Electronic Tasbih</string>
+    <string name="theme_dark">Dark Mode</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_purple">Purple Gradient</string>
+    <string name="theme_section_title">App Theme</string>
+    <string name="theme_system">System Default</string>
+    <string name="time_format_desc">Show times in 12-hour format with AM/PM instead of 24-hour</string>
+    <string name="time_format_title">12-Hour Format</string>
+    <string name="time_remaining_label">Time Remaining</string>
+    <string name="volume_mute_desc">Mute the alert as soon as either volume button is pressed</string>
+    <string name="volume_mute_title">Stop Adhan with Volume Buttons</string>
+</resources>
