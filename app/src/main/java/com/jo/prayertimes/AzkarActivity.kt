@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
@@ -27,7 +28,6 @@ class AzkarActivity : AppCompatActivity() {
     private var currentIndex: Int = 0
     private var currentList: List<ZikrItem> = listOf()
 
-    // أذكار الصباح بصوت الشيخ ياسر الدوسري
     private val sabahAzkar = listOf(
         ZikrItem("أَكْبَرُ اللَّهِ لاَ إِلَٰهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ... (آية الكرسي)", "https://server11.mp3quran.net/dosr/002.mp3", 1),
         ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...", "https://backup.islamway.net/one/dossary/01_sabah.mp3", 1),
@@ -35,7 +35,6 @@ class AzkarActivity : AppCompatActivity() {
         ZikrItem("اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ... (سيد الاستغفار)", "https://backup.islamway.net/one/dossary/03_sabah.mp3", 1)
     )
 
-    // أذكار المساء بصوت الشيخ ياسر الدوسري
     private val msaaAzkar = listOf(
         ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...", "https://backup.islamway.net/one/dossary/01_masaa.mp3", 1),
         ZikrItem("اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", "https://backup.islamway.net/one/dossary/02_masaa.mp3", 1),
@@ -55,10 +54,10 @@ class AzkarActivity : AppCompatActivity() {
         autoCompleteCategory = findViewById(R.id.autoCompleteCategory)
 
         btnPlay.setColorFilter(Color.WHITE)
+        btnNext.setColorFilter(Color.WHITE)
+        btnPrev.setColorFilter(Color.WHITE)
 
         setupCategorySelector()
-        
-        // البدء بأذكار الصباح افتراضياً
         loadAzkarCategory(0)
 
         btnPlay.setOnClickListener {
@@ -88,11 +87,11 @@ class AzkarActivity : AppCompatActivity() {
 
     private fun setupCategorySelector() {
         val categories = arrayOf("أذكار الصباح", "أذكار المساء")
-        val adapter = ArrayAdapter(this, R.layout.item_dropdown_surah, categories)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories)
         autoCompleteCategory.setAdapter(adapter)
         autoCompleteCategory.setText(categories[0], false)
 
-        autoCompleteCategory.setOnItemClickListener { _, _, position, _ ->
+        autoCompleteCategory.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             loadAzkarCategory(position)
         }
     }
@@ -143,7 +142,6 @@ class AzkarActivity : AppCompatActivity() {
                     btnPlay.setImageResource(android.R.drawable.ic_media_pause)
                 }
                 setOnCompletionListener {
-                    // الانتقال التلقائي للذكر التالي عند انتهاء الصوت (مثل القرآن)
                     if (currentIndex < currentList.size - 1) {
                         currentIndex++
                         updateUiForCurrentZikr()
