@@ -1,177 +1,184 @@
 package com.jo.prayertimes
 
+import android.graphics.Color
+import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.SeekBar
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import org.json.JSONObject
-import java.util.Locale
+
+data class ZikrItem(val text: String, val audioUrl: String, val count: Int)
 
 class AzkarActivity : AppCompatActivity() {
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleHelper.wrap(newBase))
-    }
-
-    private lateinit var btnMorning: Button
-    private lateinit var btnEvening: Button
-    private lateinit var tvNowPlaying: TextView
-    private lateinit var tvTimeRemaining: TextView
-    private lateinit var seekBar: SeekBar
-    private lateinit var btnPlay: Button
-    private lateinit var btnPause: Button
-    private lateinit var container: LinearLayout
+    private lateinit var tvZikrText: TextView
+    private lateinit var tvZikrCounter: TextView
+    private lateinit var tvZikrTitle: TextView
+    private lateinit var btnPlay: ImageButton
+    private lateinit var btnNext: ImageButton
+    private lateinit var btnPrev: ImageButton
+    private lateinit var autoCompleteCategory: AutoCompleteTextView
 
     private var mediaPlayer: MediaPlayer? = null
-    private var isMorning = true
+    private var isAudioPlaying: Boolean = false
+    private var currentIndex: Int = 0
+    private var currentList: List<ZikrItem> = listOf()
 
-    private val progressHandler = Handler(Looper.getMainLooper())
-    private val progressRunnable = object : Runnable {
-        override fun run() {
-            mediaPlayer?.let {
-                if (it.isPlaying) {
-                    seekBar.progress = it.currentPosition
-                    updateTimeRemaining(it)
-                }
-            }
-            progressHandler.postDelayed(this, 500)
-        }
-    }
+    // أذكار الصباح بصوت الشيخ ياسر الدوسري
+    private val sabahAzkar = listOf(
+        ZikrItem("أَكْبَرُ اللَّهِ لاَ إِلَٰهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ... (آية الكرسي)", "https://server11.mp3quran.net/dosr/002.mp3", 1),
+        ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...", "https://backup.islamway.net/one/dossary/01_sabah.mp3", 1),
+        ZikrItem("اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", "https://backup.islamway.net/one/dossary/02_sabah.mp3", 1),
+        ZikrItem("اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ... (سيد الاستغفار)", "https://backup.islamway.net/one/dossary/03_sabah.mp3", 1)
+    )
+
+    // أذكار المساء بصوت الشيخ ياسر الدوسري
+    private val msaaAzkar = listOf(
+        ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...", "https://backup.islamway.net/one/dossary/01_masaa.mp3", 1),
+        ZikrItem("اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", "https://backup.islamway.net/one/dossary/02_masaa.mp3", 1),
+        ZikrItem("أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", "https://backup.islamway.net/one/dossary/03_masaa.mp3", 3)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_azkar)
 
-        HomeNavigator.wire(this)
-        btnMorning = findViewById(R.id.btnMorning)
-        btnEvening = findViewById(R.id.btnEvening)
-        tvNowPlaying = findViewById(R.id.tvAzkarNowPlaying)
-        tvTimeRemaining = findViewById(R.id.tvAzkarTimeRemaining)
-        seekBar = findViewById(R.id.seekBarAzkar)
+        tvZikrText = findViewById(R.id.tvZikrText)
+        tvZikrCounter = findViewById(R.id.tvZikrCounter)
+        tvZikrTitle = findViewById(R.id.tvZikrTitle)
         btnPlay = findViewById(R.id.btnPlayAzkar)
-        btnPause = findViewById(R.id.btnPauseAzkar)
-        container = findViewById(R.id.containerAzkarList)
+        btnNext = findViewById(R.id.btnNextAzkar)
+        btnPrev = findViewById(R.id.btnPrevAzkar)
+        autoCompleteCategory = findViewById(R.id.autoCompleteCategory)
 
-        btnMorning.setOnClickListener { switchTo(morning = true) }
-        btnEvening.setOnClickListener { switchTo(morning = false) }
+        btnPlay.setColorFilter(Color.WHITE)
 
-        btnPlay.setOnClickListener { playAudio() }
-        btnPause.setOnClickListener { pauseAudio() }
+        setupCategorySelector()
+        
+        // البدء بأذكار الصباح افتراضياً
+        loadAzkarCategory(0)
 
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) mediaPlayer?.seekTo(progress)
+        btnPlay.setOnClickListener {
+            if (isAudioPlaying) {
+                pauseAudio()
+            } else {
+                playCurrentZikr()
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        }
 
-        switchTo(morning = true)
+        btnNext.setOnClickListener {
+            if (currentIndex < currentList.size - 1) {
+                currentIndex++
+                updateUiForCurrentZikr()
+                if (isAudioPlaying) playCurrentZikr()
+            }
+        }
+
+        btnPrev.setOnClickListener {
+            if (currentIndex > 0) {
+                currentIndex--
+                updateUiForCurrentZikr()
+                if (isAudioPlaying) playCurrentZikr()
+            }
+        }
     }
 
-    private fun switchTo(morning: Boolean) {
-        isMorning = morning
-        stopAudio()
-        highlightButtons()
-        renderList()
-        prepareAudio()
+    private fun setupCategorySelector() {
+        val categories = arrayOf("أذكار الصباح", "أذكار المساء")
+        val adapter = ArrayAdapter(this, R.layout.item_dropdown_surah, categories)
+        autoCompleteCategory.setAdapter(adapter)
+        autoCompleteCategory.setText(categories[0], false)
+
+        autoCompleteCategory.setOnItemClickListener { _, _, position, _ ->
+            loadAzkarCategory(position)
+        }
     }
 
-    private fun highlightButtons() {
-        if (isMorning) {
-            btnMorning.backgroundTintList = ContextCompat.getColorStateList(this, R.color.primary)
-            btnMorning.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-            btnEvening.backgroundTintList = ContextCompat.getColorStateList(this, R.color.surface_alt)
-            btnEvening.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+    private fun loadAzkarCategory(categoryIndex: Int) {
+        pauseAudio()
+        currentIndex = 0
+        if (categoryIndex == 0) {
+            currentList = sabahAzkar
+            tvZikrTitle.text = "أذكار الصباح - بصوت الشيخ ياسر الدوسري"
         } else {
-            btnEvening.backgroundTintList = ContextCompat.getColorStateList(this, R.color.primary)
-            btnEvening.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-            btnMorning.backgroundTintList = ContextCompat.getColorStateList(this, R.color.surface_alt)
-            btnMorning.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+            currentList = msaaAzkar
+            tvZikrTitle.text = "أذكار المساء - بصوت الشيخ ياسر الدوسري"
+        }
+        updateUiForCurrentZikr()
+    }
+
+    private fun updateUiForCurrentZikr() {
+        if (currentList.isNotEmpty()) {
+            val item = currentList[currentIndex]
+            tvZikrText.text = item.text
+            tvZikrCounter.text = "الذكر ${currentIndex + 1} من ${currentList.size} | التكرار: ${item.count}"
         }
     }
 
-    private fun loadAzkarList(): List<String> {
-        val jsonText = assets.open("azkar.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
-        val root = JSONObject(jsonText)
-        val key = if (isMorning) "أذكار الصباح" else "أذكار المساء"
-        val arr = root.getJSONArray(key)
-        val list = ArrayList<String>()
-        for (i in 0 until arr.length()) list.add(arr.getString(i))
-        return list
-    }
+    private fun playCurrentZikr() {
+        if (currentList.isEmpty()) return
+        val item = currentList[currentIndex]
 
-    private fun renderList() {
-        container.removeAllViews()
-        val inflater = LayoutInflater.from(this)
-        val list = loadAzkarList()
-        for (text in list) {
-            val card = inflater.inflate(R.layout.item_zikr_card, container, false)
-            card.findViewById<TextView>(R.id.zikrText).text = text
-            container.addView(card)
-        }
-    }
-
-    private fun prepareAudio() {
-        stopAudio()
-        val resId = if (isMorning) R.raw.tasbeeh else R.raw.istighfar
-        mediaPlayer = MediaPlayer.create(this, resId)
-        mediaPlayer?.let { player ->
-            seekBar.max = player.duration
-            seekBar.progress = 0
-            updateTimeRemaining(player)
-            player.setOnCompletionListener {
-                seekBar.progress = 0
-                updateTimeRemaining(mediaPlayer)
+        try {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer()
+            } else {
+                mediaPlayer?.reset()
             }
-        }
-        tvNowPlaying.text = if (isMorning)
-            "استماع للتسبيح"
-        else
-            "استماع للاستغفار"
-    }
 
-    private fun playAudio() {
-        if (mediaPlayer == null) prepareAudio()
-        mediaPlayer?.start()
-        progressHandler.post(progressRunnable)
+            mediaPlayer?.apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+                setDataSource(item.audioUrl)
+                setOnPreparedListener {
+                    start()
+                    this@AzkarActivity.isAudioPlaying = true
+                    btnPlay.setImageResource(android.R.drawable.ic_media_pause)
+                }
+                setOnCompletionListener {
+                    // الانتقال التلقائي للذكر التالي عند انتهاء الصوت (مثل القرآن)
+                    if (currentIndex < currentList.size - 1) {
+                        currentIndex++
+                        updateUiForCurrentZikr()
+                        playCurrentZikr()
+                    } else {
+                        pauseAudio()
+                        currentIndex = 0
+                        updateUiForCurrentZikr()
+                    }
+                }
+                setOnErrorListener { _, _, _ ->
+                    pauseAudio()
+                    true
+                }
+                prepareAsync()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            pauseAudio()
+        }
     }
 
     private fun pauseAudio() {
-        mediaPlayer?.let { if (it.isPlaying) it.pause() }
-    }
-
-    private fun stopAudio() {
-        progressHandler.removeCallbacks(progressRunnable)
-        mediaPlayer?.let {
-            if (it.isPlaying) it.stop()
-            it.release()
+        try {
+            mediaPlayer?.pause()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        mediaPlayer = null
-    }
-
-    private fun updateTimeRemaining(player: MediaPlayer?) {
-        if (player == null) {
-            tvTimeRemaining.text = "الوقت المتبقي: 00:00"
-            return
-        }
-        val remainingMs = (player.duration - player.currentPosition).coerceAtLeast(0)
-        val totalSeconds = remainingMs / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        tvTimeRemaining.text = String.format(Locale("ar"), "الوقت المتبقي: %02d:%02d", minutes, seconds)
+        isAudioPlaying = false
+        btnPlay.setImageResource(android.R.drawable.ic_media_play)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        stopAudio()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }
