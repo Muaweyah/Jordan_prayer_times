@@ -28,11 +28,11 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var spinnerSurah: Spinner
 
     private var mediaPlayer: MediaPlayer? = null
-    private var isPlaying = false
+    private var isPlaying: Boolean = false
 
-    private var currentSurah = 1
-    private var currentAyah = 1
-    private var isUserSelectingSurah = false
+    private var currentSurah: Int = 1
+    private var currentAyah: Int = 1
+    private var isUserSelectingSurah: Boolean = false
 
     private val surahNames = arrayOf(
         "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -69,8 +69,7 @@ class QuranActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Catch any background crash and show on screen
+
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             runOnUiThread {
                 showErrorScreen("Crash Exception:\n" + throwable.stackTraceToString())
@@ -80,7 +79,7 @@ class QuranActivity : AppCompatActivity() {
         try {
             initQuranUI()
         } catch (e: Throwable) {
-            showErrorScreen("onCreate Layout/Initialization Error:\n" + e.stackTraceToString())
+            showErrorScreen("onCreate Layout Error:\n" + e.stackTraceToString())
         }
     }
 
@@ -108,8 +107,8 @@ class QuranActivity : AppCompatActivity() {
 
         setupSpinner()
 
-        val adapter = QuranPagerAdapter(604)
-        viewPager.adapter = adapter
+        val quranAdapter = QuranPagerAdapter(604)
+        viewPager.adapter = quranAdapter
         viewPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -135,7 +134,7 @@ class QuranActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surahNames) {
+        val spinnerAdapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surahNames) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = super.getView(position, convertView, parent)
                 (v as? TextView)?.apply {
@@ -155,7 +154,7 @@ class QuranActivity : AppCompatActivity() {
                 return v
             }
         }
-        spinnerSurah.adapter = adapter
+        spinnerSurah.adapter = spinnerAdapter
 
         spinnerSurah.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -170,8 +169,10 @@ class QuranActivity : AppCompatActivity() {
     }
 
     private fun getSurahIndexForPage(page: Int): Int {
-        for (i in surahStartPages.indices.reversed()) {
-            if (page >= surahStartPages[i]) return i
+        var idx = surahStartPages.size - 1
+        while (idx >= 0) {
+            if (page >= surahStartPages[idx]) return idx
+            idx--
         }
         return 0
     }
@@ -230,9 +231,9 @@ class QuranActivity : AppCompatActivity() {
         if (currentSurah <= 114) {
             val maxAyahs = ayahCounts[currentSurah - 1]
             if (currentAyah < maxAyahs) {
-                currentAyah++
+                currentAyah = currentAyah + 1
             } else {
-                currentSurah++
+                currentSurah = currentSurah + 1
                 currentAyah = 1
             }
             if (currentSurah <= 114) {
