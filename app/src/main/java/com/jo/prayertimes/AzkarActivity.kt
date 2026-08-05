@@ -4,11 +4,10 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -22,6 +21,7 @@ class AzkarActivity : AppCompatActivity() {
     private lateinit var btnPlay: ImageButton
     private lateinit var btnNext: ImageButton
     private lateinit var btnPrev: ImageButton
+    private lateinit var autoCompleteCategory: AutoCompleteTextView
 
     private var mediaPlayer: MediaPlayer? = null
     private var isAudioPlaying: Boolean = false
@@ -65,34 +65,17 @@ class AzkarActivity : AppCompatActivity() {
         btnPlay = findViewById(R.id.btnPlayAzkar)
         btnNext = findViewById(R.id.btnNextAzkar)
         btnPrev = findViewById(R.id.btnPrevAzkar)
+        autoCompleteCategory = findViewById(R.id.autoCompleteCategory)
 
         btnPlay.setColorFilter(Color.WHITE)
         btnNext.setColorFilter(Color.WHITE)
         btnPrev.setColorFilter(Color.WHITE)
 
-        val vSpinner: View? = findViewById(R.id.autoCompleteCategory) ?: findViewById(R.id.spinnerCategory)
-        if (vSpinner is Spinner) {
-            val categories = arrayOf("أذكار الصباح", "أذكار المساء", "تسبيح", "استغفار", "صلاة على الرسول")
-            val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
-            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-            vSpinner.adapter = adapter
-            vSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    loadCategory(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-        }
-
+        setupCategoryDropdown()
         loadCategory(0)
 
         btnPlay.setOnClickListener {
-            if (isAudioPlaying) {
-                pauseAudio()
-            } else {
-                playCurrentZikr()
-            }
+            if (isAudioPlaying) pauseAudio() else playCurrentZikr()
         }
 
         btnNext.setOnClickListener {
@@ -109,6 +92,17 @@ class AzkarActivity : AppCompatActivity() {
                 updateUi()
                 if (isAudioPlaying) playCurrentZikr()
             }
+        }
+    }
+
+    private fun setupCategoryDropdown() {
+        val categories = arrayOf("أذكار الصباح", "أذكار المساء", "تسبيح", "استغفار", "صلاة على الرسول")
+        val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
+        autoCompleteCategory.setAdapter(adapter)
+        autoCompleteCategory.setTextColor(Color.WHITE)
+
+        autoCompleteCategory.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            loadCategory(position)
         }
     }
 
