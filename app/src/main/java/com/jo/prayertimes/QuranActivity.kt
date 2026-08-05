@@ -1,7 +1,8 @@
 package com.jo.prayertimes
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +12,13 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 
 class QuranActivity : AppCompatActivity() {
 
@@ -34,7 +27,7 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var tvPageInfo: TextView
     private lateinit var spinnerSurah: Spinner
 
-    private var player: ExoPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
     private var isPlaying = false
 
     private var currentSurah = 1
@@ -76,6 +69,34 @@ class QuranActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Catch any background crash and show on screen
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            runOnUiThread {
+                showErrorScreen("Crash Exception:\n" + throwable.stackTraceToString())
+            }
+        }
+
+        try {
+            initQuranUI()
+        } catch (e: Throwable) {
+            showErrorScreen("onCreate Layout/Initialization Error:\n" + e.stackTraceToString())
+        }
+    }
+
+    private fun showErrorScreen(errorMsg: String) {
+        val scrollView = ScrollView(this)
+        val textView = TextView(this)
+        textView.text = errorMsg
+        textView.setTextColor(Color.RED)
+        textView.setBackgroundColor(Color.BLACK)
+        textView.setPadding(32, 32, 32, 32)
+        textView.setTextIsSelectable(true)
+        scrollView.addView(textView)
+        setContentView(scrollView)
+    }
+
+    private fun initQuranUI() {
         setContentView(R.layout.activity_quran)
 
         viewPager = findViewById(R.id.viewPagerQuran)
@@ -83,7 +104,8 @@ class QuranActivity : AppCompatActivity() {
         tvPageInfo = findViewById(R.id.tvPageInfo)
         spinnerSurah = findViewById(R.id.spinnerSurah)
 
-        setupPlayer()
+        btnPlay.setColorFilter(Color.WHITE)
+
         setupSpinner()
 
         val adapter = QuranPagerAdapter(604)
@@ -118,7 +140,7 @@ class QuranActivity : AppCompatActivity() {
                 val v = super.getView(position, convertView, parent)
                 (v as? TextView)?.apply {
                     setTextColor(Color.WHITE)
-                    textSize = 16f
+                    textSize = 15f
                 }
                 return v
             }
@@ -128,7 +150,7 @@ class QuranActivity : AppCompatActivity() {
                 (v as? TextView)?.apply {
                     setTextColor(Color.WHITE)
                     setBackgroundColor(Color.parseColor("#1E1E1E"))
-                    setPadding(24, 24, 24, 24)
+                    setPadding(20, 20, 20, 20)
                 }
                 return v
             }
@@ -154,35 +176,52 @@ class QuranActivity : AppCompatActivity() {
         return 0
     }
 
-    private fun setupPlayer() {
-        player = ExoPlayer.Builder(this).build().apply {
-            addListener(object : Player.Listener {
-                override fun onPlaybackStateChanged(state: Int) {
-                    if (state == Player.STATE_ENDED) {
-                        moveToNextAyah()
-                    }
-                }
-            })
-        }
-    }
-
     private fun playCurrentAyah() {
         val s = String.format("%03d", currentSurah)
         val a = String.format("%03d", currentAyah)
         val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/$s$a.mp3"
 
-        player?.let { p ->
-            val mediaItem = MediaItem.fromUri(audioUrl)
-            p.setMediaItem(mediaItem)
-            p.prepare()
-            p.play()
-            isPlaying = true
-            btnPlay.setImageResource(android.R.drawable.ic_media_pause)
+        try {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer()
+            } else {
+                mediaPlayer?.reset()
+            }
+
+            mediaPlayer?.apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+                setDataSource(audioUrl)
+                setOnPreparedListener {
+                    start()
+                    isPlaying = true
+                    btnPlay.setImageResource(android.R.drawable.ic_media_pause)
+                }
+                setOnCompletionListener {
+                    moveToNextAyah()
+                }
+                setOnErrorListener { _, _, _ ->
+                    pauseAudio()
+                    true
+                }
+                prepareAsync()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            pauseAudio()
         }
     }
 
     private fun pauseAudio() {
-        player?.pause()
+        try {
+            mediaPlayer?.pause()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         isPlaying = false
         btnPlay.setImageResource(android.R.drawable.ic_media_play)
     }
@@ -208,8 +247,8 @@ class QuranActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        player?.release()
-        player = null
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     inner class QuranPagerAdapter(private val totalPages: Int) :
@@ -228,70 +267,15 @@ class QuranActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
-            val formattedPage = String.format("%03d", pageNumber)
-
-            val primaryUrl = "https://quran.ksu.edu.jo/png_big/$formattedPage.png"
-            val fallbackUrl = "https://everyayah.com/data/quranpngs/$pageNumber.png"
-
-            val glideUrl = GlideUrl(
-                primaryUrl,
-                LazyHeaders.Builder()
-                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .build()
-            )
+            val primaryUrl = "https://everyayah.com/data/quranpngs/$pageNumber.png"
 
             holder.progressBar.visibility = View.VISIBLE
 
             Glide.with(holder.itemView.context)
-                .load(glideUrl)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        // If primary server fails, automatically load fallback CDN
-                        Glide.with(holder.itemView.context)
-                            .load(fallbackUrl)
-                            .listener(object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e2: GlideException?,
-                                    m2: Any?,
-                                    t2: Target<Drawable>,
-                                    isFirst2: Boolean
-                                ): Boolean {
-                                    holder.progressBar.visibility = View.GONE
-                                    return false
-                                }
-
-                                override fun onResourceReady(
-                                    res2: Drawable,
-                                    m2: Any,
-                                    t2: Target<Drawable>?,
-                                    ds2: DataSource,
-                                    isFirst2: Boolean
-                                ): Boolean {
-                                    holder.progressBar.visibility = View.GONE
-                                    return false
-                                }
-                            })
-                            .into(holder.imageView)
-                        return true
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        model: Any,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        holder.progressBar.visibility = View.GONE
-                        return false
-                    }
-                })
+                .load(primaryUrl)
                 .into(holder.imageView)
+
+            holder.progressBar.visibility = View.GONE
         }
 
         override fun getItemCount(): Int = totalPages
