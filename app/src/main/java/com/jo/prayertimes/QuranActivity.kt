@@ -1,12 +1,16 @@
 package com.jo.prayertimes
 
 import android.content.Context
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
 
@@ -17,24 +21,14 @@ class QuranActivity : AppCompatActivity() {
     }
 
     private lateinit var spSurahList: Spinner
-    private lateinit var btnPlayPause: Button
-    private lateinit var btnRewind10: Button
-    private lateinit var btnForward10: Button
-    private lateinit var tvAyahIndicator: TextView
     private lateinit var webViewQuran: WebView
     private lateinit var progressQuranPage: ProgressBar
     private lateinit var btnToggleFullscreen: ImageButton
     private lateinit var tvQuranTitle: TextView
     private lateinit var tvPageLabel: TextView
-    private lateinit var llQuranControls: LinearLayout
-    private lateinit var llQuranRoot: LinearLayout
+    private lateinit var llQuranRoot: android.widget.LinearLayout
     private lateinit var btnHome: ImageButton
     private var isFullscreen = false
-
-    private var mediaPlayer: MediaPlayer? = null
-    private var isAutoPlaying = false
-    private var currentSurah = 1
-    private var currentAyah = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,16 +36,11 @@ class QuranActivity : AppCompatActivity() {
 
         HomeNavigator.wire(this)
         spSurahList = findViewById(R.id.spSurahList)
-        btnPlayPause = findViewById(R.id.btnPlayPause)
-        btnRewind10 = findViewById(R.id.btnRewind10)
-        btnForward10 = findViewById(R.id.btnForward10)
-        tvAyahIndicator = findViewById(R.id.tvAyahIndicator)
         webViewQuran = findViewById(R.id.webViewQuran)
         progressQuranPage = findViewById(R.id.progressQuranPage)
         btnToggleFullscreen = findViewById(R.id.btnToggleFullscreen)
         tvQuranTitle = findViewById(R.id.tvQuranTitle)
         tvPageLabel = findViewById(R.id.tvPageLabel)
-        llQuranControls = findViewById(R.id.llQuranControls)
         llQuranRoot = findViewById(R.id.llQuranRoot)
         btnHome = findViewById(R.id.btnHome)
 
@@ -63,28 +52,13 @@ class QuranActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, R.layout.spinner_item, surahNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spSurahList.adapter = adapter
-        goToAyah(1, 1, updateWebView = true)
+        loadQuranPage(1)
 
         spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                stopPlayback()
-                goToAyah(position + 1, 1, updateWebView = true)
+                loadQuranPage(position + 1)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        btnPlayPause.setOnClickListener { togglePlayPause() }
-
-        btnRewind10.setOnClickListener {
-            if (currentAyah > 1) {
-                goToAyah(currentSurah, currentAyah - 1, updateWebView = true)
-                if (isAutoPlaying) playCurrentAyahAudio()
-            }
-        }
-
-        btnForward10.setOnClickListener {
-            goToAyah(currentSurah, currentAyah + 1, updateWebView = true)
-            if (isAutoPlaying) playCurrentAyahAudio()
         }
     }
 
@@ -97,36 +71,56 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 progressQuranPage.visibility = View.GONE
-                hideBuiltInAudioPlayer(view)
+                openTilawaAndReciterMenu(view)
             }
         }
     }
 
-    /** يخفي مشغّل الصوت الخاص بموقع KSU (شريط "القارئ" وأزرار التشغيل الخاصة فيه)
-     * حتى لا يتعارض مع صوت العفاسي المشغَّل من داخل التطبيق نفسه. */
-    private fun hideBuiltInAudioPlayer(view: WebView?) {
-        val js = """
+    /** يحاول فتح لوحة "تلاوة" ثم قائمة القرّاء (⋮) تلقائياً بعد تحميل الصفحة، ليتمكن المستخدم
+     * من اختيار القارئ الذي يفضله مباشرة من نظام Quranflash المدمج والمتزامن أصلاً مع الصفحات. */
+    private fun openTilawaAndReciterMenu(view: WebView?) {
+        val jsOpenTilawa = """
             (function() {
-                function hideByText(matchText) {
+                function findAndClick() {
                     var all = document.querySelectorAll('*');
                     for (var i = 0; i < all.length; i++) {
                         var el = all[i];
-                        if (el.children.length === 0 && el.textContent && el.textContent.indexOf(matchText) !== -1) {
-                            var container = el;
-                            for (var up = 0; up < 3 && container.parentElement; up++) {
-                                container = container.parentElement;
-                            }
-                            container.style.display = 'none';
+                        if (el.children.length === 0 && el.textContent && el.textContent.trim() === 'تلاوة') {
+                            el.click();
+                            return true;
                         }
                     }
+                    return false;
                 }
-                hideByText('القارئ');
+                return findAndClick();
             })();
         """.trimIndent()
 
-        val delays = listOf(600L, 1400L, 2500L)
-        for (delayMs in delays) {
-            view?.postDelayed({ view.evaluateJavascript(js, null) }, delayMs)
+        val jsOpenReciterMenu = """
+            (function() {
+                function findAndClick() {
+                    var all = document.querySelectorAll('*');
+                    for (var i = 0; i < all.length; i++) {
+                        var el = all[i];
+                        if (el.children.length === 0 && el.textContent) {
+                            var t = el.textContent.trim();
+                            if (t === '...' || t === '…' || t === '⋮') {
+                                el.click();
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+                return findAndClick();
+            })();
+        """.trimIndent()
+
+        for (delayMs in listOf(800L, 1800L, 3000L)) {
+            view?.postDelayed({ view.evaluateJavascript(jsOpenTilawa, null) }, delayMs)
+        }
+        for (delayMs in listOf(4200L, 5600L, 7000L)) {
+            view?.postDelayed({ view.evaluateJavascript(jsOpenReciterMenu, null) }, delayMs)
         }
     }
 
@@ -140,69 +134,10 @@ class QuranActivity : AppCompatActivity() {
         }
     }
 
-    /** ينتقل لآية معيّنة، ويأمر صفحة KSU (إن طُلب) بالانتقال لنفس الآية فتنعرض صفحتها الحقيقية تلقائياً */
-    private fun goToAyah(surah: Int, ayah: Int, updateWebView: Boolean) {
-        currentSurah = surah
-        currentAyah = ayah
-        tvAyahIndicator.text = "آية $ayah"
-        if (updateWebView) {
-            progressQuranPage.visibility = View.VISIBLE
-            val url = "https://quran.ksu.edu.sa/m.php?l=ar#aya=${surah}_${ayah}&t=1"
-            webViewQuran.loadUrl(url)
-        } else {
-            val js = "if (window.location) { window.location.hash = \'aya=${surah}_${ayah}&t=1\'; }"
-            webViewQuran.evaluateJavascript(js, null)
-        }
-    }
-
-    private fun togglePlayPause() {
-        if (isAutoPlaying) {
-            stopPlayback()
-        } else {
-            isAutoPlaying = true
-            btnPlayPause.text = "⏸"
-            playCurrentAyahAudio()
-        }
-    }
-
-    private fun stopPlayback() {
-        isAutoPlaying = false
-        btnPlayPause.text = "▶"
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-
-    private fun playCurrentAyahAudio() {
-        val surahPadded = String.format("%03d", currentSurah)
-        val ayahPadded = String.format("%03d", currentAyah)
-        val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/$surahPadded$ayahPadded.mp3"
-
-        mediaPlayer?.release()
-        try {
-            mediaPlayer = MediaPlayer().apply {
-                setDataSource(audioUrl)
-                setOnPreparedListener { it.start() }
-                setOnCompletionListener {
-                    val nextAyah = currentAyah + 1
-                    goToAyah(currentSurah, nextAyah, updateWebView = false)
-                    if (isAutoPlaying) playCurrentAyahAudio()
-                }
-                setOnErrorListener { _, _, _ ->
-                    // على الأغلب انتهت السورة (لا توجد آية بهذا الرقم)، ننتقل للسورة التالية
-                    val nextSurah = currentSurah + 1
-                    if (nextSurah <= 114) {
-                        spSurahList.setSelection(nextSurah - 1)
-                    } else {
-                        stopPlayback()
-                    }
-                    true
-                }
-                prepareAsync()
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, "تعذر تشغيل الصوت", Toast.LENGTH_SHORT).show()
-            stopPlayback()
-        }
+    private fun loadQuranPage(surahNumber: Int) {
+        progressQuranPage.visibility = View.VISIBLE
+        val url = "https://app.quranflash.com/book/Medina1?ar#/reader/chapter/$surahNumber"
+        webViewQuran.loadUrl(url)
     }
 
     private fun toggleFullscreen() {
@@ -210,7 +145,6 @@ class QuranActivity : AppCompatActivity() {
         val visibility = if (isFullscreen) View.GONE else View.VISIBLE
         tvQuranTitle.visibility = visibility
         spSurahList.visibility = visibility
-        llQuranControls.visibility = visibility
         tvPageLabel.visibility = visibility
         btnHome.visibility = visibility
         llQuranRoot.setPadding(
@@ -226,8 +160,6 @@ class QuranActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.release()
-        mediaPlayer = null
         webViewQuran.destroy()
     }
 }
