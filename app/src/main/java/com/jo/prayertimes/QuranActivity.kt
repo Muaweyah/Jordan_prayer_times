@@ -22,6 +22,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
@@ -226,12 +228,22 @@ class QuranActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
-            val imageUrl = "https://cdn.islamic.network/quran/images/high-res/$pageNumber.png"
+            val formattedPage = String.format("%03d", pageNumber)
+
+            val primaryUrl = "https://quran.ksu.edu.jo/png_big/$formattedPage.png"
+            val fallbackUrl = "https://everyayah.com/data/quranpngs/$pageNumber.png"
+
+            val glideUrl = GlideUrl(
+                primaryUrl,
+                LazyHeaders.Builder()
+                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+                    .build()
+            )
 
             holder.progressBar.visibility = View.VISIBLE
 
             Glide.with(holder.itemView.context)
-                .load(imageUrl)
+                .load(glideUrl)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -239,8 +251,33 @@ class QuranActivity : AppCompatActivity() {
                         target: Target<Drawable>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        holder.progressBar.visibility = View.GONE
-                        return false
+                        // If primary server fails, automatically load fallback CDN
+                        Glide.with(holder.itemView.context)
+                            .load(fallbackUrl)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e2: GlideException?,
+                                    m2: Any?,
+                                    t2: Target<Drawable>,
+                                    isFirst2: Boolean
+                                ): Boolean {
+                                    holder.progressBar.visibility = View.GONE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    res2: Drawable,
+                                    m2: Any,
+                                    t2: Target<Drawable>?,
+                                    ds2: DataSource,
+                                    isFirst2: Boolean
+                                ): Boolean {
+                                    holder.progressBar.visibility = View.GONE
+                                    return false
+                                }
+                            })
+                            .into(holder.imageView)
+                        return true
                     }
 
                     override fun onResourceReady(
