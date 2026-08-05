@@ -22,7 +22,6 @@ class AzkarActivity : AppCompatActivity() {
     private lateinit var btnPlay: ImageButton
     private lateinit var btnNext: ImageButton
     private lateinit var btnPrev: ImageButton
-    private lateinit var spinnerCategory: Spinner
 
     private var mediaPlayer: MediaPlayer? = null
     private var isAudioPlaying: Boolean = false
@@ -67,15 +66,24 @@ class AzkarActivity : AppCompatActivity() {
         btnNext = findViewById(R.id.btnNextAzkar)
         btnPrev = findViewById(R.id.btnPrevAzkar)
 
-        val spinnerView: View? = findViewById(R.id.autoCompleteCategory) ?: findViewById(R.id.spinnerCategory)
-        if (spinnerView is Spinner) {
-            spinnerCategory = spinnerView
-            setupSpinner()
-        }
-
         btnPlay.setColorFilter(Color.WHITE)
         btnNext.setColorFilter(Color.WHITE)
         btnPrev.setColorFilter(Color.WHITE)
+
+        val vSpinner: View? = findViewById(R.id.autoCompleteCategory) ?: findViewById(R.id.spinnerCategory)
+        if (vSpinner is Spinner) {
+            val categories = arrayOf("أذكار الصباح", "أذكار المساء", "تسبيح", "استغفار", "صلاة على الرسول")
+            val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            vSpinner.adapter = adapter
+            vSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    loadCategory(position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
 
         loadCategory(0)
 
@@ -100,22 +108,6 @@ class AzkarActivity : AppCompatActivity() {
                 currentIndex--
                 updateUi()
                 if (isAudioPlaying) playCurrentZikr()
-            }
-        }
-    }
-
-    private fun setupSpinner() {
-        val categories = arrayOf("أذكار الصباح", "أذكار المساء", "تسبيح", "استغفار", "صلاة على الرسول")
-        val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        if (::spinnerCategory.isInitialized) {
-            spinnerCategory.adapter = adapter
-            spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    loadCategory(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
     }
