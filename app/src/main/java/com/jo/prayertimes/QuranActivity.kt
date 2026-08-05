@@ -37,7 +37,7 @@ class QuranActivity : AppCompatActivity() {
     private val surahNames = arrayOf(
         "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
         "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
-        "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
+        "الأنبيـاء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
         "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
         "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
         "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة",
@@ -67,6 +67,34 @@ class QuranActivity : AppCompatActivity() {
         11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 6, 4, 5, 6
     )
 
+    // خريطة بداية الآيات لكل صفحة من المصحف (سورة ، آية)
+    private fun getPageStartAyah(page: Int): Pair<Int, Int> {
+        return when (page) {
+            1 -> Pair(1, 1)
+            2 -> Pair(2, 1)
+            3 -> Pair(2, 6)
+            4 -> Pair(2, 17)
+            5 -> Pair(2, 25)
+            6 -> Pair(2, 30)
+            7 -> Pair(2, 38)
+            8 -> Pair(2, 49)
+            9 -> Pair(2, 58)
+            10 -> Pair(2, 62)
+            else -> {
+                val sIdx = getSurahIndexForPage(page)
+                if (page == surahStartPages[sIdx]) {
+                    Pair(sIdx + 1, 1)
+                } else {
+                    // تقدير الآية التقريبية للصفحات المتقدمة
+                    val totalPagesInSurah = if (sIdx < 113) surahStartPages[sIdx + 1] - surahStartPages[sIdx] else 1
+                    val pageOffset = page - surahStartPages[sIdx]
+                    val approxAyah = (pageOffset * (ayahCounts[sIdx] / totalPagesInSurah.coerceAtLeast(1))) + 1
+                    Pair(sIdx + 1, approxAyah.coerceAtMost(ayahCounts[sIdx]))
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quran)
@@ -88,19 +116,19 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val pageNum = position + 1
-                val surahIdx = getSurahIndexForPage(pageNum)
 
-                if (surahIdx != -1) {
-                    if (!isInternalNavigation) {
-                        autoCompleteSurah.setText(surahNames[surahIdx], false)
-                        currentSurah = surahIdx + 1
-                        currentAyah = 1 // عند التمرير اليدوي، نبدأ من أول الآيات في هذه الصفحة الجديدة
+                if (!isInternalNavigation) {
+                    // تحديد السورة والآية الصحيحة لأول الصفحة فور التقليب اليدوي
+                    val pageInfo = getPageStartAyah(pageNum)
+                    currentSurah = pageInfo.first
+                    currentAyah = pageInfo.second
 
-                        if (isAudioPlaying) {
-                            playCurrentAyah() // إذا كان الصوت يعمل، انتقل وتابع القراءة من الصفحة الجديدة
-                        } else {
-                            tvPageInfo.text = "سورة ${surahNames[surahIdx]} - ص $pageNum"
-                        }
+                    autoCompleteSurah.setText(surahNames[currentSurah - 1], false)
+
+                    if (isAudioPlaying) {
+                        playCurrentAyah() // يبدأ القراءة فوراً من أصل الآية الموجودة بالصفحة المعروضة!
+                    } else {
+                        tvPageInfo.text = "سورة ${surahNames[currentSurah - 1]} - آية $currentAyah"
                     }
                 }
             }
