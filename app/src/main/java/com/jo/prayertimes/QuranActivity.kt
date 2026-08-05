@@ -116,7 +116,7 @@ class QuranActivity : AppCompatActivity() {
 
     private fun loadQuranPage(surahNumber: Int) {
         progressQuranPage.visibility = View.VISIBLE
-        val url = "https://app.quranflash.com/book/Medina1?ar#/reader/chapter/$surahNumber"
+        val url = "https://quran.ksu.edu.sa/m.php?l=ar#aya=${surahNumber}_1&t=1"
         webViewQuran.loadUrl(url)
     }
 
