@@ -1,11 +1,17 @@
 package com.jo.prayertimes
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -13,18 +19,49 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 
 class QuranActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var btnPlay: ImageButton
+    private lateinit var tvPageInfo: TextView
+    private lateinit var spinnerSurah: Spinner
+
     private var player: ExoPlayer? = null
     private var isPlaying = false
 
     private var currentSurah = 1
     private var currentAyah = 1
+    private var isUserSelectingSurah = false
 
-    // عدد آيات سور القرآن الـ 114 بالترتيب
+    private val surahNames = arrayOf(
+        "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
+        "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
+        "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
+        "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
+        "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
+        "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة",
+        "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
+        "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس",
+        "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
+        "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+        "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
+        "المسد", "الإخلاص", "الفلق", "الناس"
+    )
+
+    private val surahStartPages = intArrayOf(
+        1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312,
+        322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467,
+        477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549,
+        551, 553, 554, 556, 558, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585,
+        586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599,
+        600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604
+    )
+
     private val ayahCounts = intArrayOf(
         7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128, 111, 110, 98, 135,
         112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73, 54, 45, 83, 182, 88, 75, 85,
@@ -40,12 +77,28 @@ class QuranActivity : AppCompatActivity() {
 
         viewPager = findViewById(R.id.viewPagerQuran)
         btnPlay = findViewById(R.id.btnPlayAudio)
+        tvPageInfo = findViewById(R.id.tvPageInfo)
+        spinnerSurah = findViewById(R.id.spinnerSurah)
 
         setupPlayer()
+        setupSpinner()
 
         val adapter = QuranPagerAdapter(604)
         viewPager.adapter = adapter
         viewPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val pageNum = position + 1
+                tvPageInfo.text = "صفحة  من 604"
+
+                val surahIdx = getSurahIndexForPage(pageNum)
+                if (surahIdx != -1 && !isUserSelectingSurah) {
+                    spinnerSurah.setSelection(surahIdx)
+                }
+            }
+        })
 
         btnPlay.setOnClickListener {
             if (isPlaying) {
@@ -54,6 +107,29 @@ class QuranActivity : AppCompatActivity() {
                 playCurrentAyah()
             }
         }
+    }
+
+    private fun setupSpinner() {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, surahNames)
+        spinnerSurah.adapter = adapter
+
+        spinnerSurah.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                isUserSelectingSurah = true
+                val targetPage = surahStartPages[position]
+                viewPager.currentItem = targetPage - 1
+                isUserSelectingSurah = false
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun getSurahIndexForPage(page: Int): Int {
+        for (i in surahStartPages.indices.reversed()) {
+            if (page >= surahStartPages[i]) return i
+        }
+        return 0
     }
 
     private fun setupPlayer() {
@@ -71,7 +147,7 @@ class QuranActivity : AppCompatActivity() {
     private fun playCurrentAyah() {
         val s = String.format("%03d", currentSurah)
         val a = String.format("%03d", currentAyah)
-        val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/${s}${a}.mp3"
+        val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/.mp3"
 
         player?.let { p ->
             val mediaItem = MediaItem.fromUri(audioUrl)
@@ -119,6 +195,7 @@ class QuranActivity : AppCompatActivity() {
 
         inner class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val imageView: ImageView = itemView.findViewById(R.id.imageViewQuranPage)
+            val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
@@ -129,10 +206,35 @@ class QuranActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
-            val imageUrl = "https://cdn.islamic.network/quran/images/high-res/${pageNumber}.png"
+            val formattedPage = String.format("%03d", pageNumber)
+            val imageUrl = "https://quran.ksu.edu.jo/png_big/.png"
+
+            holder.progressBar.visibility = View.VISIBLE
 
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        holder.progressBar.visibility = View.GONE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        holder.progressBar.visibility = View.GONE
+                        return false
+                    }
+                })
                 .into(holder.imageView)
         }
 

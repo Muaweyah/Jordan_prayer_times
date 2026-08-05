@@ -4,28 +4,58 @@
     android:layout_height="match_parent"
     android:background="#121212">
 
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:background="#1E1E1E"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/tvPageInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="صفحة 1 من 604"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerSurah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerQuran"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomControlBar" />
+        android:layout_above="@id/bottomControlBar"
+        android:layout_below="@id/topBar" />
 
     <LinearLayout
         android:id="@+id/bottomControlBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
+        android:background="#1E1E1E"
         android:gravity="center"
-        android:padding="12dp"
-        android:background="#1E1E1E">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <ImageButton
             android:id="@+id/btnPlayAudio"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Play Audio"
             android:src="@android:drawable/ic_media_play"
-            android:contentDescription="Play Audio" />
+            android:tint="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>
