@@ -97,7 +97,36 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 progressQuranPage.visibility = View.GONE
+                hideBuiltInAudioPlayer(view)
             }
+        }
+    }
+
+    /** يخفي مشغّل الصوت الخاص بموقع KSU (شريط "القارئ" وأزرار التشغيل الخاصة فيه)
+     * حتى لا يتعارض مع صوت العفاسي المشغَّل من داخل التطبيق نفسه. */
+    private fun hideBuiltInAudioPlayer(view: WebView?) {
+        val js = """
+            (function() {
+                function hideByText(matchText) {
+                    var all = document.querySelectorAll('*');
+                    for (var i = 0; i < all.length; i++) {
+                        var el = all[i];
+                        if (el.children.length === 0 && el.textContent && el.textContent.indexOf(matchText) !== -1) {
+                            var container = el;
+                            for (var up = 0; up < 3 && container.parentElement; up++) {
+                                container = container.parentElement;
+                            }
+                            container.style.display = 'none';
+                        }
+                    }
+                }
+                hideByText('القارئ');
+            })();
+        """.trimIndent()
+
+        val delays = listOf(600L, 1400L, 2500L)
+        for (delayMs in delays) {
+            view?.postDelayed({ view.evaluateJavascript(js, null) }, delayMs)
         }
     }
 
