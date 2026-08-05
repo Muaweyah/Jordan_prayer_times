@@ -27,11 +27,11 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var autoCompleteSurah: AutoCompleteTextView
 
     private var mediaPlayer: MediaPlayer? = null
-    private var isPlaying = false
+    private var isAudioPlaying: Boolean = false
 
-    private var currentSurah = 1
-    private var currentAyah = 1
-    private var isUserSelectingSurah = false
+    private var currentSurah: Int = 1
+    private var currentAyah: Int = 1
+    private var isUserSelectingSurah: Boolean = false
 
     private val surahNames = arrayOf(
         "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -99,7 +99,7 @@ class QuranActivity : AppCompatActivity() {
         })
 
         btnPlay.setOnClickListener {
-            if (isPlaying) {
+            if (isAudioPlaying) {
                 pauseAudio()
             } else {
                 playCurrentAyah()
@@ -120,7 +120,7 @@ class QuranActivity : AppCompatActivity() {
                 viewPager.currentItem = targetPage - 1
                 currentSurah = index + 1
                 currentAyah = 1
-                if (isPlaying) playCurrentAyah()
+                if (isAudioPlaying) playCurrentAyah()
                 isUserSelectingSurah = false
             }
         }
@@ -157,7 +157,7 @@ class QuranActivity : AppCompatActivity() {
                 setDataSource(audioUrl)
                 setOnPreparedListener {
                     start()
-                    isPlaying = true
+                    this@QuranActivity.isAudioPlaying = true
                     btnPlay.setImageResource(android.R.drawable.ic_media_pause)
                 }
                 setOnCompletionListener {
@@ -181,7 +181,7 @@ class QuranActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        isPlaying = false
+        isAudioPlaying = false
         btnPlay.setImageResource(android.R.drawable.ic_media_play)
     }
 
