@@ -25,7 +25,6 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var btnPlay: ImageButton
     private lateinit var tvPageInfo: TextView
-    private lateinit var tvCurrentAyahInfo: TextView
     private lateinit var autoCompleteSurah: AutoCompleteTextView
 
     private var mediaPlayer: MediaPlayer? = null
@@ -33,7 +32,7 @@ class QuranActivity : AppCompatActivity() {
 
     private var currentSurah: Int = 1
     private var currentAyah: Int = 1
-    private var isUserSelectingSurah: Boolean = false
+    private var isProgrammaticScroll: Boolean = false
 
     private val surahNames = arrayOf(
         "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -89,14 +88,22 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val pageNum = position + 1
-                tvPageInfo.text = "صفحة $pageNum من 604"
 
                 val surahIdx = getSurahIndexForPage(pageNum)
-                if (surahIdx != -1 && !isUserSelectingSurah) {
+                if (surahIdx != -1) {
                     autoCompleteSurah.setText(surahNames[surahIdx], false)
-                    if (!isAudioPlaying) {
-                        currentSurah = surahIdx + 1
-                        currentAyah = 1
+                }
+
+                // إذا كان التغيير يدوياً من المستخدم وليس بتأثير قراءة الصوت التلقائية
+                if (!isProgrammaticScroll) {
+                    currentSurah = surahIdx + 1
+                    currentAyah = 1 // البدء من أول السورة/الصفحة
+
+                    // إذا كان الصوت يعمل حالياً، أعطه أمر التشغيل الفوري للآية في الصفحة الجديدة
+                    if (isAudioPlaying) {
+                        playCurrentAyah()
+                    } else {
+                        tvPageInfo.text = "سورة ${surahNames[surahIdx]} - ص $pageNum"
                     }
                 }
             }
@@ -121,13 +128,13 @@ class QuranActivity : AppCompatActivity() {
             val selectedName = parent.getItemAtPosition(position) as String
             val index = surahNames.indexOf(selectedName)
             if (index != -1) {
-                isUserSelectingSurah = true
+                isProgrammaticScroll = true
                 val targetPage = surahStartPages[index]
                 viewPager.currentItem = targetPage - 1
                 currentSurah = index + 1
                 currentAyah = 1
                 if (isAudioPlaying) playCurrentAyah()
-                isUserSelectingSurah = false
+                isProgrammaticScroll = false
             }
         }
     }
@@ -146,7 +153,6 @@ class QuranActivity : AppCompatActivity() {
         val a = String.format("%03d", currentAyah)
         val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/$s$a.mp3"
 
-        // تحديث تفاصيل التظليل النصي للآية وقرينة الصفحة
         val surahName = surahNames[currentSurah - 1]
         tvPageInfo.text = "سورة $surahName - آية $currentAyah"
 
@@ -206,13 +212,13 @@ class QuranActivity : AppCompatActivity() {
             }
 
             if (currentSurah <= 114) {
-                // الانتقال التلقائي للصفحة إذا لزم الأمر
                 val nextSurahStartPage = surahStartPages[currentSurah - 1]
                 val currentShowingPage = viewPager.currentItem + 1
-                
-                // إذا تجاوزت الآية حدود الصفحة الحالية، ننتقل تلقائياً للصفحة القادمة
+
                 if (nextSurahStartPage > currentShowingPage) {
+                    isProgrammaticScroll = true
                     viewPager.setCurrentItem(nextSurahStartPage - 1, true)
+                    isProgrammaticScroll = false
                 }
 
                 playCurrentAyah()
