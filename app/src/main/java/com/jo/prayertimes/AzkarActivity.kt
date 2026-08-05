@@ -1,7 +1,6 @@
 package com.jo.prayertimes
 
 import android.graphics.Color
-import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.AdapterView
@@ -11,7 +10,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-data class ZikrItem(val text: String, val audioUrl: String, val count: Int)
+data class ZikrItem(val text: String, val rawResId: Int, val count: Int)
 
 class AzkarActivity : AppCompatActivity() {
 
@@ -28,32 +27,39 @@ class AzkarActivity : AppCompatActivity() {
     private var currentIndex: Int = 0
     private var currentList: List<ZikrItem> = listOf()
 
-    // 1. أذكار الصباح - الشيخ ياسر الدوسري
-    private val sabahAzkar = listOf(
-        ZikrItem("اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...", "https://server11.mp3quran.net/dosr/002.mp3", 1),
-        ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", "https://server11.mp3quran.net/dosr/112.mp3", 1)
-    )
+    // أذكار الصباح
+    private val sabahAzkar by lazy {
+        val res = if (resources.getIdentifier("sabah", "raw", packageName) != 0) resources.getIdentifier("sabah", "raw", packageName) else R.raw.tasbeeh
+        listOf(
+            ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", res, 1)
+        )
+    }
 
-    // 2. أذكار المساء - الشيخ ياسر الدوسري
-    private val msaaAzkar = listOf(
-        ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", "https://server11.mp3quran.net/dosr/113.mp3", 1),
-        ZikrItem("اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ...", "https://server11.mp3quran.net/dosr/114.mp3", 1)
-    )
+    // أذكار المساء
+    private val msaaAzkar by lazy {
+        val res = if (resources.getIdentifier("masaa", "raw", packageName) != 0) resources.getIdentifier("masaa", "raw", packageName) else R.raw.tasbeeh
+        listOf(
+            ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", res, 1)
+        )
+    }
 
-    // 3. تسبيح - الشيخ مشاري العفاسي
+    // تسبيح
     private val tasbeehAzkar = listOf(
-        ZikrItem("سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ", "https://server8.mp3quran.net/afs/001.mp3", 100)
+        ZikrItem("سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ", R.raw.tasbeeh, 100)
     )
 
-    // 4. استغفار - الشيخ مشاري العفاسي
+    // استغفار
     private val istighfarAzkar = listOf(
-        ZikrItem("أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", "https://server8.mp3quran.net/afs/002.mp3", 100)
+        ZikrItem("أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", R.raw.istighfar, 100)
     )
 
-    // 5. صلاة على الرسول - الشيخ مشاري العفاسي
-    private val salawatAzkar = listOf(
-        ZikrItem("اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", "https://server8.mp3quran.net/afs/108.mp3", 100)
-    )
+    // صلاة على الرسول
+    private val salawatAzkar by lazy {
+        val res = if (resources.getIdentifier("salawat", "raw", packageName) != 0) resources.getIdentifier("salawat", "raw", packageName) else R.raw.tasbeeh
+        listOf(
+            ZikrItem("اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", res, 100)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,23 +118,23 @@ class AzkarActivity : AppCompatActivity() {
         when (position) {
             0 -> {
                 currentList = sabahAzkar
-                tvZikrTitle.text = "أذكار الصباح - بصوت الشيخ ياسر الدوسري"
+                tvZikrTitle.text = "أذكار الصباح"
             }
             1 -> {
                 currentList = msaaAzkar
-                tvZikrTitle.text = "أذكار المساء - بصوت الشيخ ياسر الدوسري"
+                tvZikrTitle.text = "أذكار المساء"
             }
             2 -> {
                 currentList = tasbeehAzkar
-                tvZikrTitle.text = "تسبيح - بصوت الشيخ مشاري العفاسي"
+                tvZikrTitle.text = "تسبيح"
             }
             3 -> {
                 currentList = istighfarAzkar
-                tvZikrTitle.text = "استغفار - بصوت الشيخ مشاري العفاسي"
+                tvZikrTitle.text = "استغفار"
             }
             4 -> {
                 currentList = salawatAzkar
-                tvZikrTitle.text = "صلاة على الرسول - بصوت الشيخ مشاري العفاسي"
+                tvZikrTitle.text = "صلاة على الرسول"
             }
         }
         updateUi()
@@ -147,25 +153,9 @@ class AzkarActivity : AppCompatActivity() {
         val item = currentList[currentIndex]
 
         try {
-            if (mediaPlayer == null) {
-                mediaPlayer = MediaPlayer()
-            } else {
-                mediaPlayer?.reset()
-            }
-
+            stopAudio()
+            mediaPlayer = MediaPlayer.create(this, item.rawResId)
             mediaPlayer?.apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .build()
-                )
-                setDataSource(item.audioUrl)
-                setOnPreparedListener {
-                    start()
-                    this@AzkarActivity.isAudioPlaying = true
-                    btnPlay.setImageResource(android.R.drawable.ic_media_pause)
-                }
                 setOnCompletionListener {
                     if (currentIndex < currentList.size - 1) {
                         currentIndex++
@@ -175,11 +165,9 @@ class AzkarActivity : AppCompatActivity() {
                         pauseAudio()
                     }
                 }
-                setOnErrorListener { _, _, _ ->
-                    pauseAudio()
-                    true
-                }
-                prepareAsync()
+                start()
+                isAudioPlaying = true
+                btnPlay.setImageResource(android.R.drawable.ic_media_pause)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -197,9 +185,19 @@ class AzkarActivity : AppCompatActivity() {
         btnPlay.setImageResource(android.R.drawable.ic_media_play)
     }
 
+    private fun stopAudio() {
+        try {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        mediaPlayer = null
+        isAudioPlaying = false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        stopAudio()
     }
 }
