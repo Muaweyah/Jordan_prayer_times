@@ -1,6 +1,7 @@
 package com.jo.prayertimes
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -108,8 +109,9 @@ class QuranActivity : AppCompatActivity() {
     }
 
     private fun setupSurahSearch() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, surahNames)
+        val adapter = ArrayAdapter(this, R.layout.item_dropdown_surah, surahNames)
         autoCompleteSurah.setAdapter(adapter)
+        autoCompleteSurah.setDropDownBackgroundDrawable(ColorDrawable(Color.parseColor("#2A2A2A")))
 
         autoCompleteSurah.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val selectedName = parent.getItemAtPosition(position) as String
@@ -226,7 +228,7 @@ class QuranActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
-            val primaryUrl = "https://cdn.islamic.network/quran/images/high-res/$pageNumber.png"
+            val primaryUrl = "https://everyayah.com/data/quranpngs/$pageNumber.png"
 
             holder.progressBar.visibility = View.VISIBLE
 
