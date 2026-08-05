@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:id="@+id/llQuranRoot"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,7 +12,6 @@
     android:layoutDirection="rtl">
 
     <TextView
-        android:id="@+id/tvQuranTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="القرآن الكريم"
@@ -34,7 +32,6 @@
 
     <!-- صف تحكم موحّد: تأخير 10 ثوانٍ / تشغيل-إيقاف / شريط التقدّم / تقديم 10 ثوانٍ -->
     <LinearLayout
-        android:id="@+id/llQuranControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -85,44 +82,33 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvPageLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="صفحة المصحف"
+        android:text="نص السورة"
         android:textColor="@color/purple_dark_text"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/purple_light_bg">
+        android:background="@color/purple_light_bg"
+        android:padding="4dp">
 
-        <WebView
-            android:id="@+id/webViewQuran"
+        <TextView
+            android:id="@+id/tvAyahText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ProgressBar
-            android:id="@+id/progressQuranPage"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:textColor="@color/purple_light_text"
+            android:textSize="18sp"
+            android:lineSpacingExtra="10dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="" />
 
-        <ImageButton
-            android:id="@+id/btnToggleFullscreen"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="top|end"
-            android:layout_margin="8dp"
-            android:background="@drawable/bg_fab_circle"
-            android:src="@android:drawable/ic_menu_view"
-            android:padding="8dp"
-            android:contentDescription="شاشة كاملة" />
-
-    </FrameLayout>
+    </ScrollView>
 </LinearLayout>
 
     <ImageButton

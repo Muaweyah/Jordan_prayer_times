@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
@@ -23,20 +21,14 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var btnRewind10: Button
     private lateinit var btnForward10: Button
     private lateinit var seekBarQuran: SeekBar
-    private lateinit var webViewQuran: WebView
-    private lateinit var progressQuranPage: ProgressBar
-    private lateinit var btnToggleFullscreen: ImageButton
-    private lateinit var tvQuranTitle: TextView
-    private lateinit var tvPageLabel: TextView
-    private lateinit var llQuranControls: LinearLayout
-    private lateinit var llQuranRoot: LinearLayout
-    private lateinit var btnHome: ImageButton
-    private var isFullscreen = false
+    private lateinit var tvAyahText: TextView
 
     private var mediaPlayer: MediaPlayer? = null
     private var pausedPosition = 0
     private var currentSurahIndex = -1
     private var isUserSeeking = false
+
+    private var surahAyatMap: Map<String, List<String>> = emptyMap()
 
     private val progressHandler = Handler(Looper.getMainLooper())
     private val progressRunnable = object : Runnable {
@@ -60,28 +52,20 @@ class QuranActivity : AppCompatActivity() {
         btnRewind10 = findViewById(R.id.btnRewind10)
         btnForward10 = findViewById(R.id.btnForward10)
         seekBarQuran = findViewById(R.id.seekBarQuran)
-        webViewQuran = findViewById(R.id.webViewQuran)
-        progressQuranPage = findViewById(R.id.progressQuranPage)
-        btnToggleFullscreen = findViewById(R.id.btnToggleFullscreen)
-        tvQuranTitle = findViewById(R.id.tvQuranTitle)
-        tvPageLabel = findViewById(R.id.tvPageLabel)
-        llQuranControls = findViewById(R.id.llQuranControls)
-        llQuranRoot = findViewById(R.id.llQuranRoot)
-        btnHome = findViewById(R.id.btnHome)
+        tvAyahText = findViewById(R.id.tvAyahText)
 
-        btnToggleFullscreen.setOnClickListener { toggleFullscreen() }
-
-        setupWebView()
+        surahAyatMap = loadQuranData()
 
         val surahNames = loadSurahNames()
         val adapter = ArrayAdapter(this, R.layout.spinner_item, surahNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spSurahList.adapter = adapter
-        loadQuranPage(1)
+        updateAyahText(surahNames.firstOrNull())
 
         spSurahList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                loadQuranPage(position + 1)
+                val name = surahNames.getOrNull(position) ?: ""
+                updateAyahText(name)
                 if (position != currentSurahIndex) {
                     // السورة المختارة تغيّرت، لا نستأنف من موضع سورة أخرى
                     pausedPosition = 0
@@ -136,44 +120,6 @@ class QuranActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupWebView() {
-        webViewQuran.settings.javaScriptEnabled = true
-        webViewQuran.settings.domStorageEnabled = true
-        webViewQuran.settings.loadWithOverviewMode = true
-        webViewQuran.settings.useWideViewPort = true
-        webViewQuran.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                progressQuranPage.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun toggleFullscreen() {
-        isFullscreen = !isFullscreen
-        val visibility = if (isFullscreen) View.GONE else View.VISIBLE
-        tvQuranTitle.visibility = visibility
-        spSurahList.visibility = visibility
-        llQuranControls.visibility = visibility
-        tvPageLabel.visibility = visibility
-        btnHome.visibility = visibility
-        llQuranRoot.setPadding(
-            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
-            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
-            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt(),
-            if (isFullscreen) 0 else (16 * resources.displayMetrics.density).toInt()
-        )
-        btnToggleFullscreen.setImageResource(
-            if (isFullscreen) android.R.drawable.ic_menu_close_clear_cancel else android.R.drawable.ic_menu_view
-        )
-    }
-
-    private fun loadQuranPage(surahNumber: Int) {
-        progressQuranPage.visibility = View.VISIBLE
-        val url = "https://quran.ksu.edu.sa/m.php?l=ar#aya=${surahNumber}_1&t=1"
-        webViewQuran.loadUrl(url)
-    }
-
     private fun loadSurahNames(): List<String> {
         return try {
             val json = assets.open("surah_names.json").bufferedReader().use { it.readText() }
@@ -181,6 +127,33 @@ class QuranActivity : AppCompatActivity() {
             (0 until array.length()).map { array.getString(it) }
         } catch (e: Exception) {
             Array(114) { i -> "سورة رقم ${i + 1}" }.toList()
+        }
+    }
+
+    private fun loadQuranData(): Map<String, List<String>> {
+        return try {
+            val json = assets.open("quran.json").bufferedReader().use { it.readText() }
+            val array = JSONArray(json)
+            val map = mutableMapOf<String, List<String>>()
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                val surahName = obj.getString("surah")
+                val ayatArray = obj.getJSONArray("ayat")
+                val ayatList = (0 until ayatArray.length()).map { ayatArray.getString(it) }
+                map[surahName] = ayatList
+            }
+            map
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
+
+    private fun updateAyahText(surahName: String?) {
+        val ayat = surahAyatMap[surahName]
+        tvAyahText.text = if (ayat != null) {
+            ayat.mapIndexed { index, ayah -> "${ayah} ﴿${index + 1}﴾" }.joinToString("\n\n")
+        } else {
+            "نص السورة غير متوفر حالياً"
         }
     }
 
@@ -229,6 +202,5 @@ class QuranActivity : AppCompatActivity() {
         progressHandler.removeCallbacks(progressRunnable)
         mediaPlayer?.release()
         mediaPlayer = null
-        webViewQuran.destroy()
     }
 }
