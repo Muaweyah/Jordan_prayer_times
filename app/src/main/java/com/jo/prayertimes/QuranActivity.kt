@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +25,7 @@ class QuranActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var btnPlay: ImageButton
     private lateinit var tvPageInfo: TextView
+    private lateinit var tvCurrentAyahInfo: TextView
     private lateinit var autoCompleteSurah: AutoCompleteTextView
 
     private var mediaPlayer: MediaPlayer? = null
@@ -94,8 +94,10 @@ class QuranActivity : AppCompatActivity() {
                 val surahIdx = getSurahIndexForPage(pageNum)
                 if (surahIdx != -1 && !isUserSelectingSurah) {
                     autoCompleteSurah.setText(surahNames[surahIdx], false)
-                    currentSurah = surahIdx + 1
-                    currentAyah = 1
+                    if (!isAudioPlaying) {
+                        currentSurah = surahIdx + 1
+                        currentAyah = 1
+                    }
                 }
             }
         })
@@ -143,6 +145,10 @@ class QuranActivity : AppCompatActivity() {
         val s = String.format("%03d", currentSurah)
         val a = String.format("%03d", currentAyah)
         val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/$s$a.mp3"
+
+        // تحديث تفاصيل التظليل النصي للآية وقرينة الصفحة
+        val surahName = surahNames[currentSurah - 1]
+        tvPageInfo.text = "سورة $surahName - آية $currentAyah"
 
         try {
             if (mediaPlayer == null) {
@@ -198,7 +204,17 @@ class QuranActivity : AppCompatActivity() {
                 currentSurah += 1
                 currentAyah = 1
             }
+
             if (currentSurah <= 114) {
+                // الانتقال التلقائي للصفحة إذا لزم الأمر
+                val nextSurahStartPage = surahStartPages[currentSurah - 1]
+                val currentShowingPage = viewPager.currentItem + 1
+                
+                // إذا تجاوزت الآية حدود الصفحة الحالية، ننتقل تلقائياً للصفحة القادمة
+                if (nextSurahStartPage > currentShowingPage) {
+                    viewPager.setCurrentItem(nextSurahStartPage - 1, true)
+                }
+
                 playCurrentAyah()
             } else {
                 pauseAudio()
