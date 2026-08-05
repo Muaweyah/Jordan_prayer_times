@@ -46,6 +46,10 @@ class QuranActivity : AppCompatActivity() {
         webViewQuran.settings.domStorageEnabled = true
         webViewQuran.settings.loadWithOverviewMode = true
         webViewQuran.settings.useWideViewPort = true
+        webViewQuran.settings.mediaPlaybackRequiresUserGesture = false
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            webViewQuran.settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        }
         webViewQuran.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
