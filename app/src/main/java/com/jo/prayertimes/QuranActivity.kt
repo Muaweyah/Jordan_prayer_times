@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class QuranActivity : AppCompatActivity() {
 
@@ -111,7 +112,8 @@ class QuranActivity : AppCompatActivity() {
     private fun setupSurahSearch() {
         val adapter = ArrayAdapter(this, R.layout.item_dropdown_surah, surahNames)
         autoCompleteSurah.setAdapter(adapter)
-        autoCompleteSurah.setDropDownBackgroundDrawable(ColorDrawable(Color.parseColor("#2A2A2A")))
+        autoCompleteSurah.threshold = 1
+        autoCompleteSurah.setDropDownBackgroundDrawable(ColorDrawable(Color.parseColor("#2E2E2E")))
 
         autoCompleteSurah.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val selectedName = parent.getItemAtPosition(position) as String
@@ -217,7 +219,6 @@ class QuranActivity : AppCompatActivity() {
 
         inner class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val imageView: ImageView = itemView.findViewById(R.id.imageViewQuranPage)
-            val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
@@ -228,15 +229,12 @@ class QuranActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
-            val primaryUrl = "https://everyayah.com/data/quranpngs/$pageNumber.png"
-
-            holder.progressBar.visibility = View.VISIBLE
+            val pageUrl = "https://quran.ksu.edu.sa/png_big/$pageNumber.png"
 
             Glide.with(holder.itemView.context)
-                .load(primaryUrl)
+                .load(pageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageView)
-
-            holder.progressBar.visibility = View.GONE
         }
 
         override fun getItemCount(): Int = totalPages
