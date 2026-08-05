@@ -32,7 +32,7 @@ class QuranActivity : AppCompatActivity() {
 
     private var currentSurah: Int = 1
     private var currentAyah: Int = 1
-    private var isUserSelectingSurah: Boolean = false
+    private var isInternalNavigation: Boolean = false
 
     private val surahNames = arrayOf(
         "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -88,15 +88,20 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val pageNum = position + 1
-
                 val surahIdx = getSurahIndexForPage(pageNum)
-                if (surahIdx != -1 && !isUserSelectingSurah) {
-                    autoCompleteSurah.setText(surahNames[surahIdx], false)
-                }
 
-                // تحديث نص رقم الصفحة فقط دون تعريض الصوت للإلغاء أو الإعادة
-                if (!isAudioPlaying) {
-                    tvPageInfo.text = "صفحة $pageNum من 604"
+                if (surahIdx != -1) {
+                    if (!isInternalNavigation) {
+                        autoCompleteSurah.setText(surahNames[surahIdx], false)
+                        currentSurah = surahIdx + 1
+                        currentAyah = 1 // عند التمرير اليدوي، نبدأ من أول الآيات في هذه الصفحة الجديدة
+
+                        if (isAudioPlaying) {
+                            playCurrentAyah() // إذا كان الصوت يعمل، انتقل وتابع القراءة من الصفحة الجديدة
+                        } else {
+                            tvPageInfo.text = "سورة ${surahNames[surahIdx]} - ص $pageNum"
+                        }
+                    }
                 }
             }
         })
@@ -120,13 +125,13 @@ class QuranActivity : AppCompatActivity() {
             val selectedName = parent.getItemAtPosition(position) as String
             val index = surahNames.indexOf(selectedName)
             if (index != -1) {
-                isUserSelectingSurah = true
+                isInternalNavigation = true
                 val targetPage = surahStartPages[index]
                 viewPager.currentItem = targetPage - 1
                 currentSurah = index + 1
                 currentAyah = 1
                 if (isAudioPlaying) playCurrentAyah()
-                isUserSelectingSurah = false
+                isInternalNavigation = false
             }
         }
     }
@@ -207,9 +212,10 @@ class QuranActivity : AppCompatActivity() {
                 val nextSurahStartPage = surahStartPages[currentSurah - 1]
                 val currentShowingPage = viewPager.currentItem + 1
 
-                // إذا انتهت السورة أو انتقلت للآية التالية وكانت الصفحة الجديدة تختلف، اقلب الشاشة تلقائياً
                 if (nextSurahStartPage > currentShowingPage) {
+                    isInternalNavigation = true
                     viewPager.setCurrentItem(nextSurahStartPage - 1, true)
+                    isInternalNavigation = false
                 }
 
                 playCurrentAyah()
