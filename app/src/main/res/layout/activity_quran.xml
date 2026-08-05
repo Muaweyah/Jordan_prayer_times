@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#121212">
 
-    <WebView
-        android:id="@+id/webViewQuran"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerQuran"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomControlBar" />
 
-    <ProgressBar
-        android:id="@+id/progressQuranPage"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/bottomControlBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
-    <ImageButton
-        android:id="@+id/btnHome"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="8dp"
-        android:background="@drawable/bg_fab_circle"
-        android:src="@drawable/ic_home"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:padding="12dp"
-        android:elevation="6dp"
-        android:contentDescription="الرئيسية" />
+        android:background="#1E1E1E">
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/btnPlayAudio"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_media_play"
+            android:contentDescription="Play Audio" />
+    </LinearLayout>
+</RelativeLayout>
