@@ -2,8 +2,8 @@ package com.jo.prayertimes
 
 enum class JordanGovernorates(
     val arabicName: String,
-    val latitude: Double,
-    val longitude: Double,
+    val lat: Double,
+    val lng: Double,
     val officialZoneKey: String
 ) {
     AMMAN("عمان", 31.9539, 35.9106, "عمان/الزرقاء - البلقاء/مأدبا"),
