@@ -67,7 +67,6 @@ class AzkarActivity : AppCompatActivity() {
         btnNext = findViewById(R.id.btnNextAzkar)
         btnPrev = findViewById(R.id.btnPrevAzkar)
 
-        // محاولة ربط المكونات مع واجهة المستخدم لضمان اللون الواضح
         val spinnerView: View? = findViewById(R.id.autoCompleteCategory) ?: findViewById(R.id.spinnerCategory)
         if (spinnerView is Spinner) {
             spinnerCategory = spinnerView
@@ -109,14 +108,15 @@ class AzkarActivity : AppCompatActivity() {
         val categories = arrayOf("أذكار الصباح", "أذكار المساء", "تسبيح", "استغفار", "صلاة على الرسول")
         val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        spinnerCategory.adapter = adapter
+        if (::spinnerCategory.isInitialized) {
+            spinnerCategory.adapter = adapter
+            spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    loadCategory(position)
+                }
 
-        spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                loadCategory(position)
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
