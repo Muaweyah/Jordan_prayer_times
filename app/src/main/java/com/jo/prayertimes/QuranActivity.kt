@@ -91,7 +91,7 @@ class QuranActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val pageNum = position + 1
-                tvPageInfo.text = "صفحة  من 604"
+                tvPageInfo.text = "صفحة " + pageNum + " من 604"
 
                 val surahIdx = getSurahIndexForPage(pageNum)
                 if (surahIdx != -1 && !isUserSelectingSurah) {
@@ -147,7 +147,7 @@ class QuranActivity : AppCompatActivity() {
     private fun playCurrentAyah() {
         val s = String.format("%03d", currentSurah)
         val a = String.format("%03d", currentAyah)
-        val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/.mp3"
+        val audioUrl = "https://everyayah.com/data/Alafasy_128kbps/" + s + a + ".mp3"
 
         player?.let { p ->
             val mediaItem = MediaItem.fromUri(audioUrl)
@@ -207,7 +207,7 @@ class QuranActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
             val pageNumber = position + 1
             val formattedPage = String.format("%03d", pageNumber)
-            val imageUrl = "https://quran.ksu.edu.jo/png_big/.png"
+            val imageUrl = "https://quran.ksu.edu.jo/png_big/" + formattedPage + ".png"
 
             holder.progressBar.visibility = View.VISIBLE
 
