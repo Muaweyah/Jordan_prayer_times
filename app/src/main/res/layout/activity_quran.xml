@@ -21,7 +21,34 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="12dp" />
+
+    <LinearLayout
+        android:id="@+id/llIndexBuilding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvBuildingIndexStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="جاري تحضير فهرس المصحف لأول مرة..."
+            android:textColor="@color/purple_dark_text"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:layout_marginBottom="6dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBuildIndex"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/spSurahList"
@@ -30,28 +57,81 @@
         android:layout_height="wrap_content"
         android:minHeight="52dp"
         android:background="@color/purple_light_bg"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/tvPageLabel"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llQuranControls"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="صفحة المصحف"
-        android:textColor="@color/purple_dark_text"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/btnRewind10"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:text="⏮"
+            android:textSize="16sp"
+            android:backgroundTint="@color/purple_light_bg"
+            android:textColor="@color/purple_light_text" />
+
+        <Button
+            android:id="@+id/btnPlayPause"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:text="▶"
+            android:textSize="18sp"
+            android:backgroundTint="@color/accent_gold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/tvPageNumber"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/purple_dark_text"
+            android:textSize="13sp"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btnForward10"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:layout_marginStart="6dp"
+            android:text="⏭"
+            android:textSize="16sp"
+            android:backgroundTint="@color/purple_light_bg"
+            android:textColor="@color/purple_light_text" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/purple_light_bg">
+        android:background="#FBF3E3">
 
-        <WebView
-            android:id="@+id/webViewQuran"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/llMushafPageLines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </ScrollView>
 
         <ProgressBar
             android:id="@+id/progressQuranPage"
