@@ -27,37 +27,34 @@ class AzkarActivity : AppCompatActivity() {
     private var currentIndex: Int = 0
     private var currentList: List<ZikrItem> = listOf()
 
-    // أذكار الصباح
+    // 1. أذكار الصباح
     private val sabahAzkar by lazy {
-        val res = if (resources.getIdentifier("sabah", "raw", packageName) != 0) resources.getIdentifier("sabah", "raw", packageName) else R.raw.tasbeeh
         listOf(
-            ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", res, 1)
+            ZikrItem("أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", R.raw.sabah, 1)
         )
     }
 
-    // أذكار المساء
+    // 2. أذكار المساء
     private val msaaAzkar by lazy {
-        val res = if (resources.getIdentifier("masaa", "raw", packageName) != 0) resources.getIdentifier("masaa", "raw", packageName) else R.raw.tasbeeh
         listOf(
-            ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", res, 1)
+            ZikrItem("أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ...", R.raw.masaa, 1)
         )
     }
 
-    // تسبيح
+    // 3. تسبيح
     private val tasbeehAzkar = listOf(
         ZikrItem("سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ", R.raw.tasbeeh, 100)
     )
 
-    // استغفار
+    // 4. استغفار
     private val istighfarAzkar = listOf(
         ZikrItem("أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", R.raw.istighfar, 100)
     )
 
-    // صلاة على الرسول
+    // 5. صلاة على الرسول
     private val salawatAzkar by lazy {
-        val res = if (resources.getIdentifier("salawat", "raw", packageName) != 0) resources.getIdentifier("salawat", "raw", packageName) else R.raw.tasbeeh
         listOf(
-            ZikrItem("اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", res, 100)
+            ZikrItem("اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", R.raw.salawat, 100)
         )
     }
 
