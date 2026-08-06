@@ -127,7 +127,7 @@ class AccountActivity : AppCompatActivity() {
                 pendingActionAfterRecovery = PendingAction.SYNC_UP
                 runOnUiThread {
                     setButtonsEnabled(true)
-                    startActivityForResult(e.intent, RC_AUTH_RECOVERY)
+                    e.intent?.let { startActivityForResult(it, RC_AUTH_RECOVERY) }
                 }
             } catch (e: Exception) {
                 runOnUiThread {
@@ -172,7 +172,7 @@ class AccountActivity : AppCompatActivity() {
                 pendingActionAfterRecovery = PendingAction.SYNC_DOWN
                 runOnUiThread {
                     setButtonsEnabled(true)
-                    startActivityForResult(e.intent, RC_AUTH_RECOVERY)
+                    e.intent?.let { startActivityForResult(it, RC_AUTH_RECOVERY) }
                 }
             } catch (e: Exception) {
                 runOnUiThread {
