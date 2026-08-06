@@ -43,6 +43,7 @@
 <string name="tasbih_title">المسبحة الإلكترونية</string>
 <string name="about_title">حول التطبيق</string>
 <string name="pet_feeding_title">أطعم أليفك</string>
+<string name="account_title">الحساب والمزامنة</string>
 <string name="home_title">مواقيت الصلاة</string>
     <string name="countdown_to_next_format">الوقت المتبقي لـ %1$s: %2$s</string>
     <string name="next_prayer_title">الصلاة القادمة</string>

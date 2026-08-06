@@ -41,6 +41,7 @@
         <activity android:name=".SettingsActivity" android:exported="false" />
         <activity android:name=".PetFeedingActivity" android:exported="false" />
         <activity android:name=".PetDetailActivity" android:exported="false" />
+        <activity android:name=".AccountActivity" android:exported="false" />
 
         <service
             android:name=".AdhanService"
