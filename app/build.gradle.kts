@@ -23,12 +23,20 @@ android {
             keyAlias = System.getenv("KEY_ALIAS") ?: ""
             keyPassword = System.getenv("KEY_PASSWORD") ?: ""
         }
+        create("debugFixed") {
+            storeFile = file("keystore_fixed/debug-fixed.keystore")
+            storePassword = "jordanprayertimes"
+            keyAlias = "jordanprayertimes-debug"
+            keyPassword = "jordanprayertimes"
+        }
     }
 
     buildTypes {
         debug {
-            if (System.getenv("KEYSTORE_PATH") != null) {
-                signingConfig = signingConfigs.getByName("stable")
+            signingConfig = if (System.getenv("KEYSTORE_PATH") != null) {
+                signingConfigs.getByName("stable")
+            } else {
+                signingConfigs.getByName("debugFixed")
             }
         }
         release {
