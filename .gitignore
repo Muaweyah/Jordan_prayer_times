@@ -15,3 +15,4 @@
 PREFIX/
 TESSDATA_PREFIX/
 aapt
+**/build/

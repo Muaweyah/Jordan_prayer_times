@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvHijriDate: TextView
     private lateinit var circularCountdown: CircularCountdownView
     private lateinit var tvCountdownBig: TextView
+    private lateinit var tvFooterClock: TextView
 
 
     /** لحظة حلول الصلاة القادمة (بالمللي ثانية) واسمها، تُستخدم لحساب العد التنازلي كل ثانية دون إعادة بناء القائمة */
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         circularCountdown = findViewById(R.id.circularCountdown)
         tvRemainingLabel = findViewById(R.id.tvRemainingLabel)
         tvCountdownBig = findViewById(R.id.tvCountdownBig)
+        tvFooterClock = findViewById(R.id.tvFooterClock)
 
 
         val rvPrayerTimes = findViewById<RecyclerView>(R.id.rvPrayerTimes)
@@ -359,6 +361,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateClock() {
         val now = Calendar.getInstance()
         tvGregorianDate.text = SimpleDateFormat("EEEE، d MMMM yyyy", Locale.getDefault()).format(now.time)
+        tvFooterClock.text = SimpleDateFormat("HH:mm:ss", Locale.US).format(now.time)
 
         // نعيد بناء قائمة المواقيت فقط عند تغيّر الدقيقة، أما العد التنازلي فيُحدَّث كل ثانية بشكل مستقل وخفيف
         val currentMinute = now.get(Calendar.MINUTE)

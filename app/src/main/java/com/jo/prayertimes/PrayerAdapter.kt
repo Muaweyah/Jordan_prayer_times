@@ -29,6 +29,7 @@ class PrayerAdapter(
         val rowRoot: View = view.findViewById(R.id.row_prayer_item)
         val iconView: ImageView = view.findViewById(R.id.iv_prayer_icon)
         val nameView: TextView = view.findViewById(R.id.tv_prayer_name)
+        val nameEnView: TextView = view.findViewById(R.id.tv_prayer_name_en)
         val timeView: TextView = view.findViewById(R.id.tv_prayer_time)
         val bellButton: ImageButton = view.findViewById(R.id.btn_bell_toggle)
     }
@@ -52,6 +53,7 @@ class PrayerAdapter(
         holder.timeView.text = formatTimeForDisplay(item.time)
 
         val prayer = item.prayer
+        holder.nameEnView.text = prayer?.englishLabel ?: "Sunrise"
         if (prayer != null) {
             holder.iconView.setImageResource(iconFor(prayer))
             holder.iconView.setBackgroundResource(bgFor(prayer))
@@ -74,11 +76,9 @@ class PrayerAdapter(
         }
 
         if (item.isNext) {
-            holder.rowRoot.setBackgroundColor(0x332D3748.toInt())
-            holder.timeView.setTextColor(0xFF10B981.toInt())
+            holder.rowRoot.setBackgroundResource(R.drawable.bg_prayer_card_navy_active)
         } else {
-            holder.rowRoot.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-            holder.timeView.setTextColor(0xFFF59E0B.toInt())
+            holder.rowRoot.setBackgroundResource(R.drawable.bg_prayer_card_navy)
         }
     }
 

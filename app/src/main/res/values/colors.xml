@@ -33,4 +33,14 @@
     <color name="purple_primary">#6B21A8</color>
     <color name="purple_popup_bg">#4C1D95</color>
     <color name="purple_text">#FFFFFF</color>
+
+    <!-- نظام ألوان "كحلي وذهبي" لتصميم الشاشة الرئيسية -->
+    <color name="navy_bg_top">#0E1730</color>
+    <color name="navy_bg_bottom">#1A2A52</color>
+    <color name="navy_card">#1B274A</color>
+    <color name="navy_card_alt">#22315C</color>
+    <color name="gold">#E8B84B</color>
+    <color name="gold_soft">#F1D28C</color>
+    <color name="text_on_navy">#FFFFFF</color>
+    <color name="text_on_navy_secondary">#AEB8D6</color>
 </resources>

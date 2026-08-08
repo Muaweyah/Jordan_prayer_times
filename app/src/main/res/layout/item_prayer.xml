@@ -4,75 +4,72 @@
     android:id="@+id/row_prayer_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@android:color/transparent">
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginVertical="4dp"
+    android:orientation="horizontal"
+    android:layoutDirection="locale"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_prayer_card_navy"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="10dp">
 
+    <!-- أيقونة الصلاة بخلفية ملونة -->
+    <ImageView
+        android:contentDescription="Prayer Icon"
+        android:id="@+id/iv_prayer_icon"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:padding="7dp"
+        android:src="@drawable/ic_sun" />
+
+    <!-- اسم الصلاة بالعربي وتحته بالإنجليزي -->
     <LinearLayout
-        android:layoutDirection="locale"
-        android:gravity="center_vertical"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="9dp">
+        android:layout_weight="1"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical"
+        android:gravity="start">
 
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical|start">
-
-            <ImageView
-                android:contentDescription="Prayer Icon"
-                android:id="@+id/iv_prayer_icon"
-                android:layout_height="22dp"
-                android:layout_width="22dp"
-                android:padding="3dp"
-                android:src="@drawable/ic_sun" />
-
-            <TextView
-                android:id="@+id/tv_prayer_name"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tv_prayer_name"
             android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_amiri"
+            android:textColor="@color/text_on_navy"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
-            <TextView
-                android:id="@+id/tv_prayer_time"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="#F59E0B"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Adhan Toggle Bell"
-                android:id="@+id/btn_bell_toggle"
-                android:layout_height="26dp"
-                android:layout_width="26dp"
-                android:layout_marginStart="6dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_bell"
-                app:tint="#F59E0B" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_prayer_name_en"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layoutDirection="ltr"
+            android:textColor="@color/text_on_navy_secondary"
+            android:textSize="11sp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="16dp"
-        android:background="#26FFFFFF" />
+    <!-- الوقت وزر تفعيل التنبيه -->
+    <TextView
+        android:id="@+id/tv_prayer_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
+        android:textColor="@color/gold"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Adhan Toggle Bell"
+        android:id="@+id/btn_bell_toggle"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="8dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_bell"
+        app:tint="@color/gold" />
 </LinearLayout>
