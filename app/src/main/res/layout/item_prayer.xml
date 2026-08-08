@@ -22,35 +22,19 @@
         android:padding="7dp"
         android:src="@drawable/ic_sun" />
 
-    <!-- اسم الصلاة بالعربي وتحته بالإنجليزي -->
-    <LinearLayout
+    <!-- اسم الصلاة بالعربي -->
+    <TextView
+        android:id="@+id/tv_prayer_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="10dp"
-        android:orientation="vertical"
-        android:gravity="start">
-
-        <TextView
-            android:id="@+id/tv_prayer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_amiri"
-            android:textColor="@color/text_on_navy"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/tv_prayer_name_en"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layoutDirection="ltr"
-            android:textColor="@color/text_on_navy_secondary"
-            android:textSize="11sp" />
-    </LinearLayout>
+        android:fontFamily="@font/amiri_bold"
+        android:textColor="@color/text_on_navy"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
     <!-- الوقت وزر تفعيل التنبيه -->
     <TextView

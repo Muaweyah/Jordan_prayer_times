@@ -29,7 +29,6 @@ class PrayerAdapter(
         val rowRoot: View = view.findViewById(R.id.row_prayer_item)
         val iconView: ImageView = view.findViewById(R.id.iv_prayer_icon)
         val nameView: TextView = view.findViewById(R.id.tv_prayer_name)
-        val nameEnView: TextView = view.findViewById(R.id.tv_prayer_name_en)
         val timeView: TextView = view.findViewById(R.id.tv_prayer_time)
         val bellButton: ImageButton = view.findViewById(R.id.btn_bell_toggle)
     }
@@ -53,7 +52,6 @@ class PrayerAdapter(
         holder.timeView.text = formatTimeForDisplay(item.time)
 
         val prayer = item.prayer
-        holder.nameEnView.text = prayer?.englishLabel ?: "Sunrise"
         if (prayer != null) {
             holder.iconView.setImageResource(iconFor(prayer))
             holder.iconView.setBackgroundResource(bgFor(prayer))
