@@ -29,10 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="10dp"
-        android:fontFamily="@font/amiri_bold"
+        android:fontFamily="@font/amiri_regular"
         android:textColor="@color/text_on_navy"
-        android:textSize="17sp"
-        android:textStyle="bold"
+        android:textSize="18sp"
         android:maxLines="1"
         android:ellipsize="end" />
 
