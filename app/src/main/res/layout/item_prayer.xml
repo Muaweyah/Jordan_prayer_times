@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="2dp"
     android:layout_marginVertical="4dp"
     android:orientation="horizontal"
-    android:layoutDirection="locale"
+    android:layoutDirection="rtl"
     android:gravity="center_vertical"
     android:background="@drawable/bg_prayer_card_navy"
     android:paddingHorizontal="14dp"
