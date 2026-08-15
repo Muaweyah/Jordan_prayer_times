@@ -11,4 +11,13 @@
         <item>وقفة عرفة وخصوصية الحج: 9 ذو الحجة</item>
         <item>عيد الأضحى المبارك: 10 ذو الحجة</item>
     </string-array>
+    <string-array name="week_day_labels">
+        <item>أحد</item>
+        <item>اثنين</item>
+        <item>ثلاثاء</item>
+        <item>أربعاء</item>
+        <item>خميس</item>
+        <item>جمعة</item>
+        <item>سبت</item>
+    </string-array>
 </resources>

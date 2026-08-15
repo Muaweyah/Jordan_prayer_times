@@ -1,5 +1,7 @@
 package com.jo.prayertimes.tasks
 
+import com.jo.prayertimes.R
+import androidx.compose.ui.res.stringResource
 import android.Manifest
 import android.app.Activity
 import android.os.Build
@@ -61,7 +63,7 @@ fun TasksRoot() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("المهام") },
+                title = { Text(stringResource(R.string.tl_app_title)) },
                 navigationIcon = {
                     IconButton(onClick = { (context as? Activity)?.finish() }) {
                         Text("🏠")
@@ -78,25 +80,25 @@ fun TasksRoot() {
                     selected = currentRoute == "timeline",
                     onClick = { navController.navigate("timeline") },
                     icon = { Text("🗓️") },
-                    label = { Text("الجدول") }
+                    label = { Text(stringResource(R.string.tl_nav_schedule)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "habits",
                     onClick = { navController.navigate("habits") },
                     icon = { Text("🔄") },
-                    label = { Text("العادات") }
+                    label = { Text(stringResource(R.string.tl_nav_habits)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "dailies",
                     onClick = { navController.navigate("dailies") },
                     icon = { Text("✅") },
-                    label = { Text("الروتين") }
+                    label = { Text(stringResource(R.string.tl_nav_dailies)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "reports",
                     onClick = { navController.navigate("reports") },
                     icon = { Text("📊") },
-                    label = { Text("التقارير") }
+                    label = { Text(stringResource(R.string.tasks_nav_reports)) }
                 )
             }
         }

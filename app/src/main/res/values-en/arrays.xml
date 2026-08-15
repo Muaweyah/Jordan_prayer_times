@@ -11,4 +11,13 @@
         <item>Day of Arafah: 9 Dhu al-Hijjah</item>
         <item>Eid al-Adha: 10 Dhu al-Hijjah</item>
     </string-array>
+    <string-array name="week_day_labels">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
 </resources>

@@ -1,5 +1,6 @@
 package com.jo.prayertimes.tasks.ui.timeline
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
@@ -15,8 +16,6 @@ import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.data.Category
 import com.jo.prayertimes.tasks.data.DefaultCategories
 import java.util.*
-
-private val weekDayLabels = listOf("أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,20 +53,20 @@ fun AddTimedTaskDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("مهمة جديدة بوقت محدد") },
+        title = { Text(stringResource(R.string.tl_add_dialog_title)) },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("عنوان المهمة") },
+                    label = { Text(stringResource(R.string.tl_field_title)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Box {
                     OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
-                        Text(selectedCategory?.let { "${it.icon} ${DefaultCategories.displayName(it)}" } ?: "اختر تصنيف")
+                        Text(selectedCategory?.let { "${it.icon} ${DefaultCategories.displayName(it)}" } ?: stringResource(R.string.tasks_choose_category))
                     }
                     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                         categories.forEach { cat ->
@@ -82,11 +81,11 @@ fun AddTimedTaskDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     OutlinedButton(onClick = { pickTime { startTime = it } }, modifier = Modifier.weight(1f)) {
-                        Text(if (startTime.isBlank()) "وقت البداية" else startTime)
+                        Text(if (startTime.isBlank()) stringResource(R.string.tl_start_time) else startTime)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedButton(onClick = { pickTime { endTime = it } }, modifier = Modifier.weight(1f)) {
-                        Text(if (endTime.isBlank()) "وقت النهاية" else endTime)
+                        Text(if (endTime.isBlank()) stringResource(R.string.tl_end_time) else endTime)
                     }
                 }
 
@@ -94,26 +93,27 @@ fun AddTimedTaskDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("ملاحظات") },
+                    label = { Text(stringResource(R.string.tl_notes)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = link,
                     onValueChange = { link = it },
-                    label = { Text("رابط (اجتماع مثلاً)") },
+                    label = { Text(stringResource(R.string.tl_link)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = isRecurring, onCheckedChange = { isRecurring = it })
-                    Text("مهمة متكررة")
+                    Text(stringResource(R.string.tl_recurring))
                 }
 
                 if (isRecurring) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                    val weekDayLabels = androidx.compose.ui.res.stringArrayResource(id = R.array.week_day_labels)
                         weekDayLabels.forEachIndexed { index, label ->
                             FilterChip(
                                 selected = selectedDays.contains(index),
@@ -143,10 +143,10 @@ fun AddTimedTaskDialog(
                         if (isRecurring) selectedDays.sorted().joinToString(",") else null
                     )
                 }
-            }) { Text("إضافة") }
+            }) { Text(stringResource(R.string.tasks_add)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("إلغاء") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.tl_cancel)) }
         }
     )
 }

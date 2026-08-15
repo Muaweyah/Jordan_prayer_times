@@ -1,5 +1,7 @@
 package com.jo.prayertimes.tasks.ui.timeline
 
+import com.jo.prayertimes.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -47,7 +49,7 @@ fun TimelineScreen(viewModel: TimelineViewModel = viewModel()) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "إضافة")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.tasks_add))
             }
         }
     ) { padding ->
@@ -57,7 +59,7 @@ fun TimelineScreen(viewModel: TimelineViewModel = viewModel()) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "الجدول الزمني", style = MaterialTheme.typography.headlineMedium)
+                Text(text = stringResource(R.string.tl_header), style = MaterialTheme.typography.headlineMedium)
                 BadgedBox(badge = {
                     if (inbox.isNotEmpty()) Badge { Text("${inbox.size}") }
                 }) {

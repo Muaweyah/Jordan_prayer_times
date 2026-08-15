@@ -1,5 +1,7 @@
 package com.jo.prayertimes.tasks.ui.gamify
 
+import com.jo.prayertimes.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,16 +25,16 @@ fun StatsBar(stats: UserStats) {
     ) {
         Column {
             Text("❤️ ${stats.health}/${stats.maxHealth}", style = MaterialTheme.typography.labelLarge)
-            Text("المستوى ${stats.level}", style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(R.string.stats_level, stats.level), style = MaterialTheme.typography.labelSmall)
         }
         Column {
             val needed = RewardEngine.xpForLevel(stats.level)
             Text("⭐ ${stats.xp}/$needed", style = MaterialTheme.typography.labelLarge)
-            Text("خبرة", style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(R.string.stats_xp_label), style = MaterialTheme.typography.labelSmall)
         }
         Column {
             Text("🪙 ${stats.gold}", style = MaterialTheme.typography.labelLarge)
-            Text("عملة", style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(R.string.stats_gold_label), style = MaterialTheme.typography.labelSmall)
         }
     }
 }

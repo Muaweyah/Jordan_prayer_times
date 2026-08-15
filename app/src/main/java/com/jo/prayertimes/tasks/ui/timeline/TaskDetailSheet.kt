@@ -1,5 +1,7 @@
 package com.jo.prayertimes.tasks.ui.timeline
 
+import com.jo.prayertimes.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -51,18 +53,18 @@ fun TaskDetailSheet(
             }
             if (task.isRecurring) {
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "🔁 مهمة متكررة", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.tl_recurring_badge), style = MaterialTheme.typography.bodySmall)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "المهام الفرعية", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.tl_subtasks), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
 
             Row {
                 OutlinedTextField(
                     value = newSubtask,
                     onValueChange = { newSubtask = it },
-                    label = { Text("خطوة جديدة") },
+                    label = { Text(stringResource(R.string.tl_subtask_placeholder)) },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -71,7 +73,7 @@ fun TaskDetailSheet(
                         viewModel.addSubtask(task.id, newSubtask, task.category)
                         newSubtask = ""
                     }
-                }) { Text("إضافة") }
+                }) { Text(stringResource(R.string.tasks_add)) }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -91,7 +93,7 @@ fun TaskDetailSheet(
             OutlinedButton(
                 onClick = { onDelete(task) },
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("حذف المهمة") }
+            ) { Text(stringResource(R.string.tl_delete_task)) }
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.jo.prayertimes.tasks.ui.gamify
 
+import com.jo.prayertimes.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,8 +20,6 @@ import com.jo.prayertimes.tasks.data.DefaultCategories
 import com.jo.prayertimes.tasks.data.Difficulty
 import com.jo.prayertimes.tasks.data.Task
 
-private val weekDayLabels = listOf("أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت")
-
 @Composable
 fun DailiesScreen(viewModel: DailiesViewModel = viewModel()) {
     val stats by viewModel.stats.collectAsState()
@@ -34,13 +34,13 @@ fun DailiesScreen(viewModel: DailiesViewModel = viewModel()) {
         }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-            Text("الروتين اليومي", style = MaterialTheme.typography.headlineMedium)
+            Text(stringResource(R.string.tl_nav_dailies), style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(12.dp))
             StatsBar(stats)
             Spacer(modifier = Modifier.height(16.dp))
 
             if (dailies.isEmpty()) {
-                Text("لا توجد مهام يومية لهذا اليوم")
+                Text(stringResource(R.string.dailies_empty))
             } else {
                 LazyColumn {
                     items(dailies) { task ->
@@ -72,7 +72,7 @@ private fun DailyRow(task: Task, done: Boolean, onToggle: () -> Unit, onDelete: 
             Checkbox(checked = done, onCheckedChange = { onToggle() })
             Text(text = "${cat?.icon ?: ""} ${task.title}")
         }
-        TextButton(onClick = onDelete) { Text("حذف") }
+        TextButton(onClick = onDelete) { Text(stringResource(R.string.tasks_delete)) }
     }
 }
 
@@ -93,14 +93,14 @@ private fun AddDailyDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("مهمة يومية جديدة") },
+        title = { Text(stringResource(R.string.add_daily_title)) },
         text = {
             Column {
-                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("عنوان المهمة") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.tl_field_title)) }, modifier = Modifier.fillMaxWidth())
                 Spacer(modifier = Modifier.height(8.dp))
                 Box {
                     OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
-                        Text(selectedCategory?.let { "${it.icon} ${DefaultCategories.displayName(it)}" } ?: "اختر تصنيف")
+                        Text(selectedCategory?.let { "${it.icon} ${DefaultCategories.displayName(it)}" } ?: stringResource(R.string.tasks_choose_category))
                     }
                     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                         categories.forEach { cat ->
@@ -111,11 +111,12 @@ private fun AddDailyDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     Difficulty.values().forEach { d ->
-                        FilterChip(selected = difficulty == d, onClick = { difficulty = d }, label = { Text(d.label) }, modifier = Modifier.padding(end = 4.dp))
+                        FilterChip(selected = difficulty == d, onClick = { difficulty = d }, label = { Text(difficultyLabel(d)) }, modifier = Modifier.padding(end = 4.dp))
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("أيام التكرار", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.recurrence_days_label), style = MaterialTheme.typography.labelMedium)
+                val weekDayLabels = androidx.compose.ui.res.stringArrayResource(id = R.array.week_day_labels)
                 Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                     weekDayLabels.forEachIndexed { index, label ->
                         FilterChip(
@@ -131,8 +132,8 @@ private fun AddDailyDialog(
         confirmButton = {
             TextButton(onClick = {
                 if (title.isNotBlank()) onConfirm(title, selectedCategory?.id ?: "work", difficulty.name, selectedDays.sorted())
-            }) { Text("إضافة") }
+            }) { Text(stringResource(R.string.tasks_add)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("إلغاء") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.tl_cancel)) } }
     )
 }

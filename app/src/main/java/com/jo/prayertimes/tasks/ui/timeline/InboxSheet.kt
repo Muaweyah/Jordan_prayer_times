@@ -1,5 +1,6 @@
 package com.jo.prayertimes.tasks.ui.timeline
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,14 +33,14 @@ fun InboxSheet(
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            Text("صندوق الوارد", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.tl_inbox_title), style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(12.dp))
 
             Row {
                 OutlinedTextField(
                     value = newTitle,
                     onValueChange = { newTitle = it },
-                    label = { Text("فكرة أو مهمة سريعة") },
+                    label = { Text(stringResource(R.string.tl_inbox_placeholder)) },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -48,13 +49,13 @@ fun InboxSheet(
                         onAdd(newTitle, categories.firstOrNull()?.id ?: "work")
                         newTitle = ""
                     }
-                }) { Text("إضافة") }
+                }) { Text(stringResource(R.string.tasks_add)) }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             if (inbox.isEmpty()) {
-                Text("لا توجد عناصر بصندوق الوارد")
+                Text(stringResource(R.string.tl_inbox_empty))
             } else {
                 LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
                     items(inbox) { task ->
@@ -85,7 +86,7 @@ fun InboxSheet(
                                     calendar.get(Calendar.MINUTE),
                                     true
                                 ).show()
-                            }) { Text("جدولة") }
+                            }) { Text(stringResource(R.string.tl_schedule_btn)) }
                         }
                     }
                 }
