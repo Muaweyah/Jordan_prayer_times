@@ -2,14 +2,14 @@ package com.jo.prayertimes
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.jo.prayertimes.tasks.data.TasksBackupBridge
 import org.json.JSONArray
 import org.json.JSONObject
 
-/** يبني نسخة JSON كاملة من كل تفضيلات التطبيق (الإعدادات + بيانات الحيوانات الأليفة) ويستعيدها.
+/** يبني نسخة JSON كاملة من كل تفضيلات التطبيق (الإعدادات + بيانات الحيوانات الأليفة + المهام اليومية) ويستعيدها.
  *  يعمل بشكل عام على أي مفتاح موجود حالياً، دون الحاجة لتحديثه يدوياً كل ما تُضاف ميزة جديدة
- *  تستخدم SharedPreferences */
+ *  تستخدم SharedPreferences، بالإضافة لجدول المهام بقاعدة بيانات Room المنفصلة. */
 class BackupManager(private val context: Context) {
-
     private val prefFiles = listOf("app_settings", "pet_feeding")
 
     fun buildBackupJson(): String {
@@ -18,6 +18,8 @@ class BackupManager(private val context: Context) {
             val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
             root.put(name, serializePrefs(prefs))
         }
+        val tasksJson = TasksBackupBridge.exportToJson(context)
+        root.put("daily_tasks", tasksJson)
         return root.toString()
     }
 
@@ -27,6 +29,9 @@ class BackupManager(private val context: Context) {
             if (!root.has(name)) continue
             val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
             deserializeInto(prefs, root.getJSONObject(name))
+        }
+        if (root.has("daily_tasks")) {
+            TasksBackupBridge.importFromJson(context, root.getJSONObject("daily_tasks"))
         }
     }
 

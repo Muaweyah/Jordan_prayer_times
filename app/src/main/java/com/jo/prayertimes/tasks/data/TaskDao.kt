@@ -11,6 +11,9 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE date BETWEEN :startDate AND :endDate")
     suspend fun getTasksInRange(startDate: String, endDate: String): List<Task>
 
+    @Query("SELECT COUNT(*) FROM tasks WHERE title = :title AND date = :date AND category = :category")
+    suspend fun countMatching(title: String, date: String, category: String): Int
+
     @Insert
     suspend fun insert(task: Task): Long
 
