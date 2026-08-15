@@ -18,7 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.jo.prayertimes.tasks.ui.TaskViewModel
+import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
 import java.util.*
 
 class TasksActivity : ComponentActivity() {
@@ -38,6 +43,8 @@ class TasksActivity : ComponentActivity() {
 
 @Composable
 fun TasksRoot() {
+    val navController = rememberNavController()
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { }
@@ -46,7 +53,37 @@ fun TasksRoot() {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
-    DailyTasksScreen()
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                val backStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = backStackEntry?.destination?.route
+
+                NavigationBarItem(
+                    selected = currentRoute == "daily",
+                    onClick = { navController.navigate("daily") },
+                    icon = { Text("✅") },
+                    label = { Text("اليوم") }
+                )
+                NavigationBarItem(
+                    selected = currentRoute == "reports",
+                    onClick = { navController.navigate("reports") },
+                    icon = { Text("📊") },
+                    label = { Text("التقارير") }
+                )
+            }
+        }
+    ) { padding ->
+        NavHost(
+            navController = navController,
+            startDestination = "daily",
+            modifier = Modifier.padding(padding)
+        ) {
+            composable("daily") { DailyTasksScreen() }
+            composable("reports") { ReportsScreen() }
+        }
+    }
 }
 
 @Composable
