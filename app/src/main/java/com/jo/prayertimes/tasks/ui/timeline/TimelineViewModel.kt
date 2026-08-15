@@ -94,7 +94,13 @@ class TimelineViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun toggleTask(task: Task) {
-        viewModelScope.launch { repository.updateTask(task.copy(isCompleted = !task.isCompleted)) }
+        viewModelScope.launch {
+            val nowCompleted = !task.isCompleted
+            repository.updateTask(task.copy(isCompleted = nowCompleted))
+            if (nowCompleted && task.itemType == "TODO") {
+                GamificationService.applyTodoComplete(getApplication(), task)
+            }
+        }
     }
 
     fun deleteTask(task: Task) {

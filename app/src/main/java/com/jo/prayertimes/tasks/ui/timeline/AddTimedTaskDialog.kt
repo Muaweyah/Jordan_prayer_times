@@ -1,6 +1,8 @@
 package com.jo.prayertimes.tasks.ui.timeline
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Alignment
@@ -111,7 +113,7 @@ fun AddTimedTaskDialog(
 
                 if (isRecurring) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row {
+                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                         weekDayLabels.forEachIndexed { index, label ->
                             FilterChip(
                                 selected = selectedDays.contains(index),

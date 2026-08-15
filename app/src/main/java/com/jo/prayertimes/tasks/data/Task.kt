@@ -20,5 +20,10 @@ data class Task(
     val linkUrl: String? = null,
     val parentTaskId: Long? = null,
     val isRecurring: Boolean = false,
-    val recurrenceDays: String? = null
+    val recurrenceDays: String? = null,
+    val itemType: String = "TODO",
+    val difficulty: String = "EASY",
+    val isPositiveHabit: Boolean = true,
+    val isNegativeHabit: Boolean = false,
+    val createdDate: String? = null
 )
