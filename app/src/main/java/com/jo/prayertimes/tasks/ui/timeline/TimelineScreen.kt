@@ -69,7 +69,10 @@ fun TimelineScreen(viewModel: TimelineViewModel = viewModel()) {
                 }
             }
 
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(bottom = 96.dp)
+            ) {
                 items((6..23).toList()) { hour ->
                     val hourBlocks = blocksByHour[hour] ?: emptyList()
                     HourRow(hour = hour, blocks = hourBlocks, onTaskClick = { detailTask = it })

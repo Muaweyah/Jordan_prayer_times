@@ -39,7 +39,7 @@ fun HabitsScreen(viewModel: HabitsViewModel = viewModel()) {
             if (habits.isEmpty()) {
                 Text(stringResource(R.string.habits_empty))
             } else {
-                LazyColumn {
+                LazyColumn(contentPadding = PaddingValues(bottom = 96.dp)) {
                     items(habits) { habit ->
                         HabitRow(habit, onPositive = { viewModel.tapPositive(habit) }, onNegative = { viewModel.tapNegative(habit) }, onDelete = { viewModel.deleteHabit(habit) })
                     }

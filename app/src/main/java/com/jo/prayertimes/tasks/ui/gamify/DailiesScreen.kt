@@ -42,7 +42,7 @@ fun DailiesScreen(viewModel: DailiesViewModel = viewModel()) {
             if (dailies.isEmpty()) {
                 Text(stringResource(R.string.dailies_empty))
             } else {
-                LazyColumn {
+                LazyColumn(contentPadding = PaddingValues(bottom = 96.dp)) {
                     items(dailies) { task ->
                         val done = completedToday.contains(task.id)
                         DailyRow(task, done, onToggle = { viewModel.toggle(task) }, onDelete = { viewModel.deleteDaily(task) })
