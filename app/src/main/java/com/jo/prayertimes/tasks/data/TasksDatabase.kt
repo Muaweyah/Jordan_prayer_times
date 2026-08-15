@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Task::class, Category::class], version = 1, exportSchema = false)
+@Database(entities = [Task::class, Category::class], version = 2, exportSchema = false)
 abstract class TasksDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun categoryDao(): CategoryDao
@@ -19,7 +19,9 @@ abstract class TasksDatabase : RoomDatabase() {
                     context.applicationContext,
                     TasksDatabase::class.java,
                     "prayertimes_tasks_db"
-                ).build().also { INSTANCE = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
             }
         }
     }

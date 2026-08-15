@@ -9,9 +9,16 @@ data class Task(
     val title: String,
     val category: String,
     val priority: Int = 0,
-    val date: String,
+    val date: String?,
     val isCompleted: Boolean = false,
     val reminderTime: String? = null,
     val repeatRule: String? = null,
-    val customSound: String? = null
+    val customSound: String? = null,
+    val startTime: String? = null,
+    val endTime: String? = null,
+    val notes: String? = null,
+    val linkUrl: String? = null,
+    val parentTaskId: Long? = null,
+    val isRecurring: Boolean = false,
+    val recurrenceDays: String? = null
 )
