@@ -75,4 +75,33 @@
 <string name="prayer_asr">Asr</string>
 <string name="prayer_maghrib">Maghrib</string>
 <string name="prayer_isha">Isha</string>
+    <string name="tasks_title">Today\'s Tasks</string>
+    <string name="tasks_new_task">New task</string>
+    <string name="tasks_choose_category">Choose category</string>
+    <string name="tasks_no_reminder">No reminder</string>
+    <string name="tasks_add">Add</string>
+    <string name="tasks_empty">No tasks yet — add your first task</string>
+    <string name="tasks_delete">Delete</string>
+    <string name="tasks_nav_today">Today</string>
+    <string name="tasks_nav_reports">Reports</string>
+
+    <string name="reports_title">Achievement Reports</string>
+    <string name="reports_day">Day</string>
+    <string name="reports_week">Week</string>
+    <string name="reports_month">Month</string>
+    <string name="reports_year">Year</string>
+    <string name="reports_daily_breakdown">Daily breakdown</string>
+    <string name="reports_by_category">Completion by category</string>
+    <string name="reports_empty">No data for this period yet</string>
+    <string name="reports_completed_of">Completed %1$d of %2$d tasks</string>
+    <string name="reports_overall_rate">Overall completion rate</string>
+    <string name="reports_this_week">This week</string>
+
+    <string name="cat_worship">Worship</string>
+    <string name="cat_health">Health &amp; Self-Care</string>
+    <string name="cat_home">House Chores</string>
+    <string name="cat_work">Work &amp; Productivity</string>
+    <string name="cat_selfdev">Self-Development</string>
+    <string name="cat_leisure">Entertainment &amp; Leisure</string>
+    <string name="cat_pets">Pet Care</string>
 </resources>

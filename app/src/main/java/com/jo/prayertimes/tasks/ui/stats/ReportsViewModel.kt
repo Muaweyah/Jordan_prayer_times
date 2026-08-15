@@ -108,7 +108,7 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
         val cal = Calendar.getInstance()
         return when (_period.value) {
             ReportPeriod.DAY -> SimpleDateFormat("EEEE، d MMMM", Locale("ar")).format(cal.time)
-            ReportPeriod.WEEK -> "هذا الأسبوع"
+            ReportPeriod.WEEK -> getApplication<android.app.Application>().getString(com.jo.prayertimes.R.string.reports_this_week)
             ReportPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", Locale("ar")).format(cal.time)
             ReportPeriod.YEAR -> SimpleDateFormat("yyyy", Locale("ar")).format(cal.time)
         }

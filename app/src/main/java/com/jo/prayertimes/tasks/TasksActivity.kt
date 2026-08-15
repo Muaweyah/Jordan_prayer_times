@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.jo.prayertimes.R
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -64,13 +66,13 @@ fun TasksRoot() {
                     selected = currentRoute == "daily",
                     onClick = { navController.navigate("daily") },
                     icon = { Text("✅") },
-                    label = { Text("اليوم") }
+                    label = { Text(stringResource(R.string.tasks_nav_today)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "reports",
                     onClick = { navController.navigate("reports") },
                     icon = { Text("📊") },
-                    label = { Text("التقارير") }
+                    label = { Text(stringResource(R.string.tasks_nav_reports)) }
                 )
             }
         }
@@ -105,21 +107,21 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
     val calendar = remember { Calendar.getInstance() }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "مهام اليوم", style = MaterialTheme.typography.headlineMedium)
+        Text(text = stringResource(R.string.tasks_title), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
             value = newTaskTitle,
             onValueChange = { newTaskTitle = it },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("مهمة جديدة") }
+            label = { Text(stringResource(R.string.tasks_new_task)) }
         )
         Spacer(modifier = Modifier.height(8.dp))
 
         Row {
             Box {
                 OutlinedButton(onClick = { expanded = true }) {
-                    Text(text = selectedCategory?.let { "${it.icon} ${it.nameAr}" } ?: "اختر تصنيف")
+                    Text(text = selectedCategory?.let { "${it.icon} ${it.nameAr}" } ?: stringResource(R.string.tasks_choose_category))
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     visibleCategories.forEach { cat ->
@@ -139,7 +141,7 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
                     calendar.get(Calendar.MINUTE),
                     true
                 ).show()
-            }) { Text(text = reminderTime ?: "بدون تنبيه") }
+            }) { Text(text = reminderTime ?: stringResource(R.string.tasks_no_reminder)) }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -154,12 +156,12 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
                 }
             },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("إضافة") }
+        ) { Text(stringResource(R.string.tasks_add)) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         if (tasks.isEmpty()) {
-            Text(text = "لا توجد مهام بعد — أضف أول مهمة لك")
+            Text(text = stringResource(R.string.tasks_empty))
         } else {
             LazyColumn {
                 items(tasks) { task ->
@@ -173,7 +175,7 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
                             Checkbox(checked = task.isCompleted, onCheckedChange = { viewModel.toggleTask(task) })
                             Text(text = "${cat?.icon ?: ""} ${task.title}")
                         }
-                        TextButton(onClick = { viewModel.deleteTask(task) }) { Text("حذف") }
+                        TextButton(onClick = { viewModel.deleteTask(task) }) { Text(stringResource(R.string.tasks_delete)) }
                     }
                 }
             }

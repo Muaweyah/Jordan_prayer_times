@@ -75,4 +75,33 @@
 <string name="prayer_asr">العصر</string>
 <string name="prayer_maghrib">المغرب</string>
 <string name="prayer_isha">العشاء</string>
+    <string name="tasks_title">مهام اليوم</string>
+    <string name="tasks_new_task">مهمة جديدة</string>
+    <string name="tasks_choose_category">اختر تصنيف</string>
+    <string name="tasks_no_reminder">بدون تنبيه</string>
+    <string name="tasks_add">إضافة</string>
+    <string name="tasks_empty">لا توجد مهام بعد — أضف أول مهمة لك</string>
+    <string name="tasks_delete">حذف</string>
+    <string name="tasks_nav_today">اليوم</string>
+    <string name="tasks_nav_reports">التقارير</string>
+
+    <string name="reports_title">تقارير الإنجاز</string>
+    <string name="reports_day">يومي</string>
+    <string name="reports_week">أسبوعي</string>
+    <string name="reports_month">شهري</string>
+    <string name="reports_year">سنوي</string>
+    <string name="reports_daily_breakdown">التفصيل اليومي</string>
+    <string name="reports_by_category">الإنجاز حسب التصنيف</string>
+    <string name="reports_empty">لا توجد بيانات لهذه الفترة بعد</string>
+    <string name="reports_completed_of">أنجزت %1$d من %2$d مهمة</string>
+    <string name="reports_overall_rate">نسبة الإنجاز الإجمالية</string>
+    <string name="reports_this_week">هذا الأسبوع</string>
+
+    <string name="cat_worship">العبادات</string>
+    <string name="cat_health">الصحة والعناية الشخصية</string>
+    <string name="cat_home">الأعمال المنزلية</string>
+    <string name="cat_work">العمل والإنتاجية</string>
+    <string name="cat_selfdev">التنمية الذاتية</string>
+    <string name="cat_leisure">الترفيه والترويح</string>
+    <string name="cat_pets">رعاية الحيوانات الأليفة</string>
 </resources>

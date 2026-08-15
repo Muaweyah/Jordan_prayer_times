@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.jo.prayertimes.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.roundToInt
 
@@ -22,14 +24,14 @@ fun ReportsScreen(viewModel: ReportsViewModel = viewModel()) {
     val dailyBreakdown by viewModel.dailyBreakdown.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "تقارير الإنجاز", style = MaterialTheme.typography.headlineMedium)
+        Text(text = stringResource(R.string.reports_title), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(12.dp))
 
         Row {
-            PeriodChip("يومي", period == ReportPeriod.DAY) { viewModel.setPeriod(ReportPeriod.DAY) }
-            PeriodChip("أسبوعي", period == ReportPeriod.WEEK) { viewModel.setPeriod(ReportPeriod.WEEK) }
-            PeriodChip("شهري", period == ReportPeriod.MONTH) { viewModel.setPeriod(ReportPeriod.MONTH) }
-            PeriodChip("سنوي", period == ReportPeriod.YEAR) { viewModel.setPeriod(ReportPeriod.YEAR) }
+            PeriodChip(stringResource(R.string.reports_day), period == ReportPeriod.DAY) { viewModel.setPeriod(ReportPeriod.DAY) }
+            PeriodChip(stringResource(R.string.reports_week), period == ReportPeriod.WEEK) { viewModel.setPeriod(ReportPeriod.WEEK) }
+            PeriodChip(stringResource(R.string.reports_month), period == ReportPeriod.MONTH) { viewModel.setPeriod(ReportPeriod.MONTH) }
+            PeriodChip(stringResource(R.string.reports_year), period == ReportPeriod.YEAR) { viewModel.setPeriod(ReportPeriod.YEAR) }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -38,17 +40,17 @@ fun ReportsScreen(viewModel: ReportsViewModel = viewModel()) {
 
         if (dailyBreakdown.isNotEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "التفصيل اليومي", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.reports_daily_breakdown), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(12.dp))
             DailyBarChart(dailyBreakdown)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "الإنجاز حسب التصنيف", style = MaterialTheme.typography.titleMedium)
+        Text(text = stringResource(R.string.reports_by_category), style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
 
         if (byCategory.isEmpty()) {
-            Text(text = "لا توجد بيانات لهذه الفترة بعد")
+            Text(text = stringResource(R.string.reports_empty))
         } else {
             byCategory.forEach { cat -> CategoryReportRow(cat) }
         }
@@ -92,9 +94,9 @@ private fun OverallSummaryCard(summary: PeriodSummary) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = "أنجزت ${summary.completed} من ${summary.total} مهمة")
+                Text(text = stringResource(R.string.reports_completed_of, summary.completed, summary.total))
                 Text(
-                    text = "نسبة الإنجاز الإجمالية",
+                    text = stringResource(R.string.reports_overall_rate),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
