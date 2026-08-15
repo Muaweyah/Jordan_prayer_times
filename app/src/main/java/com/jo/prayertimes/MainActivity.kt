@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         setupRegionSpinner()
         setupLocationButton()
         setupMenuButton()
+        setupSettingsGear()
         requestNotificationPermissionIfNeeded()
         requestExactAlarmPermissionIfNeeded()
         requestBatteryOptimizationExemptionIfNeeded()
@@ -264,6 +265,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSettingsGear() {
+        findViewById<android.widget.TextView>(R.id.btnSettingsGear)?.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+    }
+
     private fun setupMenuButton() {
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
         btnMenu.setOnClickListener { anchor ->
@@ -273,7 +280,6 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(0, 3, 2, getString(R.string.quran_title))
             popup.menu.add(0, 4, 3, getString(R.string.azkar_title))
             popup.menu.add(0, 5, 4, getString(R.string.tasbih_title))
-            popup.menu.add(0, 6, 5, getString(R.string.settings_title))
             popup.menu.add(0, 7, 6, getString(R.string.about_title))
             popup.menu.add(0, 8, 7, getString(R.string.pet_feeding_title))
             popup.menu.add(0, 9, 8, getString(R.string.account_title))
@@ -285,7 +291,6 @@ class MainActivity : AppCompatActivity() {
                     3 -> QuranActivity::class.java
                     4 -> AzkarActivity::class.java
                     5 -> TasbihActivity::class.java
-                    6 -> SettingsActivity::class.java
                     7 -> AboutActivity::class.java
                     8 -> PetFeedingActivity::class.java
                     9 -> AccountActivity::class.java
