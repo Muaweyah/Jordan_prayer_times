@@ -277,6 +277,7 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(0, 7, 6, getString(R.string.about_title))
             popup.menu.add(0, 8, 7, getString(R.string.pet_feeding_title))
             popup.menu.add(0, 9, 8, getString(R.string.account_title))
+            popup.menu.add(0, 10, 9, "المهام اليومية")
             popup.setOnMenuItemClickListener { item ->
                 val target = when (item.itemId) {
                     1 -> QiblaActivity::class.java
@@ -288,6 +289,7 @@ class MainActivity : AppCompatActivity() {
                     7 -> AboutActivity::class.java
                     8 -> PetFeedingActivity::class.java
                     9 -> AccountActivity::class.java
+                    10 -> com.jo.prayertimes.tasks.TasksActivity::class.java
                     else -> null
                 }
                 target?.let { startActivity(Intent(this, it)) }
