@@ -104,4 +104,5 @@
     <string name="cat_selfdev">التنمية الذاتية</string>
     <string name="cat_leisure">الترفيه والترويح</string>
     <string name="cat_pets">رعاية الحيوانات الأليفة</string>
+    <string name="menu_daily_tasks">المهام اليومية</string>
 </resources>

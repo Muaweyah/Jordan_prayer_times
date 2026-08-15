@@ -133,7 +133,7 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
             Spacer(modifier = Modifier.width(8.dp))
             OutlinedButton(onClick = {
                 android.app.TimePickerDialog(
-                    context,
+                    android.view.ContextThemeWrapper(context, com.jo.prayertimes.R.style.TasksTimePickerDialog),
                     { _, hour, minute -> reminderTime = String.format("%02d:%02d", hour, minute) },
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),

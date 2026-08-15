@@ -32,4 +32,11 @@
         <item name="android:popupMenuStyle">@style/AppPopupMenuPurple</item>
         <item name="popupMenuStyle">@style/AppPopupMenuPurple</item>
     </style>
+
+    <!-- ستايل فاتح وواضح لنافذة اختيار الوقت (تذكيرات المهام)، بدل الستايل الداكن الافتراضي -->
+    <style name="TasksTimePickerDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">#6750A4</item>
+        <item name="android:textColorPrimary">#1C1B1F</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 </resources>
