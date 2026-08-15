@@ -10,10 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
-import com.jo.prayertimes.R
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jo.prayertimes.R
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -73,7 +74,7 @@ private fun OverallSummaryCard(summary: PeriodSummary) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFF3F3F3))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(16.dp)
     ) {
         Text(text = summary.label, style = MaterialTheme.typography.titleSmall)
@@ -131,12 +132,13 @@ private fun DailyBarChart(days: List<PeriodSummary>) {
 
 @Composable
 private fun CategoryReportRow(cat: CategorySummary) {
+    val name = if (Locale.getDefault().language == "ar") cat.nameAr else cat.nameEn
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "${cat.icon} ${cat.nameAr}")
+            Text(text = "${cat.icon} $name")
             Text(text = "${cat.completed}/${cat.total} — ${(cat.ratio * 100).roundToInt()}%")
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -145,7 +147,7 @@ private fun CategoryReportRow(cat: CategorySummary) {
                 .fillMaxWidth()
                 .height(10.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(Color(0xFFE0E0E0))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Box(
                 modifier = Modifier

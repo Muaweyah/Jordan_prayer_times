@@ -36,6 +36,8 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
         load()
     }
 
+    private fun currentLocale(): Locale = Locale.getDefault()
+
     private fun load() {
         viewModelScope.launch {
             val cal = Calendar.getInstance()
@@ -76,6 +78,7 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
                     categoryId = cat.id,
                     icon = cat.icon,
                     nameAr = cat.nameAr,
+                    nameEn = cat.nameEn,
                     total = list.size,
                     completed = list.count { it.isCompleted }
                 )
@@ -90,7 +93,7 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
                     val dayTasks = byDate[d] ?: emptyList()
                     breakdown.add(
                         PeriodSummary(
-                            label = SimpleDateFormat("d/M", Locale("ar")).format(iter.time),
+                            label = SimpleDateFormat("d/M", currentLocale()).format(iter.time),
                             total = dayTasks.size,
                             completed = dayTasks.count { it.isCompleted }
                         )
@@ -106,11 +109,13 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
 
     private fun periodLabel(): String {
         val cal = Calendar.getInstance()
+        val locale = currentLocale()
+        val app = getApplication<Application>()
         return when (_period.value) {
-            ReportPeriod.DAY -> SimpleDateFormat("EEEE، d MMMM", Locale("ar")).format(cal.time)
-            ReportPeriod.WEEK -> getApplication<android.app.Application>().getString(com.jo.prayertimes.R.string.reports_this_week)
-            ReportPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", Locale("ar")).format(cal.time)
-            ReportPeriod.YEAR -> SimpleDateFormat("yyyy", Locale("ar")).format(cal.time)
+            ReportPeriod.DAY -> SimpleDateFormat("EEEE، d MMMM", locale).format(cal.time)
+            ReportPeriod.WEEK -> app.getString(com.jo.prayertimes.R.string.reports_this_week)
+            ReportPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", locale).format(cal.time)
+            ReportPeriod.YEAR -> SimpleDateFormat("yyyy", locale).format(cal.time)
         }
     }
 }

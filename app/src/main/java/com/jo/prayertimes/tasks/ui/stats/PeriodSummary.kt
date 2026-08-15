@@ -13,6 +13,7 @@ data class CategorySummary(
     val categoryId: String,
     val icon: String,
     val nameAr: String,
+    val nameEn: String,
     val total: Int,
     val completed: Int
 ) {

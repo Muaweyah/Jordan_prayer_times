@@ -32,9 +32,7 @@ class TasksActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme(
-                colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
-            ) {
+            com.jo.prayertimes.tasks.ui.theme.TasksAppTheme(darkTheme = isSystemInDarkTheme()) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     TasksRoot()
                 }
@@ -121,12 +119,12 @@ fun DailyTasksScreen(viewModel: TaskViewModel = viewModel()) {
         Row {
             Box {
                 OutlinedButton(onClick = { expanded = true }) {
-                    Text(text = selectedCategory?.let { "${it.icon} ${it.nameAr}" } ?: stringResource(R.string.tasks_choose_category))
+                    Text(text = selectedCategory?.let { "${it.icon} ${com.jo.prayertimes.tasks.data.DefaultCategories.displayName(it)}" } ?: stringResource(R.string.tasks_choose_category))
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     visibleCategories.forEach { cat ->
                         DropdownMenuItem(
-                            text = { Text("${cat.icon} ${cat.nameAr}") },
+                            text = { Text("${cat.icon} ${com.jo.prayertimes.tasks.data.DefaultCategories.displayName(cat)}") },
                             onClick = { selectedCategory = cat; expanded = false }
                         )
                     }
