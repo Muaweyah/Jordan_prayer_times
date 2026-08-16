@@ -1,5 +1,9 @@
 package com.jo.prayertimes.tasks.ui.gamify
 
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -112,13 +116,20 @@ private fun AddDailyDialog(
         title = { Text(stringResource(R.string.add_daily_title)) },
         text = {
             var titleSuggestionsExpanded by remember { mutableStateOf(false) }
+            var isCustomEntry by remember { mutableStateOf(false) }
+            val titleFocusRequester = remember { FocusRequester() }
+            val keyboardController = LocalSoftwareKeyboardController.current
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Box {
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text(stringResource(R.string.tl_field_title)) },
-                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = !isCustomEntry,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(titleFocusRequester)
+                            .then(if (!isCustomEntry) Modifier.clickable { titleSuggestionsExpanded = true } else Modifier),
                         trailingIcon = { IconButton(onClick = { titleSuggestionsExpanded = true }) { Text("▾") } }
                     )
                     val suggestions = selectedCategory?.let { cat ->
@@ -126,9 +137,15 @@ private fun AddDailyDialog(
                     } ?: emptyList()
                     DropdownMenu(expanded = titleSuggestionsExpanded && suggestions.isNotEmpty(), onDismissRequest = { titleSuggestionsExpanded = false }) {
                         suggestions.forEach { s ->
-                            DropdownMenuItem(text = { Text(s.title) }, onClick = { title = s.title; titleSuggestionsExpanded = false })
+                            DropdownMenuItem(text = { Text(s.title) }, onClick = { title = s.title; isCustomEntry = false; titleSuggestionsExpanded = false })
                         }
-                        DropdownMenuItem(text = { Text(stringResource(R.string.add_new_custom)) }, onClick = { title = ""; titleSuggestionsExpanded = false })
+                        DropdownMenuItem(text = { Text(stringResource(R.string.add_new_custom)) }, onClick = {
+                            title = ""
+                            isCustomEntry = true
+                            titleSuggestionsExpanded = false
+                            titleFocusRequester.requestFocus()
+                            keyboardController?.show()
+                        })
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))

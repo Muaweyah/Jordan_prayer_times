@@ -1,5 +1,9 @@
 package com.jo.prayertimes.tasks.ui.gamify
 
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.foundation.clickable
 import com.jo.prayertimes.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.*
@@ -97,13 +101,20 @@ private fun AddHabitDialog(
         title = { Text(stringResource(R.string.add_habit_title)) },
         text = {
             var titleSuggestionsExpanded by remember { mutableStateOf(false) }
+            var isCustomEntry by remember { mutableStateOf(false) }
+            val titleFocusRequester = remember { FocusRequester() }
+            val keyboardController = LocalSoftwareKeyboardController.current
             Column {
                 Box {
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text(stringResource(R.string.habit_name_label)) },
-                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = !isCustomEntry,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(titleFocusRequester)
+                            .then(if (!isCustomEntry) Modifier.clickable { titleSuggestionsExpanded = true } else Modifier),
                         trailingIcon = { IconButton(onClick = { titleSuggestionsExpanded = true }) { Text("▾") } }
                     )
                     val suggestions = selectedCategory?.let { cat ->
@@ -111,9 +122,15 @@ private fun AddHabitDialog(
                     } ?: emptyList()
                     DropdownMenu(expanded = titleSuggestionsExpanded && suggestions.isNotEmpty(), onDismissRequest = { titleSuggestionsExpanded = false }) {
                         suggestions.forEach { s ->
-                            DropdownMenuItem(text = { Text(s.title) }, onClick = { title = s.title; titleSuggestionsExpanded = false })
+                            DropdownMenuItem(text = { Text(s.title) }, onClick = { title = s.title; isCustomEntry = false; titleSuggestionsExpanded = false })
                         }
-                        DropdownMenuItem(text = { Text(stringResource(R.string.add_new_custom)) }, onClick = { title = ""; titleSuggestionsExpanded = false })
+                        DropdownMenuItem(text = { Text(stringResource(R.string.add_new_custom)) }, onClick = {
+                            title = ""
+                            isCustomEntry = true
+                            titleSuggestionsExpanded = false
+                            titleFocusRequester.requestFocus()
+                            keyboardController?.show()
+                        })
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
