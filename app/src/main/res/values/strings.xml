@@ -140,4 +140,12 @@
     <string name="diff_easy">سهلة</string>
     <string name="diff_medium">متوسطة</string>
     <string name="diff_hard">صعبة</string>
+    <string name="focus_title">مؤقت التركيز</string>
+    <string name="focus_work">وقت التركيز</string>
+    <string name="focus_break">وقت الاستراحة</string>
+    <string name="focus_idle">جاهز للبدء</string>
+    <string name="focus_start">ابدأ</string>
+    <string name="focus_pause">إيقاف مؤقت</string>
+    <string name="focus_reset">إعادة تعيين</string>
+    <string name="tl_nav_focus">التركيز</string>
 </resources>

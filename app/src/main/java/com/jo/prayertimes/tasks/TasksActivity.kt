@@ -1,7 +1,5 @@
 package com.jo.prayertimes.tasks
 
-import com.jo.prayertimes.R
-import androidx.compose.ui.res.stringResource
 import android.Manifest
 import android.app.Activity
 import android.os.Build
@@ -16,11 +14,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.data.GamificationService
+import com.jo.prayertimes.tasks.ui.focus.PomodoroScreen
 import com.jo.prayertimes.tasks.ui.gamify.DailiesScreen
 import com.jo.prayertimes.tasks.ui.gamify.HabitsScreen
 import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
@@ -95,6 +96,12 @@ fun TasksRoot() {
                     label = { Text(stringResource(R.string.tl_nav_dailies)) }
                 )
                 NavigationBarItem(
+                    selected = currentRoute == "focus",
+                    onClick = { navController.navigate("focus") },
+                    icon = { Text("⏱️") },
+                    label = { Text(stringResource(R.string.tl_nav_focus)) }
+                )
+                NavigationBarItem(
                     selected = currentRoute == "reports",
                     onClick = { navController.navigate("reports") },
                     icon = { Text("📊") },
@@ -111,6 +118,7 @@ fun TasksRoot() {
             composable("timeline") { TimelineScreen() }
             composable("habits") { HabitsScreen() }
             composable("dailies") { DailiesScreen() }
+            composable("focus") { PomodoroScreen() }
             composable("reports") { ReportsScreen() }
         }
     }
