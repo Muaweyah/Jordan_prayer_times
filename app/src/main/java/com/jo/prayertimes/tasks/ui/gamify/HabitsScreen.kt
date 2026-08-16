@@ -96,8 +96,26 @@ private fun AddHabitDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.add_habit_title)) },
         text = {
+            var titleSuggestionsExpanded by remember { mutableStateOf(false) }
             Column {
-                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.habit_name_label)) }, modifier = Modifier.fillMaxWidth())
+                Box {
+                    OutlinedTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text(stringResource(R.string.habit_name_label)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = { IconButton(onClick = { titleSuggestionsExpanded = true }) { Text("▾") } }
+                    )
+                    val suggestions = selectedCategory?.let { cat ->
+                        com.jo.prayertimes.tasks.data.DefaultDailyTemplates.list.filter { it.categoryId == cat.id }
+                    } ?: emptyList()
+                    DropdownMenu(expanded = titleSuggestionsExpanded && suggestions.isNotEmpty(), onDismissRequest = { titleSuggestionsExpanded = false }) {
+                        suggestions.forEach { s ->
+                            DropdownMenuItem(text = { Text(s.title) }, onClick = { title = s.title; titleSuggestionsExpanded = false })
+                        }
+                        DropdownMenuItem(text = { Text(stringResource(R.string.add_new_custom)) }, onClick = { title = ""; titleSuggestionsExpanded = false })
+                    }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Box {
                     OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
