@@ -8,7 +8,7 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE date = :date AND parentTaskId IS NULL ORDER BY startTime IS NULL, startTime ASC, priority DESC")
     fun getTasksForDate(date: String): Flow<List<Task>>
 
-    @Query("SELECT * FROM tasks WHERE date IS NULL AND parentTaskId IS NULL ORDER BY id DESC")
+    @Query("SELECT * FROM tasks WHERE date IS NULL AND parentTaskId IS NULL AND itemType = 'TODO' ORDER BY id DESC")
     fun getInboxTasks(): Flow<List<Task>>
 
     @Query("SELECT * FROM tasks WHERE parentTaskId = :parentId ORDER BY id ASC")

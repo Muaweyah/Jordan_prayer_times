@@ -10,7 +10,8 @@ object DefaultCategories {
         Category("work", "العمل والإنتاجية", "Work & Productivity", "💼", "#42A5F5"),
         Category("selfdev", "التنمية الذاتية", "Self-Development", "📚", "#AB47BC"),
         Category("leisure", "الترفيه والترويح", "Entertainment & Leisure", "🎮", "#66BB6A"),
-        Category("pets", "رعاية الحيوانات الأليفة", "Pet Care", "🐾", "#8D6E63")
+        Category("pets", "رعاية الحيوانات الأليفة", "Pet Care", "🐾", "#8D6E63"),
+        Category("family", "العائلة والأقارب", "Family & Relatives", "👨‍👩‍👧‍👦", "#EC407A")
     )
 
     fun displayName(category: Category): String {

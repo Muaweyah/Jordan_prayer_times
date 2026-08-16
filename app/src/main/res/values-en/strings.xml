@@ -148,4 +148,11 @@
     <string name="focus_pause">Pause</string>
     <string name="focus_reset">Reset</string>
     <string name="tl_nav_focus">Focus</string>
+    <string name="recurrence_type_label">Repeat type</string>
+    <string name="recurrence_weekly">Weekly</string>
+    <string name="recurrence_monthly">Monthly</string>
+    <string name="recurrence_yearly">Yearly</string>
+    <string name="recurrence_day_of_month">Day of month (1-31)</string>
+    <string name="recurrence_day">Day</string>
+    <string name="recurrence_month">Month</string>
 </resources>

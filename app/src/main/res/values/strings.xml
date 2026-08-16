@@ -148,4 +148,11 @@
     <string name="focus_pause">إيقاف مؤقت</string>
     <string name="focus_reset">إعادة تعيين</string>
     <string name="tl_nav_focus">التركيز</string>
+    <string name="recurrence_type_label">نوع التكرار</string>
+    <string name="recurrence_weekly">أسبوعي</string>
+    <string name="recurrence_monthly">شهري</string>
+    <string name="recurrence_yearly">سنوي</string>
+    <string name="recurrence_day_of_month">يوم الشهر (1-31)</string>
+    <string name="recurrence_day">اليوم</string>
+    <string name="recurrence_month">الشهر</string>
 </resources>

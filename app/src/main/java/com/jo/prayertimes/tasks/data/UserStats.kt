@@ -11,5 +11,6 @@ data class UserStats(
     val xp: Int = 0,
     val level: Int = 1,
     val gold: Int = 0,
-    val lastRolloverDate: String? = null
+    val lastRolloverDate: String? = null,
+    val defaultDailiesSeeded: Boolean = false
 )

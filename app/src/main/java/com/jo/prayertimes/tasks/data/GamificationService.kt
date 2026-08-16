@@ -41,7 +41,7 @@ object GamificationService {
         dao.upsert(RewardEngine.todoComplete(stats, task.difficulty, createdDays))
     }
 
-    /** يُستدعى مرة واحدة عند فتح التطبيق: يفحص أي مهمة يومية كانت مفعّلة أمس ولم تُنجز، ويطبّق العقاب مرة واحدة فقط. */
+    /** يُستدعى مرة واحدة عند فتح التطبيق: يفحص أي مهمة يومية/أسبوعية/شهرية/سنوية كانت مفعّلة أمس ولم تُنجز، ويطبّق العقاب مرة واحدة فقط. */
     suspend fun rolloverCheckIfNeeded(context: Context) {
         val db = TasksDatabase.getInstance(context)
         val statsDao = db.userStatsDao()
@@ -51,14 +51,12 @@ object GamificationService {
 
         val yesterdayCal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
         val yesterday = dateFormat.format(yesterdayCal.time)
-        val yesterdayWeekday = (yesterdayCal.get(Calendar.DAY_OF_WEEK) - 1) // 0=Sunday
 
         val dailies = db.taskDao().getTasksInRange("0000-00-00", "9999-99-99")
             .filter { it.itemType == "DAILY" }
 
         for (task in dailies) {
-            val activeDays = task.recurrenceDays?.split(",")?.mapNotNull { it.toIntOrNull() } ?: (0..6).toList()
-            if (yesterdayWeekday !in activeDays) continue
+            if (!RecurrenceUtils.isActiveOn(task, yesterdayCal)) continue
 
             val log = db.dailyLogDao().get(task.id, yesterday)
             if (log?.completed == true) continue
@@ -69,5 +67,17 @@ object GamificationService {
         }
 
         statsDao.upsert(stats.copy(lastRolloverDate = today))
+    }
+
+    suspend fun seedDefaultDailiesIfNeeded(context: Context) {
+        val db = TasksDatabase.getInstance(context)
+        val statsDao = db.userStatsDao()
+        val stats = currentStats(context)
+        if (stats.defaultDailiesSeeded) return
+
+        for (template in DefaultDailyTemplates.list) {
+            db.taskDao().insert(DefaultDailyTemplates.toTask(template))
+        }
+        statsDao.upsert(stats.copy(defaultDailiesSeeded = true))
     }
 }

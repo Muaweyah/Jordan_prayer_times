@@ -18,7 +18,7 @@ class DailiesViewModel(application: Application) : AndroidViewModel(application)
     private val db = TasksDatabase.getInstance(application)
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val today = dateFormat.format(Date())
-    private val todayWeekday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1
+    private val todayCal = Calendar.getInstance()
 
     val stats: StateFlow<UserStats> = db.userStatsDao().observe()
         .map { it ?: UserStats() }
@@ -34,11 +34,12 @@ class DailiesViewModel(application: Application) : AndroidViewModel(application)
     val completedToday: StateFlow<Set<Long>> = _completedToday
 
     init {
+        viewModelScope.launch { GamificationService.seedDefaultDailiesIfNeeded(getApplication()) }
         viewModelScope.launch {
             while (true) {
                 val all = db.taskDao().getTasksInRange("0000-00-00", "9999-99-99")
                 _dailies.value = all.filter { t ->
-                    t.itemType == "DAILY" && (t.recurrenceDays?.split(",")?.mapNotNull { it.toIntOrNull() } ?: (0..6).toList()).contains(todayWeekday)
+                    t.itemType == "DAILY" && RecurrenceUtils.isActiveOn(t, todayCal)
                 }
                 val completed = mutableSetOf<Long>()
                 for (t in _dailies.value) {
@@ -51,7 +52,16 @@ class DailiesViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun addDaily(title: String, categoryId: String, difficulty: String, days: List<Int>) {
+    fun addDaily(
+        title: String,
+        categoryId: String,
+        difficulty: String,
+        recurrenceType: String,
+        recurrenceDays: List<Int>?,
+        monthDay: Int?,
+        yearMonth: Int?,
+        yearDay: Int?
+    ) {
         viewModelScope.launch {
             db.taskDao().insert(
                 Task(
@@ -61,7 +71,11 @@ class DailiesViewModel(application: Application) : AndroidViewModel(application)
                     itemType = "DAILY",
                     difficulty = difficulty,
                     isRecurring = true,
-                    recurrenceDays = days.joinToString(","),
+                    recurrenceType = recurrenceType,
+                    recurrenceDays = recurrenceDays?.joinToString(","),
+                    monthDay = monthDay,
+                    yearMonth = yearMonth,
+                    yearDay = yearDay,
                     createdDate = dateFormat.format(Date())
                 )
             )
