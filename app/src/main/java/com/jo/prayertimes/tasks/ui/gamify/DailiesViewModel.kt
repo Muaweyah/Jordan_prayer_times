@@ -34,10 +34,13 @@ class DailiesViewModel(application: Application) : AndroidViewModel(application)
     val completedToday: StateFlow<Set<Long>> = _completedToday
 
     init {
-        viewModelScope.launch { GamificationService.seedDefaultDailiesIfNeeded(getApplication()) }
+        viewModelScope.launch {
+            GamificationService.resetSeedFlagOnce(getApplication())
+            GamificationService.seedDefaultDailiesIfNeeded(getApplication())
+        }
         viewModelScope.launch {
             while (true) {
-                val all = db.taskDao().getTasksInRange("0000-00-00", "9999-99-99")
+                val all = db.taskDao().getRecurringTasks()
                 _dailies.value = all.filter { t ->
                     t.itemType == "DAILY" && RecurrenceUtils.isActiveOn(t, todayCal)
                 }

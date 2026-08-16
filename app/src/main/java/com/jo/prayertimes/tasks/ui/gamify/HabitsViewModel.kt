@@ -29,14 +29,11 @@ class HabitsViewModel(application: Application) : AndroidViewModel(application) 
 
     init {
         viewModelScope.launch {
-            db.taskDao().getTasksInRange("0000-00-00", "9999-99-99").let { all ->
-                _allHabits.value = all.filter { it.itemType == "HABIT" }
-            }
+            _allHabits.value = db.taskDao().getRecurringTasks().filter { it.itemType == "HABIT" }
         }
         viewModelScope.launch {
             while (true) {
-                val all = db.taskDao().getTasksInRange("0000-00-00", "9999-99-99")
-                _allHabits.value = all.filter { it.itemType == "HABIT" }
+                _allHabits.value = db.taskDao().getRecurringTasks().filter { it.itemType == "HABIT" }
                 kotlinx.coroutines.delay(1500)
             }
         }

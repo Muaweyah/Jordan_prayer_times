@@ -5,6 +5,11 @@ data class DailyTemplate(val title: String, val categoryId: String, val frequenc
 /** frequency: EVERY_DAY, WEEKLY, MONTHLY, YEARLY */
 object DefaultDailyTemplates {
     val list = listOf(
+        DailyTemplate("الوضوء", "worship", "EVERY_DAY"),
+        DailyTemplate("الصلوات الخمس", "worship", "EVERY_DAY"),
+        DailyTemplate("الأذكار", "worship", "EVERY_DAY"),
+        DailyTemplate("قراءة القرآن", "worship", "EVERY_DAY"),
+
         DailyTemplate("شرب الماء", "health", "EVERY_DAY"),
         DailyTemplate("تنظيف الأسنان", "health", "EVERY_DAY"),
         DailyTemplate("الأكل الصحي", "health", "EVERY_DAY"),

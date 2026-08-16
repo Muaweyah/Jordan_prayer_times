@@ -17,6 +17,9 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE date BETWEEN :startDate AND :endDate AND parentTaskId IS NULL")
     suspend fun getTasksInRange(startDate: String, endDate: String): List<Task>
 
+    @Query("SELECT * FROM tasks WHERE itemType IN ('HABIT', 'DAILY') AND parentTaskId IS NULL")
+    suspend fun getRecurringTasks(): List<Task>
+
     @Query("SELECT COUNT(*) FROM tasks WHERE title = :title AND date = :date AND category = :category")
     suspend fun countMatching(title: String, date: String, category: String): Int
 

@@ -41,7 +41,6 @@ object GamificationService {
         dao.upsert(RewardEngine.todoComplete(stats, task.difficulty, createdDays))
     }
 
-    /** يُستدعى مرة واحدة عند فتح التطبيق: يفحص أي مهمة يومية/أسبوعية/شهرية/سنوية كانت مفعّلة أمس ولم تُنجز، ويطبّق العقاب مرة واحدة فقط. */
     suspend fun rolloverCheckIfNeeded(context: Context) {
         val db = TasksDatabase.getInstance(context)
         val statsDao = db.userStatsDao()
@@ -52,8 +51,7 @@ object GamificationService {
         val yesterdayCal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
         val yesterday = dateFormat.format(yesterdayCal.time)
 
-        val dailies = db.taskDao().getTasksInRange("0000-00-00", "9999-99-99")
-            .filter { it.itemType == "DAILY" }
+        val dailies = db.taskDao().getRecurringTasks().filter { it.itemType == "DAILY" }
 
         for (task in dailies) {
             if (!RecurrenceUtils.isActiveOn(task, yesterdayCal)) continue
@@ -75,9 +73,21 @@ object GamificationService {
         val stats = currentStats(context)
         if (stats.defaultDailiesSeeded) return
 
+        val existingTitles = db.taskDao().getRecurringTasks().map { it.title }.toSet()
         for (template in DefaultDailyTemplates.list) {
-            db.taskDao().insert(DefaultDailyTemplates.toTask(template))
+            if (template.title !in existingTitles) {
+                db.taskDao().insert(DefaultDailyTemplates.toTask(template))
+            }
         }
         statsDao.upsert(stats.copy(defaultDailiesSeeded = true))
+    }
+
+    /** يعيد فتح باب الزرع مرة إضافية (لإضافة عناصر جديدة كالعبادات دون تكرار الموجود فعلاً) */
+    suspend fun resetSeedFlagOnce(context: Context) {
+        val dao = TasksDatabase.getInstance(context).userStatsDao()
+        val stats = currentStats(context)
+        if (stats.defaultDailiesSeeded) {
+            dao.upsert(stats.copy(defaultDailiesSeeded = false))
+        }
     }
 }
