@@ -156,4 +156,7 @@
     <string name="recurrence_day">Day</string>
     <string name="recurrence_month">Month</string>
     <string name="add_new_custom">➕ Add new</string>
+    <string name="overview_title">Task Overview</string>
+    <string name="overview_empty">No tasks for this period</string>
+    <string name="tl_nav_overview">Overview</string>
 </resources>

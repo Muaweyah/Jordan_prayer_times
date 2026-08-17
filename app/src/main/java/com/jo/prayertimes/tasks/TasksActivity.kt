@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.data.GamificationService
 import com.jo.prayertimes.tasks.ui.focus.PomodoroScreen
+import com.jo.prayertimes.tasks.ui.overview.TaskOverviewScreen
 import com.jo.prayertimes.tasks.ui.gamify.DailiesScreen
 import com.jo.prayertimes.tasks.ui.gamify.HabitsScreen
 import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
@@ -102,6 +103,12 @@ fun TasksRoot() {
                     label = { Text(stringResource(R.string.tl_nav_focus)) }
                 )
                 NavigationBarItem(
+                    selected = currentRoute == "overview",
+                    onClick = { navController.navigate("overview") },
+                    icon = { Text("🗂️") },
+                    label = { Text(stringResource(R.string.tl_nav_overview)) }
+                )
+                NavigationBarItem(
                     selected = currentRoute == "reports",
                     onClick = { navController.navigate("reports") },
                     icon = { Text("📊") },
@@ -119,6 +126,7 @@ fun TasksRoot() {
             composable("habits") { HabitsScreen() }
             composable("dailies") { DailiesScreen() }
             composable("focus") { PomodoroScreen() }
+            composable("overview") { TaskOverviewScreen() }
             composable("reports") { ReportsScreen() }
         }
     }

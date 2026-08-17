@@ -156,4 +156,7 @@
     <string name="recurrence_day">اليوم</string>
     <string name="recurrence_month">الشهر</string>
     <string name="add_new_custom">➕ إضافة جديد</string>
+    <string name="overview_title">إنجاز المهام</string>
+    <string name="overview_empty">لا توجد مهام لهذه الفترة</string>
+    <string name="tl_nav_overview">الإنجاز</string>
 </resources>
