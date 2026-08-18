@@ -1,6 +1,8 @@
 package com.jo.prayertimes.tasks.ui.stats
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +26,7 @@ fun ReportsScreen(viewModel: ReportsViewModel = viewModel()) {
     val byCategory by viewModel.byCategory.collectAsState()
     val dailyBreakdown by viewModel.dailyBreakdown.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
         Text(text = stringResource(R.string.reports_title), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(12.dp))
 
