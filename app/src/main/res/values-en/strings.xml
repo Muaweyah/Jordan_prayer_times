@@ -159,4 +159,12 @@
     <string name="overview_title">Task Overview</string>
     <string name="overview_empty">No tasks for this period</string>
     <string name="tl_nav_overview">Overview</string>
+    <string name="selection_title">Select Tasks</string>
+    <string name="selection_hint">Turn on the tasks you want to track daily</string>
+    <string name="selection_add_custom">➕ Add custom task</string>
+    <string name="today_title">Today\'s Tasks</string>
+    <string name="today_summary">Completed %1$d of %2$d</string>
+    <string name="today_empty">No tasks selected yet — go to the Select tab and turn some on</string>
+    <string name="tl_nav_selection">Select</string>
+    <string name="tl_nav_today_simple">Today</string>
 </resources>

@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Task::class, Category::class, UserStats::class, DailyLog::class],
-    version = 4,
+    entities = [Task::class, Category::class, UserStats::class, DailyLog::class, SelectedTask::class],
+    version = 5,
     exportSchema = false
 )
 abstract class TasksDatabase : RoomDatabase() {
@@ -15,6 +15,7 @@ abstract class TasksDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun userStatsDao(): UserStatsDao
     abstract fun dailyLogDao(): DailyLogDao
+    abstract fun selectedTaskDao(): SelectedTaskDao
 
     companion object {
         @Volatile private var INSTANCE: TasksDatabase? = null

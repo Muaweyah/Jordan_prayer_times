@@ -159,4 +159,12 @@
     <string name="overview_title">إنجاز المهام</string>
     <string name="overview_empty">لا توجد مهام لهذه الفترة</string>
     <string name="tl_nav_overview">الإنجاز</string>
+    <string name="selection_title">اختيار المهام</string>
+    <string name="selection_hint">فعّل المهام اللي بدك تتابعها يومياً</string>
+    <string name="selection_add_custom">➕ إضافة مهمة يدوية</string>
+    <string name="today_title">مهامي اليوم</string>
+    <string name="today_summary">أنجزت %1$d من %2$d</string>
+    <string name="today_empty">لم تختر أي مهام بعد — روح لتبويب الاختيار وفعّل بعضها</string>
+    <string name="tl_nav_selection">اختيار</string>
+    <string name="tl_nav_today_simple">اليوم</string>
 </resources>

@@ -20,14 +20,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jo.prayertimes.R
-import com.jo.prayertimes.tasks.data.GamificationService
 import com.jo.prayertimes.tasks.ui.focus.PomodoroScreen
-import com.jo.prayertimes.tasks.ui.overview.TaskOverviewScreen
-import com.jo.prayertimes.tasks.ui.gamify.DailiesScreen
-import com.jo.prayertimes.tasks.ui.gamify.HabitsScreen
+import com.jo.prayertimes.tasks.ui.simple.SelectionScreen
+import com.jo.prayertimes.tasks.ui.simple.TodayScreen
 import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
 import com.jo.prayertimes.tasks.ui.theme.TasksAppTheme
-import com.jo.prayertimes.tasks.ui.timeline.TimelineScreen
 
 class TasksActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: android.content.Context) {
@@ -59,7 +56,6 @@ fun TasksRoot() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
-        GamificationService.rolloverCheckIfNeeded(context)
     }
 
     Scaffold(
@@ -79,34 +75,22 @@ fun TasksRoot() {
                 val currentRoute = backStackEntry?.destination?.route
 
                 NavigationBarItem(
-                    selected = currentRoute == "timeline",
-                    onClick = { navController.navigate("timeline") },
-                    icon = { Text("🗓️") },
-                    label = { Text(stringResource(R.string.tl_nav_schedule)) }
+                    selected = currentRoute == "selection",
+                    onClick = { navController.navigate("selection") },
+                    icon = { Text("📋") },
+                    label = { Text(stringResource(R.string.tl_nav_selection)) }
                 )
                 NavigationBarItem(
-                    selected = currentRoute == "habits",
-                    onClick = { navController.navigate("habits") },
-                    icon = { Text("🔄") },
-                    label = { Text(stringResource(R.string.tl_nav_habits)) }
-                )
-                NavigationBarItem(
-                    selected = currentRoute == "dailies",
-                    onClick = { navController.navigate("dailies") },
+                    selected = currentRoute == "today",
+                    onClick = { navController.navigate("today") },
                     icon = { Text("✅") },
-                    label = { Text(stringResource(R.string.tl_nav_dailies)) }
+                    label = { Text(stringResource(R.string.tl_nav_today_simple)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "focus",
                     onClick = { navController.navigate("focus") },
                     icon = { Text("⏱️") },
                     label = { Text(stringResource(R.string.tl_nav_focus)) }
-                )
-                NavigationBarItem(
-                    selected = currentRoute == "overview",
-                    onClick = { navController.navigate("overview") },
-                    icon = { Text("🗂️") },
-                    label = { Text(stringResource(R.string.tl_nav_overview)) }
                 )
                 NavigationBarItem(
                     selected = currentRoute == "reports",
@@ -119,14 +103,12 @@ fun TasksRoot() {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = "timeline",
+            startDestination = "selection",
             modifier = Modifier.padding(padding)
         ) {
-            composable("timeline") { TimelineScreen() }
-            composable("habits") { HabitsScreen() }
-            composable("dailies") { DailiesScreen() }
+            composable("selection") { SelectionScreen() }
+            composable("today") { TodayScreen() }
             composable("focus") { PomodoroScreen() }
-            composable("overview") { TaskOverviewScreen() }
             composable("reports") { ReportsScreen() }
         }
     }
