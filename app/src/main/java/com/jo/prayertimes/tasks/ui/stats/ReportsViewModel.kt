@@ -3,8 +3,8 @@ package com.jo.prayertimes.tasks.ui.stats
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jo.prayertimes.tasks.data.TasksDatabase
 import com.jo.prayertimes.tasks.data.DefaultCategories
+import com.jo.prayertimes.tasks.data.TasksDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -40,6 +40,14 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
 
     private fun load() {
         viewModelScope.launch {
+            val selected = db.selectedTaskDao().getAllOnce()
+            if (selected.isEmpty()) {
+                _overall.value = PeriodSummary(periodLabel(), 0, 0)
+                _byCategory.value = emptyList()
+                _dailyBreakdown.value = emptyList()
+                return@launch
+            }
+
             val cal = Calendar.getInstance()
             val start = cal.clone() as Calendar
             val end = cal.clone() as Calendar
@@ -63,39 +71,48 @@ class ReportsViewModel(application: Application) : AndroidViewModel(application)
 
             val startStr = dateFormat.format(start.time)
             val endStr = dateFormat.format(end.time)
-            val tasks = db.taskDao().getTasksInRange(startStr, endStr)
+            val logs = db.dailyLogDao().getLogsInRange(startStr, endStr)
+            val selectedIds = selected.map { it.id }.toSet()
+            val relevantLogs = logs.filter { it.taskId in selectedIds && it.completed }
+
+            val daysCount = ((end.timeInMillis - start.timeInMillis) / (1000 * 60 * 60 * 24)).toInt() + 1
+            val totalSlots = selected.size * daysCount
+            val completedSlots = relevantLogs.size
 
             _overall.value = PeriodSummary(
                 label = periodLabel(),
-                total = tasks.size,
-                completed = tasks.count { it.isCompleted }
+                total = totalSlots,
+                completed = completedSlots
             )
 
-            val grouped = tasks.groupBy { it.category }
+            val completedByTask = relevantLogs.groupingBy { it.taskId }.eachCount()
             _byCategory.value = DefaultCategories.list.mapNotNull { cat ->
-                val list = grouped[cat.id] ?: return@mapNotNull null
+                val catTasks = selected.filter { it.categoryId == cat.id }
+                if (catTasks.isEmpty()) return@mapNotNull null
+                val catTotal = catTasks.size * daysCount
+                val catCompleted = catTasks.sumOf { completedByTask[it.id] ?: 0 }
                 CategorySummary(
                     categoryId = cat.id,
                     icon = cat.icon,
                     nameAr = cat.nameAr,
                     nameEn = cat.nameEn,
-                    total = list.size,
-                    completed = list.count { it.isCompleted }
+                    total = catTotal,
+                    completed = catCompleted
                 )
             }.sortedByDescending { it.total }
 
             if (_period.value != ReportPeriod.DAY) {
-                val byDate = tasks.groupBy { it.date }
+                val byDate = relevantLogs.groupBy { it.date }
                 val breakdown = mutableListOf<PeriodSummary>()
                 val iter = start.clone() as Calendar
                 while (!iter.after(end)) {
                     val d = dateFormat.format(iter.time)
-                    val dayTasks = byDate[d] ?: emptyList()
+                    val dayCompleted = byDate[d]?.size ?: 0
                     breakdown.add(
                         PeriodSummary(
                             label = SimpleDateFormat("d/M", currentLocale()).format(iter.time),
-                            total = dayTasks.size,
-                            completed = dayTasks.count { it.isCompleted }
+                            total = selected.size,
+                            completed = dayCompleted
                         )
                     )
                     iter.add(Calendar.DAY_OF_YEAR, 1)
