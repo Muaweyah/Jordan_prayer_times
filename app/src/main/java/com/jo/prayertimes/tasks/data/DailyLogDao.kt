@@ -15,4 +15,10 @@ interface DailyLogDao {
 
     @Query("SELECT * FROM daily_logs WHERE date BETWEEN :start AND :end")
     suspend fun getLogsInRange(start: String, end: String): List<DailyLog>
+
+    @Query("SELECT * FROM daily_logs WHERE date = :date")
+    suspend fun getForDate(date: String): List<DailyLog>
+
+    @Query("DELETE FROM daily_logs")
+    suspend fun deleteAll()
 }

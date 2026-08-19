@@ -167,4 +167,9 @@
     <string name="today_empty">No tasks selected yet — go to the Select tab and turn some on</string>
     <string name="tl_nav_selection">Select</string>
     <string name="tl_nav_today_simple">Today</string>
+    <string name="reset_data_button">Reset</string>
+    <string name="reset_data_confirm_title">Reset all data?</string>
+    <string name="reset_data_confirm_message">This will permanently delete all selected tasks and completion history. This cannot be undone.</string>
+    <string name="archive_title">Archive</string>
+    <string name="tl_nav_archive">Archive</string>
 </resources>

@@ -19,4 +19,7 @@ interface SelectedTaskDao {
 
     @Delete
     suspend fun delete(item: SelectedTask)
+
+    @Query("DELETE FROM selected_tasks")
+    suspend fun deleteAll()
 }

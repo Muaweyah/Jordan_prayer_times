@@ -35,4 +35,11 @@ class SelectionViewModel(application: Application) : AndroidViewModel(applicatio
     fun removeCustom(item: SelectedTask) {
         viewModelScope.launch { db.selectedTaskDao().delete(item) }
     }
+
+    fun resetAllData() {
+        viewModelScope.launch {
+            db.selectedTaskDao().deleteAll()
+            db.dailyLogDao().deleteAll()
+        }
+    }
 }

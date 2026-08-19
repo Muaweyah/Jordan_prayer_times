@@ -19,10 +19,20 @@ import com.jo.prayertimes.tasks.data.SelectedTask
 fun SelectionScreen(viewModel: SelectionViewModel = viewModel()) {
     val selected by viewModel.selected.collectAsState()
     var showAddFor by remember { mutableStateOf<String?>(null) }
+    var showResetConfirm by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp), contentPadding = PaddingValues(bottom = 32.dp)) {
         item {
-            Text(stringResource(R.string.selection_title), style = MaterialTheme.typography.headlineMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(stringResource(R.string.selection_title), style = MaterialTheme.typography.headlineMedium)
+                TextButton(onClick = { showResetConfirm = true }) {
+                    Text(stringResource(R.string.reset_data_button))
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(stringResource(R.string.selection_hint), style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(16.dp))
@@ -65,6 +75,23 @@ fun SelectionScreen(viewModel: SelectionViewModel = viewModel()) {
                 }
             }
         }
+    }
+
+    if (showResetConfirm) {
+        AlertDialog(
+            onDismissRequest = { showResetConfirm = false },
+            title = { Text(stringResource(R.string.reset_data_confirm_title)) },
+            text = { Text(stringResource(R.string.reset_data_confirm_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.resetAllData()
+                    showResetConfirm = false
+                }) { Text(stringResource(R.string.reset_data_button)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetConfirm = false }) { Text(stringResource(R.string.tl_cancel)) }
+            }
+        )
     }
 
     val targetCategoryId = showAddFor

@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.ui.focus.PomodoroScreen
+import com.jo.prayertimes.tasks.ui.archive.ArchiveScreen
 import com.jo.prayertimes.tasks.ui.simple.SelectionScreen
 import com.jo.prayertimes.tasks.ui.simple.TodayScreen
 import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
@@ -87,6 +88,12 @@ fun TasksRoot() {
                     label = { Text(stringResource(R.string.tl_nav_today_simple)) }
                 )
                 NavigationBarItem(
+                    selected = currentRoute == "archive",
+                    onClick = { navController.navigate("archive") },
+                    icon = { Text("🗄️") },
+                    label = { Text(stringResource(R.string.tl_nav_archive)) }
+                )
+                NavigationBarItem(
                     selected = currentRoute == "focus",
                     onClick = { navController.navigate("focus") },
                     icon = { Text("⏱️") },
@@ -108,6 +115,7 @@ fun TasksRoot() {
         ) {
             composable("selection") { SelectionScreen() }
             composable("today") { TodayScreen() }
+            composable("archive") { ArchiveScreen() }
             composable("focus") { PomodoroScreen() }
             composable("reports") { ReportsScreen() }
         }

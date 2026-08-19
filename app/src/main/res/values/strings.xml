@@ -167,4 +167,9 @@
     <string name="today_empty">لم تختر أي مهام بعد — روح لتبويب الاختيار وفعّل بعضها</string>
     <string name="tl_nav_selection">اختيار</string>
     <string name="tl_nav_today_simple">اليوم</string>
+    <string name="reset_data_button">إعادة تعيين</string>
+    <string name="reset_data_confirm_title">تصفير كل البيانات؟</string>
+    <string name="reset_data_confirm_message">سيتم حذف كل المهام المختارة وكل سجل الإنجاز نهائياً. لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="archive_title">الأرشيف</string>
+    <string name="tl_nav_archive">الأرشيف</string>
 </resources>
