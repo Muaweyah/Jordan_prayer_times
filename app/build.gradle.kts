@@ -23,6 +23,7 @@ android {
         }
         create("maaly") {
             dimension = "brand"
+            applicationIdSuffix = ".maaly"
         }
     }
 
