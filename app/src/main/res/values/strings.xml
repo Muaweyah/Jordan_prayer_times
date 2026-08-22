@@ -172,4 +172,6 @@
     <string name="reset_data_confirm_message">سيتم حذف كل المهام المختارة وكل سجل الإنجاز نهائياً. لا يمكن التراجع عن هذا الإجراء.</string>
     <string name="archive_title">الأرشيف</string>
     <string name="tl_nav_archive">الأرشيف</string>
+    <string name="reminder_bell_title">🔔 التذكيرات المفعّلة</string>
+    <string name="reminder_bell_empty">لا توجد تذكيرات مفعّلة حالياً</string>
 </resources>

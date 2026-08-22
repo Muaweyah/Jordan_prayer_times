@@ -8,5 +8,7 @@ data class SelectedTask(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val categoryId: String,
-    val isCustom: Boolean = false
+    val isCustom: Boolean = false,
+    val reminderTime: String? = null,
+    val reminderEnabled: Boolean = false
 )

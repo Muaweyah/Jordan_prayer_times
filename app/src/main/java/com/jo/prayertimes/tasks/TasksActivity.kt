@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.ui.focus.PomodoroScreen
 import com.jo.prayertimes.tasks.ui.archive.ArchiveScreen
+import com.jo.prayertimes.tasks.ui.simple.ReminderBellSheet
 import com.jo.prayertimes.tasks.ui.simple.SelectionScreen
 import com.jo.prayertimes.tasks.ui.simple.TodayScreen
 import com.jo.prayertimes.tasks.ui.stats.ReportsScreen
@@ -61,14 +62,23 @@ fun TasksRoot() {
 
     Scaffold(
         topBar = {
+            var showBell by remember { mutableStateOf(false) }
             TopAppBar(
                 title = { Text(stringResource(R.string.tl_app_title)) },
                 navigationIcon = {
                     IconButton(onClick = { (context as? Activity)?.finish() }) {
                         Text("🏠")
                     }
+                },
+                actions = {
+                    IconButton(onClick = { showBell = true }) {
+                        Text("🔔")
+                    }
                 }
             )
+            if (showBell) {
+                ReminderBellSheet(onDismiss = { showBell = false })
+            }
         },
         bottomBar = {
             NavigationBar {

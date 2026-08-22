@@ -172,4 +172,6 @@
     <string name="reset_data_confirm_message">This will permanently delete all selected tasks and completion history. This cannot be undone.</string>
     <string name="archive_title">Archive</string>
     <string name="tl_nav_archive">Archive</string>
+    <string name="reminder_bell_title">🔔 Active Reminders</string>
+    <string name="reminder_bell_empty">No active reminders</string>
 </resources>

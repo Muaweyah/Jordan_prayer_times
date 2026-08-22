@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,12 +15,27 @@ import com.jo.prayertimes.R
 import com.jo.prayertimes.tasks.data.DefaultCategories
 import com.jo.prayertimes.tasks.data.DefaultDailyTemplates
 import com.jo.prayertimes.tasks.data.SelectedTask
+import java.util.*
 
 @Composable
 fun SelectionScreen(viewModel: SelectionViewModel = viewModel()) {
     val selected by viewModel.selected.collectAsState()
     var showAddFor by remember { mutableStateOf<String?>(null) }
     var showResetConfirm by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val calendar = remember { Calendar.getInstance() }
+
+    fun pickReminderTime(item: SelectedTask) {
+        android.app.TimePickerDialog(
+            android.view.ContextThemeWrapper(context, R.style.TasksTimePickerDialog),
+            { _, hour, minute ->
+                viewModel.setReminderTime(item, String.format("%02d:%02d", hour, minute))
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        ).show()
+    }
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp), contentPadding = PaddingValues(bottom = 32.dp)) {
         item {
@@ -48,25 +64,34 @@ fun SelectionScreen(viewModel: SelectionViewModel = viewModel()) {
             }
             val templates = DefaultDailyTemplates.list.filter { it.categoryId == cat.id }
             items(templates) { t ->
-                val isOn = selected.any { it.title == t.title && it.categoryId == cat.id }
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = t.title, modifier = Modifier.weight(1f))
-                    Switch(checked = isOn, onCheckedChange = { viewModel.toggleTemplate(t.title, cat.id) })
+                val current = selected.find { it.title == t.title && it.categoryId == cat.id }
+                val isOn = current != null
+                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = t.title, modifier = Modifier.weight(1f))
+                        Switch(checked = isOn, onCheckedChange = { viewModel.toggleTemplate(t.title, cat.id) })
+                    }
+                    if (current != null) {
+                        ReminderRow(item = current, onPickTime = { pickReminderTime(current) }, onToggle = { viewModel.toggleReminder(current, it) })
+                    }
                 }
             }
             val customs = selected.filter { it.isCustom && it.categoryId == cat.id }
             items(customs) { c ->
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "${c.title}  ✏️", modifier = Modifier.weight(1f))
-                    TextButton(onClick = { viewModel.removeCustom(c) }) { Text(stringResource(R.string.tasks_delete)) }
+                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "${c.title}  ✏️", modifier = Modifier.weight(1f))
+                        TextButton(onClick = { viewModel.removeCustom(c) }) { Text(stringResource(R.string.tasks_delete)) }
+                    }
+                    ReminderRow(item = c, onPickTime = { pickReminderTime(c) }, onToggle = { viewModel.toggleReminder(c, it) })
                 }
             }
             item {
@@ -114,5 +139,21 @@ fun SelectionScreen(viewModel: SelectionViewModel = viewModel()) {
             },
             dismissButton = { TextButton(onClick = { showAddFor = null }) { Text(stringResource(R.string.tl_cancel)) } }
         )
+    }
+}
+
+@Composable
+private fun ReminderRow(item: SelectedTask, onPickTime: () -> Unit, onToggle: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        TextButton(onClick = onPickTime) {
+            Text(text = "🔔 " + (item.reminderTime ?: stringResource(R.string.tasks_no_reminder)))
+        }
+        if (item.reminderTime != null) {
+            Switch(checked = item.reminderEnabled, onCheckedChange = onToggle)
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jo.prayertimes.tasks.data.*
+import com.jo.prayertimes.tasks.notifications.SimpleReminderScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -19,6 +20,7 @@ class SelectionViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             val existing = db.selectedTaskDao().find(title, categoryId)
             if (existing != null) {
+                SimpleReminderScheduler.cancel(getApplication(), existing.id)
                 db.selectedTaskDao().delete(existing)
             } else {
                 db.selectedTaskDao().insert(SelectedTask(title = title, categoryId = categoryId))
@@ -33,11 +35,39 @@ class SelectionViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun removeCustom(item: SelectedTask) {
-        viewModelScope.launch { db.selectedTaskDao().delete(item) }
+        viewModelScope.launch {
+            SimpleReminderScheduler.cancel(getApplication(), item.id)
+            db.selectedTaskDao().delete(item)
+        }
+    }
+
+    fun setReminderTime(item: SelectedTask, time: String) {
+        viewModelScope.launch {
+            val updated = item.copy(reminderTime = time, reminderEnabled = true)
+            db.selectedTaskDao().update(updated)
+            SimpleReminderScheduler.schedule(getApplication(), updated.id, updated.title, time)
+        }
+    }
+
+    fun toggleReminder(item: SelectedTask, enabled: Boolean) {
+        viewModelScope.launch {
+            val updated = item.copy(reminderEnabled = enabled)
+            db.selectedTaskDao().update(updated)
+            val time = updated.reminderTime
+            if (enabled && time != null) {
+                SimpleReminderScheduler.schedule(getApplication(), updated.id, updated.title, time)
+            } else {
+                SimpleReminderScheduler.cancel(getApplication(), updated.id)
+            }
+        }
     }
 
     fun resetAllData() {
         viewModelScope.launch {
+            val all = db.selectedTaskDao().getAllOnce()
+            for (item in all) {
+                SimpleReminderScheduler.cancel(getApplication(), item.id)
+            }
             db.selectedTaskDao().deleteAll()
             db.dailyLogDao().deleteAll()
         }
