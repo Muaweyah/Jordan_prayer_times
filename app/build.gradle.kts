@@ -16,6 +16,16 @@ android {
         versionName = "1.0"
     }
 
+    flavorDimensions += "brand"
+    productFlavors {
+        create("jordan") {
+            dimension = "brand"
+        }
+        create("maaly") {
+            dimension = "brand"
+        }
+    }
+
     signingConfigs {
         create("stable") {
             val ksPath = System.getenv("KEYSTORE_PATH")

@@ -1,0 +1,15 @@
+[33m9c0e8e8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add full reminder system: per-task time picker, independent enable/disable toggle, daily-repeating notifications via AlarmManager, boot rescheduling, and in-app bell icon showing active reminders
+[33m4a541f7[m Make Reports screen auto-refresh live like Today/Archive so reset (and any change) reflects immediately in percentages
+[33m9bf5106[m Add reset-all-data button in Selection screen and new Archive tab to browse and review past days' task completion
+[33mf155084[m Fix Reports screen: add missing vertical scroll so all 8 categories are reachable instead of being clipped
+[33md6b756c[m Reconnect Reports screen to the new simplified SelectedTask/DailyLog data source instead of stale Task table
+[33m9972903[m Simplify tasks feature: replace complex habits/dailies/timeline system with simple category-based task selection and daily checklist with percentage
+[33md27fa97[m Remove accidental nested duplicate repo that was breaking GitHub Pages checkout
+[33mbf82cc2[m Add Task Overview screen: unified checklist grouped by category with day/week/month/year filter, color-coded, directly editable
+[33m38bcab2[m Prioritize suggestion dropdown over keyboard: title field is tap-to-select by default, keyboard only opens via 'Add new'
+[33m27e9c5b[m Add category-based title suggestions with 'add new' option in habit and daily creation dialogs
+[33m90ae74a[m Fix critical bug: BETWEEN query excluded NULL-date habits/dailies from all queries; add worship category items and safe re-seed
+[33m8ad9b2a[m Add real weekly/monthly/yearly recurrence engine, family category, seed default dailies list, fix inbox filtering to TODO only
+[33m3abdc99[m Restore Pomodoro focus timer as a tab within the tasks feature
+[33me071d8e[m Fix FAB overlapping last list item (delete button unreachable) in habits, dailies, and timeline screens
+[33mca553d5[m Extract all hardcoded Arabic strings from timeline/habits/dailies screens into string resources for full bilingual support
