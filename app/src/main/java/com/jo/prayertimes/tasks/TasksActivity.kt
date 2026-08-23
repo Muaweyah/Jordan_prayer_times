@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -64,7 +65,17 @@ fun TasksRoot() {
         topBar = {
             var showBell by remember { mutableStateOf(false) }
             TopAppBar(
-                title = { Text(stringResource(R.string.tl_app_title)) },
+                title = {
+                    if (com.jo.prayertimes.BuildConfig.FLAVOR == "maaly") {
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(id = R.drawable.maaly_logo),
+                            contentDescription = "Maaly",
+                            modifier = androidx.compose.ui.Modifier.height(32.dp)
+                        )
+                    } else {
+                        Text(stringResource(R.string.tl_app_title))
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { (context as? Activity)?.finish() }) {
                         Text("🏠")

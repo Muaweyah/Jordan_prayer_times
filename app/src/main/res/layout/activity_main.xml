@@ -31,6 +31,7 @@
                 android:layout_marginEnd="8dp" />
 
             <TextView
+                android:id="@+id/tvHomeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home_title"
@@ -38,6 +39,14 @@
                 android:textColor="@color/gold"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivHomeLogo"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:visibility="gone"
+                android:contentDescription="Maaly"
+                android:src="@drawable/maaly_logo" />
 
             <View
                 android:layout_width="0dp"
@@ -190,4 +199,21 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/splashOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/navy_card"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:contentDescription="Maaly"
+            android:src="@drawable/maaly_logo" />
+    </FrameLayout>
 </FrameLayout>

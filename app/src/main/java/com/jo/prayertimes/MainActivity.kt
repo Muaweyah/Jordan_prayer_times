@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        applyMaalyBrandingIfNeeded()
 
         repository = PrayerRepository(this)
 
@@ -263,6 +264,21 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 300 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             detectNearestGovernorate()
         }
+    }
+
+    private fun applyMaalyBrandingIfNeeded() {
+        if (com.jo.prayertimes.BuildConfig.FLAVOR != "maaly") return
+
+        val titleView = findViewById<android.widget.TextView>(R.id.tvHomeTitle)
+        val logoView = findViewById<android.widget.ImageView>(R.id.ivHomeLogo)
+        titleView?.visibility = android.view.View.GONE
+        logoView?.visibility = android.view.View.VISIBLE
+
+        val splash = findViewById<android.widget.FrameLayout>(R.id.splashOverlay)
+        splash?.visibility = android.view.View.VISIBLE
+        splash?.postDelayed({
+            splash.visibility = android.view.View.GONE
+        }, 1100)
     }
 
     private fun setupSettingsGear() {
