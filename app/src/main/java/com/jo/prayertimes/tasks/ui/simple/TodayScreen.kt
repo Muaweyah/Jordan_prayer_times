@@ -58,6 +58,15 @@ fun TodayScreen(viewModel: TodayViewModel = viewModel()) {
 
         if (items.isEmpty()) {
             Text(stringResource(R.string.today_empty))
+            if (com.jo.prayertimes.BuildConfig.FLAVOR == "maaly") {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    androidx.compose.foundation.Image(
+                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.maaly_logo),
+                        contentDescription = "Maaly",
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                }
+            }
         } else {
             val grouped = items.groupBy { it.categoryId }
             LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
