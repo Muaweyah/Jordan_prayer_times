@@ -80,7 +80,8 @@ fun ArchiveScreen(viewModel: ArchiveViewModel = viewModel()) {
                     androidx.compose.foundation.Image(
                         painter = androidx.compose.ui.res.painterResource(id = R.drawable.maaly_logo),
                         contentDescription = "Maaly",
-                        modifier = Modifier.fillMaxWidth(0.8f)
+                        contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                        modifier = Modifier.fillMaxSize(0.9f)
                     )
                 }
             }
